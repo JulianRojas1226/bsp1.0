@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;1,100&display=swap');
+
+:root{
+    --primary-color:#DC5F00;
+    --secundary-color:#373A40;
+    --third-color:#686D76;
+    --quarter-color:#EEEEEE;
+}
+
+*{
+    font-family: "Poppins", sans-serif;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-style: normal;
+}
+body{
+    background: url(../img/background.jpg);
+    background-size: cover;
+}
+main{
+    width: 100%;
+    padding: 20px;
+    margin: auto;
+    margin-top: 100px;
+}
+.TODO{
+    width: 100%;
+    max-width: 800px;
+    margin: auto;
+    position: relative;
+}
+.CAJA_TRASERA{
+    width: 100%;
+    padding: 10px 30px;
+    display: flex;
+    justify-content: center;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(2px);
+    background-color: #dc5f00b7;
+    border-radius: 20px;
+}
+.CAJA_TRASERA div{
+    margin: 100px 40px;
+    color: #eeee;
+    transition: all 500ms;
+}
+.CAJA_TRASERA div p,
+.CAJA_TRASERA div button{
+    margin-top: 30px;
+}
+.CAJA_TRASERA div h1{
+    font-weight: 400;
+    font-size: 26px;
+}
+.CAJA_TRASERA div h2{
+    font-weight: 100;
+    font-size: 15px;
+    margin-bottom: 20px;
+
+}
+.CAJA_TRASERA div button{
+    padding: 10px 40px;
+    border: 2px solid #fff;
+    background: transparent;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer; 
+    color: white;
+    outline: none;
+}
+.CAJA_TRASERA div button:hover{
+    background-color: #EEEEEE;
+    color:#373A40;
+}
+.contenedor_is_r {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 380PX;
+    position: relative;
+    top: -270px;
+    left: 10px;
+    transition: left 500ms cubic-bezier(0.175, 0.885, 0.320, 1.275);
+
+}
+.contenedor_is_r form{
+    width: 100%;
+    padding: 80px 20px;
+    background: white;
+    position: absolute;
+    border-radius: 20px;
+    
+}
+.contenedor_is_r form h2{
+ font-size: 30px;
+ text-align: center;
+ margin-bottom: 20px;
+ color: #373A40;   
+}
+.contenedor_is_r form input{
+    width: 100%;
+    margin-top: 20px;
+    padding: 10px;
+    border: none;
+    background: #EEEEEE;
+    font-size: 16px;
+    outline: none;
+}
+.contenedor_is_r form button{
+    width: 100%;
+    height: 40px;
+    margin-top: 40px;
+    border: none;
+    font-size: 14px;
+    background: #EEEEEE;
+    color: #686D76;
+    cursor: pointer;
+    outline: none;
+    border-radius: 10px;
+}
+.contenedor_is_r form button:hover{
+    background-color: #373A40;
+    color: #EEEEEE;
+    transition: all 500ms;
+}
+.inicio_sesion{
+    opacity: 1;
+    display: block;
+}
+.REGISTRO{
+    display: none   ;
+}
