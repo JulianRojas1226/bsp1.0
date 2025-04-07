@@ -28,6 +28,7 @@ const mlogin = {
                 message: `Error al obtener el usuario ${usuario}`,
               };
         }
-    }
+      },
+    
 }   
 export default mlogin   

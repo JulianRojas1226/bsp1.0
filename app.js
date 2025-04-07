@@ -9,6 +9,7 @@ import error from "./middwlare/err.js";
 import routeslogin   from "./rutas/login.js";
 import routessesion from "./rutas/sesion.js"
 import routesproductos from "./rutas/productos.js";
+import routesreservas from "./rutas/reservas.js"
 
 const __dirname = process.cwd()
 const app = express()
@@ -32,6 +33,7 @@ app.use(session({
 
 app.use(routeslogin)
 app.use(autenticado,routessesion)
+app.use(routesreservas)
 app.use(routesproductos)
 app.use(error.e404);
 
