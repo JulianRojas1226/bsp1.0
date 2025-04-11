@@ -3,9 +3,12 @@ import mres from "../modulos/mreservas.js"
 const cres ={
     getres: async (req,res)=>{
         try {
+            
+            const reservas = await mres.mostres()
             const tipos = await mres.mosttipo()
             const mesas = await mres.mostmesa()
-            res.render("res",{tipos, mesas})
+            const fechareservada = await mres.dia()
+            res.render("res",{tipos, mesas, reservas,fechareservada})
         } catch (err) {
             error.e500(req, res, err);
         }
@@ -19,6 +22,21 @@ const cres ={
             console.error("❌ Error al guardar los datos:", err);
             res.status(500).send("Error al guardar los datos.");  
         }
+    },
+    getFechasReservadas: async (req, res) => {
+        try {
+            const fechareservada = await mres.dia(); // Obtén las fechas reservadas desde tu modelo
+            console.log(fechareservada)
+            res.json(fechareservada); // Envía las fechas al frontend como JSON
+        } catch (err) {
+            console.error("Error al obtener fechas reservadas:", err);
+            res.status(500).json({ mensaje: "Error al obtener fechas reservadas" });
+        }
     }
+    
+
+
+
+    
 }
 export default cres 

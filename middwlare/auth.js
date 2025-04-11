@@ -5,3 +5,4 @@ export const autenticado = (req,res,next)=>{
     }
     res.redirect("/")
     }
+    

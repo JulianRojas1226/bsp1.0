@@ -28,8 +28,33 @@ const mres ={
         } catch (err) {
             throw {status:500,message:"error al cargar datos DE MESA"}  
         }
+    },
+    mostres: async()=>{
+        try {
+            const [results] = await db.query("select id_re,fecha_hora,NID,nombre,correo,celular,tipo_re,cantidad_p,mesa_asig,obser from reservas")
+            return results
+        } catch (err) {
+            throw {status:500,message:"error al cargar datos de reserva"} 
+        }
+    },
+    filtroD_M: async({dia,mes}={})=>{
+        try {
+            const queryselect =" select id_re,fecha_hora,NID,nombre,correo,celular,tipo_re,cantidad_p,mesa_asig,obser from reservas where dayofweek(fecha_hora) = ? and month(fecha_hora)=?"
+            const params=[dia,mes]
+            const [results]= await db.query(queryselect,params)
+        } catch (error) {
+            throw {status:500,message:"error al cargar datos"} 
+        }
+    },
+    dia: async()=>{
+        try {
+            const fechareservada = await db.query("select date_FORMAT(fecha_hora, '%Y-%m-%d') as fecha from reservas")
+            // console.log (fechareservada)
+            return fechareservada.map(row=> row.fecha_hora)
+        } catch (error) {
+            throw {status:500,message:"error al cargar datos"}  
+        }
     }
-
 
 }
 export default mres

@@ -18,6 +18,7 @@ app.use(cors())
 app.use(helmet())
 app.use(morgan("dev"))
 
+app.use("/node_modules", express.static("node_modules"));
 app.set("views",path.join(__dirname,"views"))
 app.set("view engine","pug")
 
