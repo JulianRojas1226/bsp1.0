@@ -46,13 +46,15 @@ const mres ={
             throw {status:500,message:"error al cargar datos"} 
         }
     },
-    dia: async()=>{
+    dia: async () => {
         try {
-            const fechareservada = await db.query("select date_FORMAT(fecha_hora, '%Y-%m-%d') as fecha from reservas")
-            // console.log (fechareservada)
-            return fechareservada.map(row=> row.fecha_hora)
+            // Ejecuta el query y selecciona las fechas formateadas
+            const [fechareservada] = await db.query("select date_FORMAT(fecha_hora, '%Y-%m-%d') as fecha from reservas");
+            // Mapea el campo "fecha" correctamente
+            console.log(fechareservada)
+            return fechareservada.map(row => row.fecha);
         } catch (error) {
-            throw {status:500,message:"error al cargar datos"}  
+            throw { status: 500, message: "Error al cargar datos" };
         }
     }
 

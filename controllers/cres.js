@@ -26,7 +26,7 @@ const cres ={
     getFechasReservadas: async (req, res) => {
         try {
             const fechareservada = await mres.dia(); // Obtén las fechas reservadas desde tu modelo
-            console.log(fechareservada)
+            console.log("NADA DE NADA",fechareservada)
             res.json(fechareservada); // Envía las fechas al frontend como JSON
         } catch (err) {
             console.error("Error al obtener fechas reservadas:", err);

@@ -1,40 +1,38 @@
-// dias permitidos
-const dias_permitidos = [6,7,1]
-document.getElementById("calendario").addEventListener("change", function (event) {
-    const fecha_select = new Date(event.target.value)
-    const dia_semana = fecha_select.getDay()+1
-    const hoy = new Date()
-    if(fecha_select<hoy){
-        alert("no se puede reservar fechas pasadas")
-        this.value=""
+
+
+document.addEventListener("DOMContentLoaded", async () => {
+    // Función para obtener las fechas reservadas desde el backend
+    async function obtenerFechasReservadas() {
+        try {
+            const response = await fetch("/fechas-reservadas"); // Endpoint del backend
+            if (!response.ok) throw new Error("Error al obtener las fechas reservadas");
+            console.log(response)
+            return await response.json(); // Devuelve un array de fechas
+        } catch (error) {
+            console.error("Error al obtener fechas reservadas:", error);
+            return []; // Devuelve un array vacío en caso de error
+        }
     }
 
-    if (!dias_permitidos.includes(dia_semana)) {
-        alert("SOLO SE PUEDEN ESCOGER VIERNES, SABADOS Y DOMINGO PORFAVOR ESCOGER OTRA FECHA")
-        event.target.value = ""
-    }
-})
-// fechas reservadas
-async function obtenerFechasReservadas() {
-    try {
-        const response = await fetch("/fechas-reservadas"); // Realiza la solicitud al endpoint
-        if (!response.ok) throw new Error("Error al obtener las fechas reservadas");
-        return await response.json(); // Devuelve las fechas como array
-    } catch (error) {
-        console.error("Error al obtener fechas reservadas:", error);
-        return []; // Devuelve un array vacío en caso de error
-    }
-}
+    // Obtener fechas y configurar Flatpickr
+    const fechasReservadas = await obtenerFechasReservadas();
+    console.log("Fechas reservadas:", fechasReservadas);
 
-// Usar las fechas reservadas al cambiar el calendario
-document.getElementById("calendario").addEventListener("change", async function () {
-    const fechasReservadas = await obtenerFechasReservadas(); // Obtiene las fechas desde el servidor
-    const fechaSeleccionada = this.value; // Obtén la fecha seleccionada por el usuario
-
-    if (fechasReservadas.includes(fechaSeleccionada)) {
-        alert("Esta fecha ya está reservada.");
-        this.value = ""; // Limpia el campo
-    } else {
-        console.log("Fecha válida:", fechaSeleccionada);
-    }
+    flatpickr("#calendario", {
+        dateFormat: "Y-m-d", // Formato de fecha (año-mes-día)
+        minDate: "today", // Bloquea fechas pasadas
+        disable: fechasReservadas, // Deshabilita las fechas reservadas
+        disable: [
+            function(date) {
+                // Bloquea días que no sean viernes (5), sábado (6) o domingo (0)
+                const dia = date.getDay();
+                if (dia !== 5 && dia !== 6 && dia !== 0) {
+                    return true; // Bloquea el día si no coincide
+                }
+    
+                // Bloquea fechas reservadas (comparando con `fechasReservadas`)
+                return fechasReservadas.includes(date.toISOString().split("T")[0]);
+            }
+        ]   
+    });
 });
