@@ -3,8 +3,23 @@ import mres from "../modulos/mreservas.js"
 const cres ={
     getres: async (req,res)=>{
         try {
-            
-            const reservas = await mres.mostres()
+            const dia = req.query.dia
+            const mes =req.query.mes
+            const query = req.query.query
+            let reservas
+            if (dia && mes && query) {
+                reservas = await mres.totalbuscar({dia,mes,query})                
+            } else if (dia && mes) {
+                reservas = await mres.filtroD_M({dia,mes})
+            }else if (dia) {
+                reservas = await mres.filtroD({dia})
+            }else if (mes) {
+                reservas = await mres.filtroM({mes})
+            }else if (query) {
+                reservas = await mres.buscar({query})
+            }else{
+                reservas = await mres.mostres()
+            }
             const tipos = await mres.mosttipo()
             const mesas = await mres.mostmesa()
             const fechareservada = await mres.dia()

@@ -42,6 +42,47 @@ const mres ={
             const queryselect =" select id_re,fecha_hora,NID,nombre,correo,celular,tipo_re,cantidad_p,mesa_asig,obser from reservas where dayofweek(fecha_hora) = ? and month(fecha_hora)=?"
             const params=[dia,mes]
             const [results]= await db.query(queryselect,params)
+            return results
+        } catch (error) {
+            throw {status:500,message:"error al cargar datos"} 
+        }
+    },
+    filtroD: async({dia}={})=>{
+        try {
+            const queryselect =" select id_re,fecha_hora,NID,nombre,correo,celular,tipo_re,cantidad_p,mesa_asig,obser from reservas where dayofweek(fecha_hora) = ? "
+            const params=[dia]
+            const [results]= await db.query(queryselect,params)
+            return results
+        } catch (error) {
+            throw {status:500,message:"error al cargar datos"} 
+        }
+    },
+    filtroM: async({mes}={})=>{
+        try {
+            const queryselect =" select id_re,fecha_hora,NID,nombre,correo,celular,tipo_re,cantidad_p,mesa_asig,obser from reservas where month(fecha_hora) = ? "
+            const params=[mes]
+            const [results]= await db.query(queryselect,params)
+            return results
+        } catch (error) {
+            throw {status:500,message:"error al cargar datos"} 
+        }
+    },
+    buscar: async({query}={})=>{
+        try {
+            const termino_busqueda = `%${query}%`
+            const [result] = await db.query("select id_re,fecha_hora,NID,nombre,correo,celular,tipo_re,cantidad_p,mesa_asig,obser from reservas where nombre like ? ",[termino_busqueda])
+            return result
+        } catch (error) {
+            throw {status:500,message:"error al cargar datos"} 
+        }
+    },
+    totalbuscar: async({dia,mes,query}={})=>{
+        try {
+            const termino_busqueda = `%${query}%`
+            const queryselect =" select id_re,fecha_hora,NID,nombre,correo,celular,tipo_re,cantidad_p,mesa_asig,obser from reservas where dayofweek(fecha_hora) = ? and month(fecha_hora)=? and nombre like ?"
+            const params=[dia,mes,termino_busqueda]
+            const [results]= await db.query(queryselect,params)
+            return results
         } catch (error) {
             throw {status:500,message:"error al cargar datos"} 
         }
