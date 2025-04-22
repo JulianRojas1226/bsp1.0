@@ -20,10 +20,7 @@ const mres ={
     },
     mostmesa: async()=>{
         try {
-            const disponible = 'disponible'
-            const [results] = await db.query("select ID from mesa where estado = ?",
-                [disponible]
-            )
+            const [results] = await db.query("select ID from mesa")
             return results
         } catch (err) {
             throw {status:500,message:"error al cargar datos DE MESA"}  
@@ -97,7 +94,36 @@ const mres ={
         } catch (error) {
             throw { status: 500, message: "Error al cargar datos" };
         }
-    }
+    },
+    borrar: async({id})=>{
+        try {
+            const [result] = await db.query("delete from reservas where id_re = ?", [id])
+           
+            console.log("Producto eliminado:", result)
+        } catch (err) {
+            console.error("❌ Error al eliminar la reserva:", err.message);
+            throw { status: 500, message: "Error al eliminar la reserva de la base de datos." };
+        }
+    },
+    actualizar: async({id,fecha_hora_act,hora_act,nombre_act,celular_act,correo_act,tipo_re,cantidad_p_act,obser_act})=>{
+        try {
+            const [result]= await db.query(`UPDATE reservas SET fecha_hora = COALESCE(?, fecha_hora),hora = COALESCE(?, hora),nombre = COALESCE(?, nombre),celular = COALESCE(?, celular),correo = COALESCE(?, correo),tipo_re = COALESCE(?, tipo_re),cantidad_p = COALESCE(?, cantidad_p),obser = COALESCE(?, obser)WHERE id_re = ?`,
+                [fecha_hora_act || null, 
+                    hora_act || null, 
+                    nombre_act || null, 
+                    celular_act || null, 
+                    correo_act || null, 
+                    tipo_re || null, 
+                    cantidad_p_act || null, 
+                    obser_act || null, 
+                    id
+                    ]
+            )
+        } catch (err) {
+            console.error("❌ Error al actualizar el producto:", err.message);
+            throw {status: 500, message: "Error al actualizar el producto en la base de datos." }; 
+        }
+    },
 
 }
 export default mres

@@ -128,9 +128,8 @@ const mprod={
     actualizar: async({id, nombre, cantidad_min, precio, proveedor, tipo })=>{
         
         try {
-            const [result] = await db.query("update producto set nombre = ?, minimo_cant = ?, precio = ?, proveedor = ?, tipo = ? where id = ?",
-            [nombre,cantidad_min,precio,proveedor,tipo,id]
-        )
+            const [result] = await db.query(`UPDATE producto SET nombre = COALESCE(?, nombre),minimo_cant = COALESCE(?, minimo_cant),precio = COALESCE(?, precio),proveedor = COALESCE(?, proveedor),tipo = COALESCE(?, tipo) WHERE id = ?`,
+            [nombre || null, cantidad_min || null, precio || null, proveedor || null, tipo || null, id])
         } catch (err) {
             console.error("❌ Error al actualizar el producto:", err.message);
             throw { status: 500, message: "Error al actualizar el producto en la base de datos." };

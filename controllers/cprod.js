@@ -92,8 +92,8 @@ const cprod ={
       const {id} = req.params
       const {nombre,cantidad_min,precio,proveedor,tipo}=req.body
       const result = await mprod.actualizar({id,nombre,cantidad_min,precio,proveedor,tipo}) 
-      console.log("Resultado de la actualización:", result);
-      res.redirect("/prod ")
+      
+      res.redirect("/prod")
     } catch (err) {
       console.error("❌ Error en el controlador:", error.message);
         res.status(500).send("Error al actualizar el producto.")

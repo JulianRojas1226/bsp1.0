@@ -1,0 +1,41 @@
+
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Ventas
+        link(rel="stylesheet", href="/css/ventas.css")
+    body 
+        main 
+            if mesas && mesas.length
+                each mesa in mesas 
+                    button(type="button" class="btn-mesa" data-id=`${mesa.ID}`) Mesa #{mesa.ID}
+                    div(id=`modal-${mesa.ID}` class="modal")
+                        div(class="modal-contenido")
+                            span.cerrar &times; <!-- Botón para cerrar -->
+                            h2 Mesa #{mesa.ID}
+                            form(action=`/ingorden/${mesa.ID}`, method="post") 
+                                select(name="producto") 
+                                    if productos && productos.length 
+                                        each producto in productos 
+                                            option(value=producto.id)  #{producto.nombre}
+                                    else 
+                                        option(value="") no hay productos en stock 
+                                label(for="#") cantidad
+                                input(type="number", name="cantidad")
+                                button(type="submit") agregar
+
+
+
+    script(src="/js/ventas.js")
+
+
+
+                    
+
+
+
+
+
+
+

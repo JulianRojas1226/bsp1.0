@@ -22,9 +22,6 @@ html(lang="es")
                 label(for="query") Buscar por nombre:
                 input(type="text" name="query" id="query" placeholder="Buscar productos..." )
                 button(type="submit") Aplicar
-
-
-            
         main(class="mainprod")
             button(id="btn-forminit") abrir
             div(id="formsprod")
@@ -124,7 +121,7 @@ html(lang="es")
                                     label(for="#") nombre 
                                     input(type="text" name="nombre")
                                     label(for="#") cantidad minima 
-                                    input(type="number", name="cantidada_min")
+                                    input(type="number", name="cantidad_min")
                                     label(for="#") precio
                                     input(type="number", name="precio") 
                                     label(for="#") proveedor
@@ -150,7 +147,7 @@ html(lang="es")
         footer 
             ul.nav.justify-content-center
                 li.nav-item
-                    a.nav-link.active(aria-current="page" href="#") Active
+                    a.nav-link(href="/sesion") Ventas
                 li.nav-item
                     a.nav-link(href="/sesion") home
                 li.nav-item

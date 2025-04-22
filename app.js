@@ -10,6 +10,7 @@ import routeslogin   from "./rutas/login.js";
 import routessesion from "./rutas/sesion.js"
 import routesproductos from "./rutas/productos.js";
 import routesreservas from "./rutas/reservas.js"
+import routesventas from "./rutas/ventas.js";
 
 const __dirname = process.cwd()
 const app = express()
@@ -36,6 +37,7 @@ app.use(routeslogin)
 app.use(autenticado,routessesion)
 app.use(routesreservas)
 app.use(routesproductos)
+app.use(routesventas)
 app.use(error.e404);
 
 app.listen(port,()=> {console.log(`la aplicacion esta funcionando en http://localhost:${port}`)})
