@@ -29,6 +29,7 @@ const cprod ={
   
         const tipos = await mprod.tipo(); // Llamamos al modelo
         const proveedores = await mprod.proveedor()
+        
   
         const minimo_cants= await mprod.lowstock()
         res.render("prod", { tipos, proveedores, productos, minimo_cants}); // Enviamos los datos a la vista

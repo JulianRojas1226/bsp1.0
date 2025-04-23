@@ -5,7 +5,9 @@ const cventas = {
         try {
             const productos = await  mventas.mostprod()
             const mesas = await mventas.mostmesa()
-            res.render("ventas", {mesas,productos})
+            const totales = await mventas.totalmesa()
+            const ordenes = await mventas.mostorden()
+            res.render("ventas", {mesas,productos,ordenes,totales})
         } catch (err) {
             error.e500(req, res, err);  
         }
@@ -20,6 +22,15 @@ const cventas = {
         } catch (err) {
             console.error("❌ Error en el controlador:", err.message);
             res.status(500).send("Error al borrar el producto.");
+        }
+    },
+    eliminarorden: async(req,res)=>{
+        try {
+            const {id} = req.params
+            const result =await mventas.eliminarorden({id})
+            res.redirect("/ventas")
+        } catch (error) {
+            throw {status:500,message:"error al borrar datosd"}
         }
     }
 

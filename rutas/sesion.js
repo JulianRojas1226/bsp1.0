@@ -4,6 +4,7 @@ import cprod from "../controllers/cprod.js";
 import cres from "../controllers/cres.js"
 import cventas from "../controllers/cventas.js";
 const routes = Router()
+// barra de navegacion
 routes.get("/sesion",csescion.getsesion)
 routes.get("/prod",cprod.getprod)
 routes.get("/res", cres.getres)

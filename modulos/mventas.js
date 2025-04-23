@@ -26,6 +26,30 @@ const mventas = {
             console.error("❌ Error al guardar los datos en la base de datos:", err);
             throw { status: 500, message: "Error al guardar los datos"};
         }
+    },
+    mostorden: async()=>{
+        try {
+            const [result]= await db.query("select id,mesa_id,id_prod,producto,precio_u,cantidad,total_p from detalles_p")
+            return result
+        } catch (error) {
+            throw {status:500,message:"error al cargar datos"}  
+        }
+    }, 
+    totalmesa: async()=>{
+        try {
+            const [result] = await db.query (`select mesa_id, sum(total_p) as total_mesa 
+                from detalles_p group by mesa_id` )
+            return result
+        } catch (error) {
+            throw {status:500,message:"error al cargar total "}
+        }
+    },
+    eliminarorden: async({id})=>{
+        try {
+            const [rewsult]= await db.query("delete from detalles_p where id = ?",[id])
+        } catch (error) {
+            throw {status:500,message:"error al borrar datosd"}
+        }
     }
 }
 export default mventas
