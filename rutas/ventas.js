@@ -7,10 +7,12 @@ import { Router } from "express";
 
  routes.post("/ingorden/:id", cventas.insorden)
  routes.post("/eliminar/:id", cventas.eliminarorden)
+ routes.post("/pagar/:mesa", cventas.pagar)
 //  barrra navegacion 
  routes.get("/ventas", cventas.getventas)
  routes.get("/res", cres.getres)
  routes.get("/prod", cprod.getprod)
  routes.get("/sesion", csescion.getsesion)
+
 
  export default routes

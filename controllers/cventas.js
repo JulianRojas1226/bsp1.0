@@ -7,7 +7,8 @@ const cventas = {
             const mesas = await mventas.mostmesa()
             const totales = await mventas.totalmesa()
             const ordenes = await mventas.mostorden()
-            res.render("ventas", {mesas,productos,ordenes,totales})
+            const pagos = await mventas.metodo_pago()
+            res.render("ventas", {mesas,productos,ordenes,totales,pagos})
         } catch (err) {
             error.e500(req, res, err);  
         }
@@ -31,6 +32,23 @@ const cventas = {
             res.redirect("/ventas")
         } catch (error) {
             throw {status:500,message:"error al borrar datosd"}
+        }
+    },
+    pagar: async(req,res)=>{
+        try {
+            const{mesa}= req.params
+            const{pago}= req.body
+            console.log("✅ Datos recibidos en el controlador:", { mesa,pago})
+            const result = await mventas.pagar({mesa,pago})
+            res.redirect("/ventas")
+        } catch (error) {
+            console.error("❌ Error en pagar:", error);
+        
+        // Manejo del error con respuesta al cliente
+            res.status(500).json({
+                message: "Ocurrió un error al procesar el pago",
+                error: error.message || "Error desconocido"
+            })
         }
     }
 

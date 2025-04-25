@@ -28,3 +28,21 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+document.addEventListener("DOMContentLoaded", function () {
+    const botonesPagar = document.querySelectorAll(".btn-pagar");
+    botonesPagar.forEach(boton => {
+        boton.addEventListener("click", function () {
+            const mesaId = this.dataset.id;
+            const modal = document.getElementById(`modal-pagar-${mesaId}`);
+            modal.style.display = "block";
+        });
+    });
+
+    const botonesCerrar = document.querySelectorAll(".cerrar");
+    botonesCerrar.forEach(boton => {
+        boton.addEventListener("click", function () {
+            const modal = this.parentElement.parentElement;
+            modal.style.display = "none";
+        });
+    });
+});

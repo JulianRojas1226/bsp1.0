@@ -31,6 +31,7 @@ html(lang="en")
                                 table(border="1") 
                                     thead
                                         tr
+                                        th fecha hora
                                         th Producto
                                         th Cantidad
                                         th Precio_u
@@ -41,6 +42,7 @@ html(lang="en")
                                             if mesa.ID === orden.mesa_id
                                                 tbody
                                                     tr
+                                                    td #{new Date(orden.HORA).toLocaleDateString("es-ES", {year:"numeric",month:"long",day:"numeric",hour:"2-digit",minute:"2-digit",hopur12:true})}
                                                     td #{orden.producto}
                                                     td #{orden.cantidad}
                                                     td #{orden.precio_u}
@@ -57,7 +59,40 @@ html(lang="en")
                                     each total in totales
                                         if mesa.ID  === total.mesa_id
                                             div
-                                                h3 Total para Mesa #{total.mesa_id}: $#{total.total_mesa}
+                                                h3 Total: $#{total.total_mesa}
+                                                button(type="button" class="btn-pagar" data-id=`${mesa.ID}`) Pagar
+                                                div(id=`modal-pagar-${mesa.ID}` class="modal")
+                                                    div(class="modal-contenido")
+                                                        span.cerrar &times; <!-- Close button -->
+                                                        h2 Pago de la Mesa #{mesa.ID}
+                                                        table 
+                                                            thead
+                                                                tr
+                                                                th fecha hora
+                                                                th Producto
+                                                                th Cantidad
+                                                                th Precio_u
+                                                                th total
+                                                            if ordenes && ordenes.length 
+                                                                each orden in ordenes
+                                                                    if mesa.ID === orden.mesa_id
+                                                                        tbody 
+                                                                            tr
+                                                                            td #{new Date(orden.HORA).toLocaleDateString("es-ES", {year:"numeric",month:"long",day:"numeric",hour:"2-digit",minute:"2-digit",hopur12:true})}
+                                                                            td #{orden.producto}
+                                                                            td #{orden.cantidad}
+                                                                            td #{orden.precio_u}
+                                                                            td #{orden.total_p}
+                                                        
+                                                        form(action=`/pagar/${mesa.ID}`, method="post")                                                        
+                                                            select(name="pago")
+                                                                if pagos && pagos.length 
+                                                                    each pago in pagos                                    
+                                                                        option(value=pago.id) #{pago.nombre} 
+                                                                else 
+                                                                        option(value="") no hay opciones
+                                                            button(type="submit") pagar   
+                                                    
                                 else
                                     p No hay totales disponibles para las mesas.
 

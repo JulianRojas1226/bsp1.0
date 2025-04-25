@@ -1,3 +1,4 @@
+
 import db from "../config/db.js"
 const mventas = {
     mostmesa: async()=>{
@@ -29,7 +30,7 @@ const mventas = {
     },
     mostorden: async()=>{
         try {
-            const [result]= await db.query("select id,mesa_id,id_prod,producto,precio_u,cantidad,total_p from detalles_p")
+            const [result]= await db.query("select HORA,id,mesa_id,id_prod,producto,precio_u,cantidad,total_p from detalles_p")
             return result
         } catch (error) {
             throw {status:500,message:"error al cargar datos"}  
@@ -45,11 +46,64 @@ const mventas = {
         }
     },
     eliminarorden: async({id})=>{
+        const coneccion = await db.getConnection()
         try {
-            const [rewsult]= await db.query("delete from detalles_p where id = ?",[id])
+            await coneccion.beginTransaction()
+            const [orden] = await coneccion.query(`
+                select id_prod, cantidad from detalles_p where id = ?
+                `,[id])
+            const {id_prod,cantidad}=orden[0]
+            // actualiza cantidad
+            await coneccion.query(`
+                update producto
+                set cantidad = cantidad + ?
+                where id =  ?
+                `,[cantidad,id_prod])
+            // eliminar
+            await coneccion.query(`
+                delete from detalles_p
+                where id = ?`,
+            [id])
+            await coneccion.commit()
         } catch (error) {
             throw {status:500,message:"error al borrar datosd"}
         }
-    }
+    },
+    metodo_pago: async()=>{
+        try {
+            const [result]= await db.query("select id,nombre from tipo_pago")
+            return result
+        } catch (error) {
+            console.error("Error en metodo_pago:", error);
+            throw { status: 500, message: "Error al obtener métodos de pago" };
+
+        }
+    },
+    pagar: async({mesa,pago})=>{
+        const coneccion = await db.getConnection()
+        try {
+            console.log("📡 Datos recibidos en el modelo:", { mesa,pago});
+            await coneccion.beginTransaction()
+            const[orden]= await coneccion.query(`
+                select  HORA,id,mesa_id,id_prod,producto,precio_u,cantidad,total_p from detalles_p
+                where mesa_id = ?
+                `,[mesa])
+            const {HORA,id,mesa_id,id_prod,producto,precio_u,cantidad,total_p}=orden[0]
+            // insertar en ventas realizadas
+            await coneccion.query(`
+                insert into ventas_res(id_orden,hora,mesa,id_prod,producto,precio_u,cantidad,total_p,pago) values(?,?,?,?,?,?,?,?,?)`,
+                [id,HORA,mesa_id,id_prod,producto,precio_u,cantidad,total_p,pago])
+            // ELIMINAR
+            await coneccion.query(`
+                delete from detalles_p
+                where mesa_id = ?`,[mesa])
+            await coneccion.commit()
+        } catch (error) {
+            
+            console.error("Error en pagar:", error);
+            throw { status: error.status || 500, message: error.message || "Error al procesar el pago" }
+        }
+    },
+    
 }
 export default mventas
