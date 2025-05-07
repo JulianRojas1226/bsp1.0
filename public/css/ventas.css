@@ -88,3 +88,33 @@ td {
     border: 1px solid #ddd;
     text-align: center;
 }
+.modal-ventas-res {
+    display: none;
+    position: fixed;
+    top: 5%;
+    left: 5%;
+    width: 90%;
+    height: 90%;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    justify-content: center;
+    align-items: center;
+}
+  
+.modal-contenido-VENTAS {
+    background: white;
+    color: black;
+    padding: 20px;
+    width: 80%;
+    height: 80%;
+    text-align: center;
+    position: relative;
+}
+  
+.cerrar {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 30px;
+    cursor: pointer;
+}

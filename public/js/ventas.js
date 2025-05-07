@@ -46,3 +46,18 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+document.getElementById("abrirModal-ventas").addEventListener("click", function() {
+    document.getElementById("modal-ventas-res").style.display = "flex";
+  });
+  
+  document.getElementById("cerrarModal").addEventListener("click", function() {
+    document.getElementById("modal-ventas-res").style.display = "none";
+  });
+  
+  window.addEventListener("click", function(event) {
+    const modal = document.getElementById("modal-ventsa-res");
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  })

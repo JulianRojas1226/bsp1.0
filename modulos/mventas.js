@@ -122,6 +122,23 @@ const mventas = {
             throw { status: error.status || 500, message: error.message || "Error al procesar el pago" }
         }
     },
+    mostventas: async()=>{
+        try {
+            const [result]= await db.query("select id,mesa,fecha_inicio,fecha_fin,metodo_pago,total from pagos")
+            return result
+        } catch (error) {
+            throw new error("no ingreso de datos");
+            
+        }
+    },
+    mostventau: async () => {
+        try {
+            const[result] = await db.query("select id,id_orden,hora,mesa,id_prod,producto,precio_u,cantidad,total_p,pago from ventas_res")
+            return result
+        } catch (error) {
+            throw new error("no muestra datos")
+        }
+    }
     
 }
 export default mventas

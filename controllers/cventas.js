@@ -7,8 +7,10 @@ const cventas = {
             const mesas = await mventas.mostmesa()
             const totales = await mventas.totalmesa()
             const ordenes = await mventas.mostorden()
-            const pagos = await mventas.metodo_pago()
-            res.render("ventas", {mesas,productos,ordenes,totales,pagos})
+            const tipo_pagos = await mventas.metodo_pago()
+            const pagos = await mventas.mostventas()
+            const ventasu = await mventas.mostventau()
+            res.render("ventas", {mesas,productos,ordenes,totales,tipo_pagos,pagos,ventasu})
         } catch (err) {
             error.e500(req, res, err);  
         }

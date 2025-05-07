@@ -10,7 +10,7 @@ html(lang="en")
     body 
         header
             nav
-                button ventas realizadas
+                button#abrirModal-ventas ventas realizadas
 
         main 
             if mesas && mesas.length
@@ -90,16 +90,24 @@ html(lang="en")
                                                         
                                                         form(action=`/pagar/${mesa.ID}`, method="post")                                                        
                                                             select(name="pago")
-                                                                if pagos && pagos.length 
-                                                                    each pago in pagos                                    
-                                                                        option(value=pago.id) #{pago.nombre} 
+                                                                if tipo_pagos && tipo_pagos.length 
+                                                                    each tipo_pago in tipo_pagos                                    
+                                                                        option(value=tipo_pago.id) #{tipo_pago.nombre} 
                                                                 else 
                                                                         option(value="") no hay opciones
                                                             button(type="submit") pagar   
                                                     
                                 else
-        
-
+            div#modal-ventas-res.modal-ventas-res
+                div.modal-contenido-VENTAS
+                    span#cerrarModal.cerrar ×
+                    if pagos && pagos.length 
+                        each pago in pagos 
+                            details 
+                                summary  mesa: #{pago.mesa} fecha: #{new Date(pago.fecha_fin).toLocaleDateString("es-ES",{ year:"numeric",month:"long", day:"numeric"})} metodo pago: #{pago.metodo_pago} total:  #{pago.total}
+                                    if ventasu && ventas.length 
+                                        each ventau in ventasu 
+                                            if ventau
 
         footer
             ul.nav.justify-content-center
