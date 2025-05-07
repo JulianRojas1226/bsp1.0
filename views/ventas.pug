@@ -8,6 +8,10 @@ html(lang="en")
         link(rel="stylesheet", href="/css/ventas.css")
         link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer")
     body 
+        header
+            nav
+                button ventas realizadas
+
         main 
             if mesas && mesas.length
                 each mesa in mesas 
@@ -94,7 +98,8 @@ html(lang="en")
                                                             button(type="submit") pagar   
                                                     
                                 else
-                                    p No hay totales disponibles para las mesas.
+        
+
 
         footer
             ul.nav.justify-content-center

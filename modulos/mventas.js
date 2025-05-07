@@ -90,13 +90,31 @@ const mventas = {
                 `,[mesa])
             const {HORA,id,mesa_id,id_prod,producto,precio_u,cantidad,total_p}=orden[0]
             // insertar en ventas realizadas
+            const[result_hora]= await coneccion.query(`
+                select min(HORA) as hora_inicial
+                from detalles_p
+                where mesa_id = ?
+                `,[mesa])
+            const [result_total]= await coneccion.query(`
+                select sum(total_p) as total_pagado
+                from detalles_p
+                where mesa_id = ? `,[mesa])
+            const hora_inicial= result_hora[0]?.hora_inicial
+            const total_pagado = result_total[0]?.total_pagado
+            
+            await coneccion.query(`
+                insert into pagos(mesa,fecha_inicio,metodo_pago,total) values (?,?,?,?)`,[mesa,hora_inicial,pago,total_pagado]
+            )
+             
             await coneccion.query(`
                 insert into ventas_res(id_orden,hora,mesa,id_prod,producto,precio_u,cantidad,total_p,pago) values(?,?,?,?,?,?,?,?,?)`,
                 [id,HORA,mesa_id,id_prod,producto,precio_u,cantidad,total_p,pago])
+            
             // ELIMINAR
             await coneccion.query(`
                 delete from detalles_p
                 where mesa_id = ?`,[mesa])
+
             await coneccion.commit()
         } catch (error) {
             
