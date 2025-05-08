@@ -31,10 +31,22 @@ const cventas = {
         try {
             const {id} = req.params
             const result =await mventas.eliminarorden({id})
+            console.log("✅ Datos recibidos en el controlador:", { id});
             res.redirect("/ventas")
         } catch (error) {
             throw {status:500,message:"error al borrar datosd"}
         }
+    },
+    duplicar: async(req,res) => {
+      try {
+        const {id} = req.params
+        const result =await mventas.duplicar_orden({id})
+        console.log("✅ Datos recibidos en el controlador:", { id});
+        res.redirect("/ventas")  
+      } catch (error) {
+        console.error("❌ Error al duplicar datos:", error);
+        res.status(500).json({ message: "Error al duplicar datos", error })
+      }
     },
     pagar: async(req,res)=>{
         try {

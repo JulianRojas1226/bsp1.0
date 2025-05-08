@@ -55,6 +55,9 @@ html(lang="en")
                                                         form(action=`/eliminar/${orden.id}`, method="post")
                                                             button(type="submit" class="btn btn-danger") 
                                                                 i.fa-regular.fa-trash-can
+                                                        form(action=`/duplicar/${orden.id}`, method="post")
+                                                            button(type="submit" class="btn btn btn-success") 
+                                                                i.fa-solid.fa-repeat
 
                                     else    
                                         p no se han consumido productos
@@ -105,24 +108,36 @@ html(lang="en")
                         each pago in pagos 
                             details 
                                 summary  mesa: #{pago.mesa} fecha: #{new Date(pago.fecha_fin).toLocaleDateString("es-ES",{ year:"numeric",month:"long", day:"numeric"})} metodo pago: #{pago.metodo_pago} total:  #{pago.total}
-                                    if ventasu && ventas.length 
+                                table 
+                                    thead 
+                                        tr 
+                                            th hora 
+                                            th producto 
+                                            th cantidad 
+                                            th precio unitario 
+                                            th total 
+                                    if ventasu && ventasu.length 
                                         each ventau in ventasu 
-                                            if ventau
-
+                                            if pago.fecha_inicio <= ventau.hora && pago.fecha_fin >= ventau.hora && pago.mesa === ventau.mesa 
+                                                tbody  
+                                                    tr 
+                                                        td #{new Date(ventau.hora).toLocaleDateString("es-ES", {year:"numeric",month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit",hopur12:true})}
+                                                        td #{ventau.producto}
+                                                        td #{ventau.cantidad} 
+                                                        td #{ventau.precio_u}
+                                                        td #{ventau.total_p}
         footer
-            ul.nav.justify-content-center
-                li.nav-item
-                    a.nav-link(href="/sesion") Ventas
-                li.nav-item
-                    a.nav-link(href="/sesion") home
-                li.nav-item
-                    a.nav-link(href="/prod") Productos
-                li.nav-item
-                    a.nav-link(href="/res") Reservas
-                li.nav-item 
-
-
-    script(src="/js/ventas.js")
+                    ul.nav.justify-content-center
+                        li.nav-item
+                            a.nav-link(href="/sesion") Ventas
+                        li.nav-item
+                            a.nav-link(href="/sesion") home
+                        li.nav-item
+                            a.nav-link(href="/prod") Productos
+                        li.nav-item
+                            a.nav-link(href="/res") Reservas
+                        li.nav-item 
+        script(src="/js/ventas.js")
 
 
 

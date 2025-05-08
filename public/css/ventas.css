@@ -106,9 +106,11 @@ td {
     color: black;
     padding: 20px;
     width: 80%;
-    height: 80%;
+    
     text-align: center;
     position: relative;
+    max-height: 90vh; /* Limita la altura del modal */
+    overflow-y: auto;
 }
   
 .cerrar {

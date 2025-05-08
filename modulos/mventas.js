@@ -28,6 +28,20 @@ const mventas = {
             throw { status: 500, message: "Error al guardar los datos"};
         }
     },
+    duplicar_orden: async ({id}) => {
+        const coneccion = await db.getConnection()
+        try {
+            await coneccion.beginTransaction()
+            const [orden]= await coneccion.query(`select mesa_id,id_prod,cantidad from detalles_p where id = ?`, [id])
+            const {mesa_id,id_prod,cantidad}=orden[0]
+            await coneccion.query(`insert into detalles_p(mesa_id,id_prod,cantidad) values (?,?,?)`,[mesa_id,id_prod,cantidad])
+            await coneccion.commit()
+        } catch (error) {
+            console.error("Error al duplicar orden:", error);
+            throw { status: 500, message: "Error al duplicar datos" };
+    
+        }
+    },
     mostorden: async()=>{
         try {
             const [result]= await db.query("select HORA,id,mesa_id,id_prod,producto,precio_u,cantidad,total_p from detalles_p")
@@ -84,11 +98,11 @@ const mventas = {
         try {
             console.log("📡 Datos recibidos en el modelo:", { mesa,pago});
             await coneccion.beginTransaction()
-            const[orden]= await coneccion.query(`
+            const[ordenes]= await coneccion.query(`
                 select  HORA,id,mesa_id,id_prod,producto,precio_u,cantidad,total_p from detalles_p
                 where mesa_id = ?
                 `,[mesa])
-            const {HORA,id,mesa_id,id_prod,producto,precio_u,cantidad,total_p}=orden[0]
+            
             // insertar en ventas realizadas
             const[result_hora]= await coneccion.query(`
                 select min(HORA) as hora_inicial
@@ -106,9 +120,13 @@ const mventas = {
                 insert into pagos(mesa,fecha_inicio,metodo_pago,total) values (?,?,?,?)`,[mesa,hora_inicial,pago,total_pagado]
             )
              
-            await coneccion.query(`
-                insert into ventas_res(id_orden,hora,mesa,id_prod,producto,precio_u,cantidad,total_p,pago) values(?,?,?,?,?,?,?,?,?)`,
-                [id,HORA,mesa_id,id_prod,producto,precio_u,cantidad,total_p,pago])
+            for (const orden of ordenes) {
+                await coneccion.query(`
+                    INSERT INTO ventas_res (id_orden, hora, mesa, id_prod, producto, precio_u, cantidad, total_p, pago) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                    [orden.id, orden.HORA, orden.mesa_id, orden.id_prod, orden.producto, orden.precio_u, orden.cantidad, orden.total_p, pago]);
+            }
+    
             
             // ELIMINAR
             await coneccion.query(`
