@@ -156,7 +156,44 @@ const mventas = {
         } catch (error) {
             throw new error("no muestra datos")
         }
-    }
+    },
+    // filtro de ventas
+    obtenerVentas: async({ inicio, fin, mes, dia, pago } = {})=> {
+        let query = "SELECT id, id_orden, hora, mesa, id_prod, producto, precio_u, cantidad, total_p, pago FROM ventas_res WHERE 1=1";
+        const params = [];
+
+        if (inicio && fin) {
+            query += " AND hora BETWEEN ? AND ?";
+            params.push(inicio, fin);
+        }
+
+        if (mes) {
+            query += " AND MONTH(hora) = ?";
+            params.push(mes);
+        }
+
+        if (dia) {
+            query += " AND DAYOFWEEK(hora) = ?";
+            params.push(dia);
+        }
+
+        if (pago) {
+            query += " AND pago = ?";
+            params.push(pago);
+        }
+
+        query += " ORDER BY hora";
+
+        try {
+            const [result] = await db.query(query, params);
+            return result;
+        } catch (error) {
+            console.error("Error en la consulta SQL:", error);
+            throw { status: 500, message: "Error al cargar datos de la base de datos." };
+        }
+
+      }
+      
     
 }
 export default mventas

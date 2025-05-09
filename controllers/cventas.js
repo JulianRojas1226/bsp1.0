@@ -1,5 +1,18 @@
 import error from "../middwlare/err.js"
 import mventas from "../modulos/mventas.js";
+import PdfPrinter  from "pdfmake";
+import fs from "fs";
+const fonts = {
+    Roboto: {
+      normal: "Helvetica", // Fuente para texto normal
+      bold: "Helvetica-Bold", // Fuente para texto en negrita
+      italics: "Helvetica-Oblique", // Fuente para texto en cursiva
+      bolditalics: "Helvetica-BoldOblique" // Fuente para texto en negrita y cursiva
+    }
+  }
+const printer = new PdfPrinter(fonts);
+
+
 const cventas = {
     getventas: async(req,res)=>{
         try {
@@ -64,7 +77,56 @@ const cventas = {
                 error: error.message || "Error desconocido"
             })
         }
+    },
+    generarpdf: async (req,res) => {
+        const filtros ={
+            inicio: req.query.inicio && req.query.inicio.trim() !== "" ? req.query.inicio : null,
+            fin: req.query.fin && req.query.fin.trim() !== "" ? req.query.fin : null,
+            mes: req.query.mes && !isNaN(req.query.mes) && req.query.mes >= 1 && req.query.mes <= 12 ? req.query.mes : null,
+            dia: req.query.dia && !isNaN(req.query.dia) && req.query.dia >= 1 && req.query.dia <= 7 ? req.query.dia : null,
+            pago: req.query.pago && req.query.pago.trim() !== "" ? req.query.pago : null
+
+        }
+        try {
+            const ventas = await mventas.obtenerVentas(filtros)
+            if (ventas === 0){
+                return res.status(404).send("No se encontraron ventas.");
+            }
+            const body = ventas.map(v=>[v.hora.toISOString().split(`T`)[0], v.mesa,v.producto,v.cantidad,`$${v.precio_u}`,`$${v.total_p}`, v.pago])
+            const docDefinicion={
+                content:[
+                    {text: `Reporte de Ventas`, style:`header`},
+                    {text: `Filtros aplicados: ${JSON.stringify(filtros)}`, style:`subheader`},
+                    {text: '\n'},
+                    {
+                        table:{
+                            widths:['20%','20%','20%','20%','20%','20%','20%'],
+                            body:[['fecha','mesa','producto','cantidad','precio unitario','total_p','metodo pago'], ...body]
+                        }
+                    }
+                ],
+                styles: {
+                    header: { fontSize: 18, bold: true, alignment: 'center' },
+                    subheader: { fontSize: 12, italics: true, alignment: 'left' }
+                }
+                
+            }
+            const pdfDoc = printer.createPdfKitDocument(docDefinicion);
+            const filepath =`./public/reporte.pdf`
+            const stream = fs.createWriteStream(filepath)
+            pdfDoc.pipe(stream)
+            pdfDoc.end()
+            stream.on('finish',()=>{
+                res.download(filepath)
+            })
+        } catch (error) {
+            console.error("Error al generar PDF:", error);
+            res.status(500).send("Error interno.");
+
+        }
     }
+
+    
 
 }
 export default cventas

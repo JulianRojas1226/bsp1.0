@@ -126,6 +126,49 @@ html(lang="en")
                                                         td #{ventau.cantidad} 
                                                         td #{ventau.precio_u}
                                                         td #{ventau.total_p}
+                    form#filtroForm(action="/ventas/pdf" method="GET")
+                        label(for="inicio") Fecha Inicio:
+                        input(type="date" name="inicio")
+
+                        label(for="fin") Fecha Fin:
+                        input(type="date" name="fin")
+
+                        label(for="mes") Mes:
+                        select(name="mes")
+                            option(value="") Todos
+                            option(value="1") Enero
+                            option(value="2") Febrero
+                            option(value="3") Marzo
+                            option(value="4") Abril
+                            option(value="5") Mayo
+                            option(value="6") Junio
+                            option(value="7") Julio
+                            option(value="8") Agosto
+                            option(value="9") Septiembre
+                            option(value="10") Octubre
+                            option(value="11") Noviembre
+                            option(value="12") Diciembre
+
+                        label(for="dia") Día de la Semana:
+                        select(name="dia")
+                            option(value="") Todos
+                            option(value="1") Domingo
+                            option(value="2") Lunes
+                            option(value="3") Martes
+                            option(value="4") Miércoles
+                            option(value="5") Jueves
+                            option(value="6") Viernes
+                            option(value="7") Sábado
+
+                        label(for="pago") Tipo de Pago:
+                        select(name="pago")
+                            if tipo_pagos && tipo_pagos.length 
+                                each tipo_pago in tipo_pagos                                    
+                                    option(value=tipo_pago.id) #{tipo_pago.nombre} 
+                            else 
+                                    option(value="") no hay opciones
+                        button(type="submit") Generar PDF
+
         footer
                     ul.nav.justify-content-center
                         li.nav-item

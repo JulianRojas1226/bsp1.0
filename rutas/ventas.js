@@ -9,6 +9,7 @@ import { Router } from "express";
  routes.post("/eliminar/:id", cventas.eliminarorden)
  routes.post("/pagar/:mesa", cventas.pagar)
  routes.post("/duplicar/:id", cventas.duplicar)
+ routes.get("/ventas/pdf",cventas.generarpdf)
 //  barrra navegacion 
  routes.get("/ventas", cventas.getventas)
  routes.get("/res", cres.getres)
