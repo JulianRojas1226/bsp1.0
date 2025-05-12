@@ -16,7 +16,16 @@ const __dirname = process.cwd()
 const app = express()
 const port = 3000
 app.use(cors())
-app.use(helmet())
+app.use(helmet({contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "https://cdn.jsdelivr.net"],
+        styleSrc: ["'self'", "https://cdn.jsdelivr.net", "'unsafe-inline'"],
+        fontSrc: ["'self'", "https://cdn.jsdelivr.net"],
+      },
+    },
+  })
+)
 app.use(morgan("dev"))
 
 app.use("/node_modules", express.static("node_modules"));

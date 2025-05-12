@@ -93,14 +93,20 @@ const cventas = {
                 return res.status(404).send("No se encontraron ventas.");
             }
             const body = ventas.map(v=>[v.hora.toISOString().split(`T`)[0], v.mesa,v.producto,v.cantidad,`$${v.precio_u}`,`$${v.total_p}`, v.pago])
+            const filtrosusados= Object.entries(filtros)
+            .filter(([_, valor])=> valor !== null && valor !== "")
+            .map(([clave,valor])=> `${clave}: ${valor}`) 
+            .join(", ")
             const docDefinicion={
                 content:[
                     {text: `Reporte de Ventas`, style:`header`},
-                    {text: `Filtros aplicados: ${JSON.stringify(filtros)}`, style:`subheader`},
+                    {text: `${new Date().toLocaleDateString("es-ES",{ year:"numeric",month:"long", day:"numeric"})}`, style:`subheader`},
+                    {text: '\n'},
+                    {text: `Filtros aplicados: ${JSON.stringify(filtrosusados)}`, style:`subheader`},
                     {text: '\n'},
                     {
                         table:{
-                            widths:['20%','20%','20%','20%','20%','20%','20%'],
+                            widths:['20%','5%','20%','10%','20%','20%','20%'],
                             body:[['fecha','mesa','producto','cantidad','precio unitario','total_p','metodo pago'], ...body]
                         }
                     }
