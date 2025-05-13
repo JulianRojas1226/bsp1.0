@@ -21,7 +21,7 @@ app.use(helmet({contentSecurityPolicy: {
         defaultSrc: ["'self'"],
         scriptSrc: ["'self'", "https://cdn.jsdelivr.net"],
         styleSrc: ["'self'", "https://cdn.jsdelivr.net", "'unsafe-inline'"],
-        fontSrc: ["'self'", "https://cdn.jsdelivr.net"],
+        fontSrc: ["'self'", "https://cdn.jsdelivr.net", "data:"],
       },
     },
   })

@@ -192,7 +192,8 @@ const mventas = {
             throw { status: 500, message: "Error al cargar datos de la base de datos." };
         }
 
-      }
+    },
+      
       
     
 }

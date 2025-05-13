@@ -10,6 +10,35 @@ const msesion ={
             throw { status: 500, message: "Error al cargar datos." };
         
         }
+    },
+    ventas_meses: async()=> {
+        try {
+        const[result]= await db.query(`select month(hora) as mes
+        ,monthname(hora) as nombre_mes, sum(total_p) as total_mensual
+        from ventas_res
+        group by month(hora)
+        order by mes`)
+        return result
+        } catch (error) {
+        console.error("Error en la consulta SQL:", error);
+        throw { status: 500, message: "Error al cargar datos." };
+        }
+    },
+    progresion_ventas: async () => {
+            try {
+            const [result]= await db.query(`select monthname(hora) as mes,
+
+            year(hora) as año, sum(total_p) as totales
+
+            from ventas_res
+            group by year(hora), month(hora)
+            order by año,mes`)
+            return result
+            } catch (error) {
+            console.error("Error en la consulta SQL:", error);
+
+            throw { status: 500, message: "Error al cargar datos." };
+            }
     }
 }
 export default msesion 

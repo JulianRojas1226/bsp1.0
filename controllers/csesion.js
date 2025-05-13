@@ -17,6 +17,26 @@ const csescion = {
         } catch (error) {
           res.status(500).send("Error al obtener datos.");
         }
-      }
+      },
+      get_graficos_mes: async (req,res) => {
+          try {
+          const datosbarras =await msesion.ventas_meses()
+          const labels = datosbarras.map(d => d.nombre_mes)
+          const values = datosbarras.map(d => d.total_mensual)
+          res.json({labels,values})
+          } catch (error) {
+          res.status(500).send("Error al obtener datos.");
+          }
+        },
+      get_lineal: async (req,res) => {
+          try {
+          const datalineal = await msesion.progresion_ventas()
+          const labels = datalineal.map(d => `${d.mes} ${d.año}`)
+          const values = datalineal.map(d => d.totales)
+          res.json({labels,values})
+          } catch (error) {
+          res.status(500).send("Error al obtener datos.");
+          }
+        }
 }
 export default csescion
