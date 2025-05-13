@@ -37,6 +37,9 @@ const csescion = {
           } catch (error) {
           res.status(500).send("Error al obtener datos.");
           }
-        }
+        },
+      get_calendar: async (req,res) => {
+        
+      }
 }
 export default csescion
