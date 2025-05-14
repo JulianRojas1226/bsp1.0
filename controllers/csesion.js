@@ -39,7 +39,18 @@ const csescion = {
           }
         },
       get_calendar: async (req,res) => {
-        
+        try {
+            const reservas = await msesion.mostres();
+            const eventos = reservas.map(reserva => ({
+              id: reserva.id_re,
+              title: reserva.nombre,
+              start: reserva.fecha_hora // Asegúrate de que el formato de fecha es correcto
+            }));
+
+           res.json(eventos)         
+        } catch (error) {
+          res.status(500).send("Error al obtener datos.");
+        }
       }
 }
 export default csescion

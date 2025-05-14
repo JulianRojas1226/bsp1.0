@@ -1,0 +1,5 @@
+#calendar {
+  width: 80%; /* Ajusta el ancho */
+  height: 600px; /* Ajusta la altura */
+  margin: auto; /* Centrar el calendario */
+}

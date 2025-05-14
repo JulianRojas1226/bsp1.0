@@ -7,6 +7,7 @@ const routes = Router()
 routes.get("/graficopie", csescion.getgraficopie)
 routes.get("/graficobarras", csescion.get_graficos_mes)
 routes.get("/graficolineal", csescion.get_lineal)
+routes.get("/calendario", csescion.get_calendar)
 // barra de navegacion
 routes.get("/sesion",csescion.getsesion)
 routes.get("/prod",cprod.getprod)
