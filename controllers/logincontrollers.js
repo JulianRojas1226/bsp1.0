@@ -5,7 +5,7 @@ import error from "../middwlare/err.js";
 const clogin=
 { 
     getlogin: (req,res)=>{
-    res.render("index")
+    res.render("login")
     },
     autenticacion: async (req,res)=>{
     try { 

@@ -51,6 +51,7 @@ const csescion = {
         } catch (error) {
           res.status(500).send("Error al obtener datos.");
         }
-      }
+      },
+      
 }
 export default csescion

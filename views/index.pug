@@ -1,41 +1,273 @@
-
-html(lang="en")
+html(lang="es")
   head
     meta(charset="UTF-8")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
-    title Document
-    link(rel="stylesheet" href="/css/style.css")
+    title Bassprod
+    link(rel="stylesheet", href="/css/styleindex.css")
+    // Iconos
+    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css", integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==", crossorigin="anonymous", referrerpolicy="no-referrer")
+    // Animaciones
+    link(rel="stylesheet", href="https://unpkg.com/aos@2.3.1/dist/aos.css")
+    //- bootstrap
+    link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous")
+    link(rel="stylesheet", href="/css/flatpickr.min.css")
 
-  body(id="login")
+  body
+    header
+      nav
+        ul
+          li
+            img(src="/img/BASSPROD3.png", alt="Logo Bassprod")
+          li: a(href="#inicio") Inicio
+          li: a(href="#somos") Quiénes somos
+          li: a(href="#beneficios") Beneficios
+          li: a(href="#trabajamos") Trabajamos
+          li: a(href="#equipo") Equipo
+          li: a(href="#contacto") Contacto
+          li: a(href="/login") login
+
     main
-      .TODO
-        .CAJA_TRASERA
-          .caja_trasera_is
-            h1 ¡Bienvenido!
-            p Inicia sesión para acceder a todas las funcionalidades de nuestra plataforma. 
-              | Ingresa tus credenciales de forma segura y comienza a disfrutar de una experiencia eficiente y personalizada.
-            button#btn_iniciarsesion inicio sesion
+        section#inicio
+            div
+            h1.titulo Bienvenidos
+            h2 Somos un equipo de diseñadores talentosos especializados en la creación de sitios web atractivos, funcionales y a la medida de tus necesidades.
+            // Modal 1
+            button.btn.btn-primary.principal(data-bs-target="#exampleModalToggle" data-bs-toggle="modal") Open first modal
 
-          .caja_trasera_reg
-            h2 ¿Ya tienes cuenta?
-            h1 ¡Únete a nosotros!
-            p Crea una cuenta en pocos pasos y accede a todas las funcionalidades que tenemos para ofrecerte. 
-              | Completa tus datos para empezar a disfrutar de una experiencia personalizada y optimizada a tus necesidades.
-            button#btn_registrarse REGISTRO
+            div.modal.fade(id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1")
+                div.modal-dialog.modal-dialog-centered
+                    div.modal-content
+                        div.modal-header
+                            h1.modal-title.fs-5.reservastittle(id="exampleModalToggleLabel") Modal 1
+                            button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close")
+                        div.modal-body
+                            form(action="/addres" method="post")
+                                label(for="#") fecha
+                                input(type="text", name="fecha_hora" id="calendario")
+                                label(for="#") Hora 
+                                input(type="time", name="hora")
+                                label(for="#") Identificacion 
+                                input(type="number", name="NID")
+                                label(for="#") nombre 
+                                input(type="text", name="nombre")
+                                label(for="#") correo 
+                                input(type="email", name="correo")
+                                label(for="#") celular 
+                                input(type="number", name="celular")
+                                label(for="#") tipo
+                                select(name="tipos")
+                                    if tipos && tipos.length 
+                                        each tipo in tipos 
+                                            option(value=tipo.tipo) #{tipo.nombre}
+                                    else 
+                                        option(value="") no se encontraron tipos
+                                label(for="#") cantidad_p
+                                input(type="number", name="cantidad_p")
+                                label(for="#") mesa 
+                                select(name="mesa_asig")
+                                    if mesas && mesas.length 
+                                        each mesa in mesas 
+                                            option(value=mesa.ID)  #{mesa.ID}
+                                    else 
+                                        option(value="") no se encontro mesa
+                                label(for="")  observacion 
+                                input(type="text", name="obser")                                                
+                                button.btn.btn-primary.principal(data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" type="submit") Open second modal
 
-        .contenedor_is_r
-          form.inicio_sesion(action="/" method="post")
-            h2 INICIAR SESION
-            input(type="text" id="usuario" name="usuario" placeholder="usuario")
-            input(type="password" id="codigo" name="codigo" placeholder="codigo")
-            button(type="submit") INICIAR
-
-          form.REGISTRO(action="/registro" method="post")
-            h2 REGISTRARSE
-            input(type="text" id="nombre_r" name="nombre_r" placeholder="nombre")
-            input(type="text" id="correo" name="correo" placeholder="correo")
-            input(type="password" id="password" name="password"  placeholder="password")
+            // Modal 2
+            div.modal.fade(id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1")
+                div.modal-dialog.modal-dialog-centered
+                    div.modal-content
+                        div.modal-header
+                            h1.modal-title.fs-5(id="exampleModalToggleLabel2") Modal 2
+                            button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close")
+                        div.modal-body
+                            | Hide this modal and show the first with the button below.
+                        div.modal-footer
+                            button.btn.btn-primary.principal(data-bs-target="#exampleModalToggle" data-bs-toggle="modal") Back to first
             
-            button(type="submit") REGISTRARSE
 
-    script(src="/js/PLAY.JS")
+        section#somos
+            .info-container
+                article.col-lg-7.cont-info-1
+                    h2 ¿Quiénes somos?
+                    a ¿En qué nos enfocamos?
+                    p Nos especializamos en el desarrollo de soluciones integrales para la gestión de inventarios, facturación y reservas enfocadas en establecimientos gastronómicos.
+                    p
+                    i.fa-regular.fa-circle-user
+                    | Control preciso de materias primas, insumos y productos terminados.
+                    p
+                    i.fa-regular.fa-circle-user
+                    | Generación de comprobantes fiscales electrónicos, adaptados a las normativas locales.
+                    p
+                    i.fa-regular.fa-circle-user
+                    | Automatización del proceso de reservas para mesas o pedidos especiales, integrándose con plataformas en línea.
+                    p
+                    i.fa-regular.fa-circle-user
+                    | Herramientas avanzadas de análisis con gráficos, estadísticas y reportes personalizados.
+                article.col-lg-5.cont-foto(data-aos="flip-left", data-aos-easing="ease-out-cubic", data-aos-duration="2500")
+                    img(src="/img/imagen_somos.png", alt="foto-1")
+            .container-lg
+                .row(data-aos="fade-up", data-aos-duration="2000")
+                    article.col-lg-3.cont-info-2
+                        h3 01
+                        h4 Lorem Ipsum
+                        p Ulamco laboris nisi ut aliquip ex ea commodo consequat. Et consectetur ducimus vero placeat.
+                    article.col-lg-3.cont-info-2
+                        h3 02
+                        h4 Repellat Nihil
+                        p Dolorem est fugiat occaecati voluptate velit esse. Dicta veritatis dolor quod et vel dire leno para dest.
+                    article.col-lg-3.cont-info-2
+                        h3 03
+                        h4 Ad ad velit qui
+                        p Molestiae officiis omnis illo asperiores. Aut doloribus vitae sunt debitis quo vel nam quis.         
+        section#beneficios.beneficios-header
+            h2 Beneficios
+            p Nos enfocamos al manejo de inventario, facturación y reservas de establecimientos dedicados a la elaboración de comidas, bebidas y que son preparadas para consumo humano.
+            .tarjetas-grid
+                article.cards(data-aos="fade-down-right", data-aos-duration="2000")
+                    h3 Manejo de inventario
+                    a
+                        i.fa-solid.fa-check
+                        |  Control eficiente de los insumos y productos disponibles.
+                        br
+                    a
+                        i.fa-solid.fa-check
+                        |  Reducción de desperdicios gracias a un monitoreo constante.
+                        br
+                    a
+                        i.fa-solid.fa-check
+                        |  Optimización de costos al mantener niveles adecuados de stock.
+
+                article.cards(data-aos="fade-down-left", data-aos-duration="2000")
+                    h3 Facturación
+                    a
+                        i.fa-solid.fa-check
+                        |  Generación rápida y precisa de facturas.
+                        br
+                    a
+                        i.fa-solid.fa-check
+                        |  Mejora en la gestión financiera y contable del establecimiento.
+                        br
+                    a
+                        i.fa-solid.fa-check
+                        |  Cumplimiento con normativas fiscales y tributarias.
+
+                article.cards(data-aos="fade-up-right", data-aos-duration="2000")
+                    h3 Reservas
+                    a
+                        i.fa-solid.fa-check
+                        |  Organización y seguimiento de las reservas de clientes.
+                        br
+                    a
+                        i.fa-solid.fa-check
+                        |  Reducción de tiempos de espera y mejor experiencia del cliente.
+                        br
+                    a
+                        i.fa-solid.fa-check
+                        |  Optimización del uso de los recursos y espacios del establecimiento.
+
+                article.cards(data-aos="fade-up-left", data-aos-duration="2000")
+                    h3 Aplicación a establecimientos de comida y bebida
+                    a
+                        i.fa-solid.fa-check
+                        |  Soluciones diseñadas específicamente para el sector gastronómico.
+                        br
+                    a
+                        i.fa-solid.fa-check
+                        |  Mejora en la calidad del servicio al cliente.
+                        br
+                    a
+                        i.fa-solid.fa-check
+                        |  Adaptación a las necesidades particulares de este tipo de negocio.
+
+        section#trabajamos
+            h2 ¿En que sitios trabajamos?
+            p Nos enfocamos en el manejo de inventario, facturación y reservas de establecimientos dedicados a la elaboración de comidas, bebidas y que son preparadas para consumo humano.
+            .container
+                .card
+                    h3 Bares
+                    li
+                        i.fa-solid.fa-minus
+                        |  Espacios donde se sirven bebidas alcohólicas y no alcohólicas.
+                    li
+                        i.fa-solid.fa-minus
+                        |  Pueden ofrecer aperitivos o bocadillos.
+                    li
+                        i.fa-solid.fa-minus
+                        |  Ambiente relajado y social.
+                    a.button.button-gray(href="#") Preguntar ahora
+
+                .card.highlight
+                    h3 Restaurantes
+                    li
+                        i.fa-solid.fa-minus
+                        |  Establecimientos donde se sirven comidas completas.
+                    li
+                        i.fa-solid.fa-minus
+                        |  Ofrecen un menú con entradas, platos principales y postres.
+                    li
+                        i.fa-solid.fa-minus
+                        |  Enfocados en la comida y la experiencia gastronómica.
+                    a.button.button-orange(href="#") Preguntar ahora
+
+                .card
+                    h3 Cafeterías
+                    li
+                        i.fa-solid.fa-minus
+                        |  Especializados en la venta de café y bebidas calientes.
+                    li
+                        i.fa-solid.fa-minus
+                        |  También venden productos de panadería y pastelería.
+                    li
+                        i.fa-solid.fa-minus
+                        |  Ambiente tranquilo, ideal para trabajar o socializar.
+                    a.button.button-gray(href="#") Preguntar ahora
+
+        section#equipo
+            h2 Conoce a Nuestro Equipo
+            p Nuestro equipo de trabajo está conformado por profesionales comprometidos con la mejora continua
+            .equipo-container
+                .miembro(data-aos="fade-right", data-aos-duration="1500")
+                    img(src="/img/team/Team-1.png", alt="Julian Estevan Rojas Cusva")
+                    h3 Julian Estevan Rojas Cusva
+                    a Programador Back-End
+                .miembro(data-aos="fade-left", data-aos-duration="1500")
+                    img(src="/img/team/Team-2.png", alt="Juan Sebastian Tovar Paez")
+                    h3 Juan Sebastian Tovar Paez
+                    a Programador Frontend
+        section.contacto(data-aos="zoom-in", data-aos-duration="1500")
+            h2 Contáctanos
+            p
+                | Comparte con nosotros tus datos de contacto y te enviaremos 
+                br
+                | toda la informacion de los medios de pagos.
+            
+            form(action="#", method="POST")
+                input(type="text", name="nombre", placeholder="Nombre", required)
+                input(type="text", name="numero", placeholder="Telefono", required)
+                input(type="email", name="correo", placeholder="Correo Electrónico", required)
+                textarea(name="mensaje", rows="5", placeholder="Mensaje Personalizado", required)
+                button(type="submit") Enviar
+
+
+    footer
+      h2 Información Contacto
+      p &copy; 2025 - Todos los derechos reservados.
+      p
+        i.fa-solid.fa-envelope
+        | Bassprod@gmail.com
+      p
+        i.fa-solid.fa-phone
+        | +57 3209367482
+      p
+        i.fa-solid.fa-location-dot
+        | Dirección: Una Casa
+
+    // Animaciones
+    script(src="/js/flatpickr.min.js")
+    script(src="/js/index.js", type="module")
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous")
+    script(src="https://unpkg.com/aos@2.3.1/dist/aos.js")
+    script.
+      AOS.init();

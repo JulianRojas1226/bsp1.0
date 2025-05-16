@@ -6,6 +6,7 @@ import helmet from "helmet"
 import morgan from "morgan"
 import {autenticado}  from "./middwlare/auth.js"
 import error from "./middwlare/err.js";
+import routesindex from "./rutas/index.js";
 import routeslogin   from "./rutas/login.js";
 import routessesion from "./rutas/sesion.js"
 import routesproductos from "./rutas/productos.js";
@@ -18,10 +19,29 @@ const port = 3000
 app.use(cors())
 app.use(helmet({contentSecurityPolicy: {
       directives: {
-        defaultSrc: ["'self'"],
-        styleSrc: ["'self'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "'unsafe-inline'"],
-        fontSrc: ["'self'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "data:"],
-        scriptSrc: ["'self'", "https://cdn.jsdelivr.net"],
+              defaultSrc: ["'self'"],
+        styleSrc: [
+          "'self'",
+          "https://cdn.jsdelivr.net",
+          "https://cdnjs.cloudflare.com",
+          "https://unpkg.com", // 👈 Agregado
+          "'unsafe-inline'"
+        ],
+        fontSrc: [
+          "'self'",
+          "https://cdn.jsdelivr.net",
+          "https://cdnjs.cloudflare.com",
+          "data:"
+        ],
+        scriptSrc: [
+          "'self'",
+          "https://cdn.jsdelivr.net",
+          "https://unpkg.com",
+          "'unsafe-inline'",
+          "'unsafe-eval'",
+          
+        ]
+
       },
     },
   })
@@ -41,7 +61,7 @@ app.use(session({
     resave: true,
     saveUninitialized: true,
 }))
-
+app.use(routesindex)
 app.use(routeslogin)
 app.use(autenticado,routessesion)
 app.use(routesreservas)

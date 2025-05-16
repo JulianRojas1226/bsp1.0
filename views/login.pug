@@ -1,0 +1,41 @@
+
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title Document
+    link(rel="stylesheet" href="/css/style.css")
+
+  body(id="login")
+    main
+      .TODO
+        .CAJA_TRASERA
+          .caja_trasera_is
+            h1 ¡Bienvenido!
+            p Inicia sesión para acceder a todas las funcionalidades de nuestra plataforma. 
+              | Ingresa tus credenciales de forma segura y comienza a disfrutar de una experiencia eficiente y personalizada.
+            button#btn_iniciarsesion inicio sesion
+
+          .caja_trasera_reg
+            h2 ¿Ya tienes cuenta?
+            h1 ¡Únete a nosotros!
+            p Crea una cuenta en pocos pasos y accede a todas las funcionalidades que tenemos para ofrecerte. 
+              | Completa tus datos para empezar a disfrutar de una experiencia personalizada y optimizada a tus necesidades.
+            button#btn_registrarse REGISTRO
+
+        .contenedor_is_r
+          form.inicio_sesion(action="/login/autenticacion" method="post")
+            h2 INICIAR SESION
+            input(type="text" id="usuario" name="usuario" placeholder="usuario")
+            input(type="password" id="codigo" name="codigo" placeholder="codigo")
+            button(type="submit") INICIAR
+
+          form.REGISTRO(action="/registro" method="post")
+            h2 REGISTRARSE
+            input(type="text" id="nombre_r" name="nombre_r" placeholder="nombre")
+            input(type="text" id="correo" name="correo" placeholder="correo")
+            input(type="password" id="password" name="password"  placeholder="password")
+            
+            button(type="submit") REGISTRARSE
+
+    script(src="/js/PLAY.JS")

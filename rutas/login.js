@@ -3,8 +3,8 @@ import clogin from "../controllers/logincontrollers.js";
 
 const routes = Router()
 
-routes.get("/",clogin.getlogin)
-routes.post("/",clogin.autenticacion)
+routes.get("/login",clogin.getlogin)
+routes.post("/login/autenticacion",clogin.autenticacion)
 routes.post("/registro",clogin.Registro)
 
 export default routes
