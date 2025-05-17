@@ -26,7 +26,7 @@ const mindex={
     },
     insertardatos: async({fecha_hora,hora,NID,nombre,correo,celular,tipos,cantidad_p,mesa_asig,obser})=>{
         try {
-            await db.query("insert into reservas(fecha_hora,hora,NID,nombre,correo,celular,tipo_re,cantidad_p,mesa_asig,obser) values (?,?,?,?,?,?,?,?,?)",
+            await db.query("insert into reservas(fecha_hora,hora,NID,nombre,correo,celular,tipo_re,cantidad_p,mesa_asig,obser) values (?,?,?,?,?,?,?,?,?,?)",
                 [fecha_hora,hora,NID,nombre,correo,celular,tipos,cantidad_p,mesa_asig,obser]
             )
         } catch (err) {

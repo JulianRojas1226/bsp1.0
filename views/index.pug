@@ -31,14 +31,15 @@ html(lang="es")
             div
             h1.titulo Bienvenidos
             h2 Somos un equipo de diseñadores talentosos especializados en la creación de sitios web atractivos, funcionales y a la medida de tus necesidades.
-            // Modal 1
-            button.btn.btn-primary.principal(data-bs-target="#exampleModalToggle" data-bs-toggle="modal") Open first modal
+            // Botón para abrir el modal
+            button.btn.btn-primary(data-bs-toggle="modal" data-bs-target="#exampleModal") Launch demo modal
 
-            div.modal.fade(id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1")
-                div.modal-dialog.modal-dialog-centered
+            // Modal
+            div.modal.fade(id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true")
+                div.modal-dialog.modal-dialog-centered.modal-dialog-scrollable
                     div.modal-content
                         div.modal-header
-                            h1.modal-title.fs-5.reservastittle(id="exampleModalToggleLabel") Modal 1
+                            h1.modal-title.fs-5(id="exampleModalLabel") Modal title
                             button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close")
                         div.modal-body
                             form(action="/addres" method="post")
@@ -71,20 +72,10 @@ html(lang="es")
                                     else 
                                         option(value="") no se encontro mesa
                                 label(for="")  observacion 
-                                input(type="text", name="obser")                                                
-                                button.btn.btn-primary.principal(data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" type="submit") Open second modal
-
-            // Modal 2
-            div.modal.fade(id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1")
-                div.modal-dialog.modal-dialog-centered
-                    div.modal-content
-                        div.modal-header
-                            h1.modal-title.fs-5(id="exampleModalToggleLabel2") Modal 2
-                            button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close")
-                        div.modal-body
-                            | Hide this modal and show the first with the button below.
-                        div.modal-footer
-                            button.btn.btn-primary.principal(data-bs-target="#exampleModalToggle" data-bs-toggle="modal") Back to first
+                                input(type="text", name="obser")                            
+                                button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Close
+                                button.btn.btn-primary(type="button") Save changes
+        
             
 
         section#somos

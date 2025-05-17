@@ -40,6 +40,14 @@ const msesion ={
             throw { status: 500, message: "Error al cargar datos." };
             }
     },
+    mostres: async()=>{
+        try {
+            const [results] = await db.query("select id_re,fecha_hora,NID,nombre,correo,celular,tipo_re,cantidad_p,mesa_asig,obser from reservas")
+            return results
+        } catch (err) {
+            throw {status:500,message:"error al cargar datos de reserva"} 
+        }
+    }
     
 }
 export default msesion 
