@@ -2,8 +2,8 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 07-05-2025 a las 04:55:36
+-- Servidor: localhost:3307
+-- Tiempo de generación: 16-05-2025 a las 14:46:38
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -178,6 +178,7 @@ CREATE TABLE `producto` (
   `cantidad` int(4) NOT NULL,
   `proveedor` int(11) NOT NULL,
   `precio` int(20) NOT NULL,
+  `Costo` int(11) NOT NULL,
   `dir` varchar(500) DEFAULT NULL,
   `minimo_cant` int(3) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -186,11 +187,11 @@ CREATE TABLE `producto` (
 -- Volcado de datos para la tabla `producto`
 --
 
-INSERT INTO `producto` (`id`, `nombre`, `tipo`, `cantidad`, `proveedor`, `precio`, `dir`, `minimo_cant`) VALUES
-(41, 'Nectar media', 5, 11, 13135465, 30000, '/productos/1743967561585-media nectar.webp', 3),
-(42, 'aguila botella', 3, 33, 13135465, 3500, '/productos/1745410336039-AGUILA.jpg', 15),
-(43, 'poker botella', 3, 50, 13135465, 3500, '/productos/1745410367573-images.jpeg', 15),
-(44, 'budweiser lata', 3, 17, 13135465, 3500, '/productos/1745410420397-BUD.webp', 10);
+INSERT INTO `producto` (`id`, `nombre`, `tipo`, `cantidad`, `proveedor`, `precio`, `Costo`, `dir`, `minimo_cant`) VALUES
+(41, 'Nectar media', 5, 11, 13135465, 30000, 0, '/productos/1743967561585-media nectar.webp', 3),
+(42, 'aguila botella', 3, 33, 13135465, 3500, 0, '/productos/1745410336039-AGUILA.jpg', 15),
+(43, 'poker botella', 3, 50, 13135465, 3500, 0, '/productos/1745410367573-images.jpeg', 15),
+(44, 'budweiser lata', 3, 17, 13135465, 3500, 0, '/productos/1745410420397-BUD.webp', 10);
 
 -- --------------------------------------------------------
 
@@ -201,19 +202,20 @@ INSERT INTO `producto` (`id`, `nombre`, `tipo`, `cantidad`, `proveedor`, `precio
 CREATE TABLE `producto_add` (
   `id` int(3) NOT NULL,
   `cantidad` int(4) NOT NULL,
-  `proveedor` varchar(11) NOT NULL
+  `proveedor` varchar(11) NOT NULL,
+  `Costo` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `producto_add`
 --
 
-INSERT INTO `producto_add` (`id`, `cantidad`, `proveedor`) VALUES
-(0, 10, '13135465'),
-(22, 20, '13135465'),
-(23, 10, '13135465'),
-(26, 20, '13135465'),
-(41, 10, '1031648129');
+INSERT INTO `producto_add` (`id`, `cantidad`, `proveedor`, `Costo`) VALUES
+(0, 10, '13135465', 0),
+(22, 20, '13135465', 0),
+(23, 10, '13135465', 0),
+(26, 20, '13135465', 0),
+(41, 10, '1031648129', 0);
 
 --
 -- Disparadores `producto_add`
