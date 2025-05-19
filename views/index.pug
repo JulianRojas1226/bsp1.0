@@ -14,70 +14,100 @@ html(lang="es")
 
   body
     header
-      nav
-        ul
-          li
-            img(src="/img/BASSPROD3.png", alt="Logo Bassprod")
-          li: a(href="#inicio") Inicio
-          li: a(href="#somos") Quiénes somos
-          li: a(href="#beneficios") Beneficios
-          li: a(href="#trabajamos") Trabajamos
-          li: a(href="#equipo") Equipo
-          li: a(href="#contacto") Contacto
-          li: a(href="/login") login
+        video(id="mvideo" autoplay loop muted)
+                source(src="/img/1112501_Cocktail_Gen-z_3840x2160.mp4" type="video/mp4")
+        nav.navbar.navbar-expand-lg.container-fluid.jus
+            a.navbar-brand(href="#")
+                img(src="/img/BASSPROD3.png", alt="")
+            button.navbar-toggler(type="button", data-bs-toggle="collapse", data-bs-target="#navbarSupportedContent", aria-controls="navbarSupportedContent", aria-expanded="false", aria-label="Toggle navigation")
+                span.navbar-toggler-icon.menu
+            .collapse.navbar-collapse#navbarSupportedContent
+                ul.navbar-nav.d-flex.justify-content-around.w-100
+                    li.nav-item
+                        a.nav-link.active(aria-current="page", href="#") Home
+                    li.nav-item
+                        a.nav-link.active(aria-current="page", href="#") ¿Quienes somos?
+                    li.nav-item
+                        a.nav-link.active(aria-current="page", href="#") Beneficios
+                    li.nav-item
+                        a.nav-link.active(aria-current="page", href="#") ¿En que sitios trabajamos
+                    li.nav-item
+                        a.nav-link.active(aria-current="page", href="#") Equipo
+                    li.nav-item
+                        a.nav-link(href="/login")
+                            i.fa-regular.fa-user
+                    
+            
+        section#inicio
+            div.bienvenidos
+                h1.titulo ¡La noche perfecta comienza aquí!
+                h2 Ambiente único, música increíble y los mejores tragos.
+                    br
+                    |¡Reserva ahora y asegura tu lugar en la fiesta!
+                //- Botón para abrir el modal
+                button.btn-reserva(data-bs-toggle="modal" data-bs-target="#exampleModal") Reserva aqui 
+
+                //- modal
+                div.modal.fade.reserva(id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true")
+                    div.modal-dialog.modal-dialog-centered.modal-dialog-scrollable
+                        div.modal-content.contenedor-reserva
+                            div.modal-header
+                                h1.modal-title.fs-5(id="exampleModalLabel") Modal title
+                                button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close")
+                            div.modal-body
+                                form(action="/addres" method="post")
+                                    div.row
+                                        div.input-wrapper.col-sm
+                                            input(type="text", name="fecha_hora" id="calendario" placeholder="fecha")
+                                            .underline
+                                        div.input-wrapper.col-sm
+                                            input(type="time", name="hora" placeholder="hora")
+                                            .underline
+                                    div.row 
+                                        div.input-wrapper.col-sm-6
+                                            input(type="number", name="NID" placeholder="Identificación")
+                                            .underline
+                                        div.input-wrapper.col-sm-5
+                                            input(type="text", name="nombre" placeholder="Nombre")
+                                            .underline
+                                    div.row 
+                                        div.col-sm-6.input-wrapper
+                                            input(type="email", name="correo" placeholder="Correo")
+                                            .underline
+                                        div.col-sm-6.input-wrapper
+                                            input(type="number", name="celular" placeholder="Celular")
+                                            .underline
+                                    div.row 
+                                        .col-sm-6.custom-select-wrapper
+                                            label Elige una opción:
+                                            select.custom-select(name="tipos" placeholder="tipo de reserva")
+                                                if tipos && tipos.length 
+                                                    each tipo in tipos 
+                                                        option(value=tipo.tipo) #{tipo.nombre}
+                                                else 
+                                                    option(value="") no se encontraron tipos
+                                        div.col-sm-6.input-wrapper
+                                            input(type="number", name="cantidad_p" placeholder="Cantidad de personas")
+                                            .underline
+                                            
+                                    .row
+                                        .col-sm.custom-select-wrapper
+                                            label(for="opciones") Elige una opción:
+                                            select.custom-select(name="mesa_asig" placeholder="Mesa asignada")
+                                                if mesas && mesas.length 
+                                                    each mesa in mesas 
+                                                        option(value=mesa.ID)  #{mesa.ID}
+                                                else 
+                                                    option(value="") no se encontro mesa
+                                    .row
+                                        .input-wrapper
+                                            input(type="text", name="obser" placeholder = "Observacion")   
+                                            .underline                         
+                                    button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Close
+                                    button.btn-reserva(type="button") Save changes
 
     main
-        section#inicio
-            div
-            h1.titulo Bienvenidos
-            h2 Somos un equipo de diseñadores talentosos especializados en la creación de sitios web atractivos, funcionales y a la medida de tus necesidades.
-            // Botón para abrir el modal
-            button.btn.btn-primary(data-bs-toggle="modal" data-bs-target="#exampleModal") Launch demo modal
-
-            // Modal
-            div.modal.fade(id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true")
-                div.modal-dialog.modal-dialog-centered.modal-dialog-scrollable
-                    div.modal-content
-                        div.modal-header
-                            h1.modal-title.fs-5(id="exampleModalLabel") Modal title
-                            button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close")
-                        div.modal-body
-                            form(action="/addres" method="post")
-                                label(for="#") fecha
-                                input(type="text", name="fecha_hora" id="calendario")
-                                label(for="#") Hora 
-                                input(type="time", name="hora")
-                                label(for="#") Identificacion 
-                                input(type="number", name="NID")
-                                label(for="#") nombre 
-                                input(type="text", name="nombre")
-                                label(for="#") correo 
-                                input(type="email", name="correo")
-                                label(for="#") celular 
-                                input(type="number", name="celular")
-                                label(for="#") tipo
-                                select(name="tipos")
-                                    if tipos && tipos.length 
-                                        each tipo in tipos 
-                                            option(value=tipo.tipo) #{tipo.nombre}
-                                    else 
-                                        option(value="") no se encontraron tipos
-                                label(for="#") cantidad_p
-                                input(type="number", name="cantidad_p")
-                                label(for="#") mesa 
-                                select(name="mesa_asig")
-                                    if mesas && mesas.length 
-                                        each mesa in mesas 
-                                            option(value=mesa.ID)  #{mesa.ID}
-                                    else 
-                                        option(value="") no se encontro mesa
-                                label(for="")  observacion 
-                                input(type="text", name="obser")                            
-                                button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Close
-                                button.btn.btn-primary(type="button") Save changes
-        
-            
-
+       
         section#somos
             .info-container
                 article.col-lg-7.cont-info-1
@@ -98,8 +128,8 @@ html(lang="es")
                     | Herramientas avanzadas de análisis con gráficos, estadísticas y reportes personalizados.
                 article.col-lg-5.cont-foto(data-aos="flip-left", data-aos-easing="ease-out-cubic", data-aos-duration="2500")
                     img(src="/img/imagen_somos.png", alt="foto-1")
-            .container-lg
-                .row(data-aos="fade-up", data-aos-duration="2000")
+            .container-fluid
+                .row.d-flex.justify-content-center(data-aos="fade-up", data-aos-duration="2000")
                     article.col-lg-3.cont-info-2
                         h3 01
                         h4 Lorem Ipsum
@@ -120,7 +150,7 @@ html(lang="es")
                     h3 Manejo de inventario
                     a
                         i.fa-solid.fa-check
-                        |  Control eficiente de los insumos y productos disponibles.
+                        | Control eficiente de los insumos y productos disponibles.
                         br
                     a
                         i.fa-solid.fa-check
@@ -255,10 +285,10 @@ html(lang="es")
         i.fa-solid.fa-location-dot
         | Dirección: Una Casa
 
-    // Animaciones
+    //- animaciones
     script(src="/js/flatpickr.min.js")
     script(src="/js/index.js", type="module")
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous")
     script(src="https://unpkg.com/aos@2.3.1/dist/aos.js")
     script.
-      AOS.init();
+     AOS.init();

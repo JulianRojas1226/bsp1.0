@@ -44,8 +44,8 @@ const cprod ={
         return res.status(400).send("no se subio ninguna imagen.")
       }
       const ruta = `/productos/${req.file.filename}`
-      const {nombre,cantidad,tipo,proveedor,precio,cantidad_min}=req.body  
-      await mprod.insertdatos({ruta,nombre,tipo,cantidad,proveedor,precio,cantidad_min})
+      const {nombre,cantidad, costo,tipo,proveedor,precio,cantidad_min}=req.body  
+      await mprod.insertdatos({ruta,nombre,tipo,cantidad,costo,proveedor,precio,cantidad_min})
       res.redirect("/prod"); 
     } catch (err) {
       console.error("❌ Error al guardar los datos:", err);
@@ -54,8 +54,8 @@ const cprod ={
   },
   addcantidad: async (req,res)=>{
     try {
-      const {producto,cantidad,proveedor}=req.body
-      await mprod.cantadd({producto,cantidad,proveedor})
+      const {producto,cantidad,costo,proveedor}=req.body
+      await mprod.cantadd({producto,cantidad,costo,proveedor})
       res.redirect("/prod"); 
     } catch (err) {
       console.error("❌ Error al guardar los datos:", err);

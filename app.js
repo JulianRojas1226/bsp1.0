@@ -17,33 +17,36 @@ const __dirname = process.cwd()
 const app = express()
 const port = 3000
 app.use(cors())
-app.use(helmet({contentSecurityPolicy: {
-      directives: {
-              defaultSrc: ["'self'"],
-        styleSrc: [
-          "'self'",
-          "https://cdn.jsdelivr.net",
-          "https://cdnjs.cloudflare.com",
-          "https://unpkg.com", // 👈 Agregado
-          "'unsafe-inline'"
-        ],
-        fontSrc: [
-          "'self'",
-          "https://cdn.jsdelivr.net",
-          "https://cdnjs.cloudflare.com",
-          "data:"
-        ],
-        scriptSrc: [
-          "'self'",
-          "https://cdn.jsdelivr.net",
-          "https://unpkg.com",
-          "'unsafe-inline'",
-          "'unsafe-eval'",
-          
-        ]
-
-      },
-    },
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: [
+        "'self'",
+        "https://cdn.jsdelivr.net",
+        "https://cdnjs.cloudflare.com",
+        "https://fonts.googleapis.com", // ← necesario para cargar estilos de Google Fonts
+        "https://unpkg.com",
+        "'unsafe-inline'"
+      ],
+      fontSrc: [
+        "'self'",
+        "https://cdn.jsdelivr.net",
+        "https://cdnjs.cloudflare.com",
+        "https://fonts.gstatic.com", // ← AÑADE ESTO
+        "data:"
+      ],
+      scriptSrc: [
+        "'self'",
+        "https://cdn.jsdelivr.net",
+        "https://unpkg.com",
+        "'unsafe-inline'",
+        "'unsafe-eval'"
+      ],
+      connectSrc: ["'self'"],
+      imgSrc: ["'self'", "data:"],
+      objectSrc: ["'none'"]
+    }
   })
 )
 app.use(morgan("dev"))

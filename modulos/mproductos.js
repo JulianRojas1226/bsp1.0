@@ -19,10 +19,10 @@ const mprod={
             throw {status:500,message:"error al cargar datos"}
         }
     },
-    insertdatos: async({ruta,nombre,tipo,cantidad,proveedor,precio,cantidad_min})=>{
+    insertdatos: async({ruta,nombre,tipo,cantidad,costo,proveedor,precio,cantidad_min})=>{
         try {
-            await db.query("Insert into producto (nombre,tipo,cantidad,proveedor,precio,dir,minimo_cant) values (?,?,?,?,?,?,?)",
-                [nombre,tipo,cantidad,proveedor,precio,ruta,cantidad_min]
+            await db.query("Insert into producto (nombre,tipo,cantidad,proveedor,precio,costo,dir,minimo_cant) values (?,?,?,?,?,?,?,?)",
+                [nombre,tipo,cantidad,proveedor,precio,costo,ruta,cantidad_min]
             )
         } catch (err) {
             console.error("❌ Error al guardar los datos en la base de datos:", err);
@@ -38,10 +38,10 @@ const mprod={
             throw {status:500,message:"error al cargar datos"}
         }
     },
-    cantadd: async({producto,cantidad,proveedor})=>{
+    cantadd: async({producto,cantidad,costo,proveedor})=>{
         try {
-            await db.query("insert into producto_add(id,cantidad,proveedor) values (?,?,?)",
-                [producto,cantidad,proveedor]
+            await db.query("insert into producto_add(id,cantidad,proveedor,costo) values (?,?,?,?)",
+                [producto,cantidad,proveedor,costo]
             )
             
         } catch (err) {
