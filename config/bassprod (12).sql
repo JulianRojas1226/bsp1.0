@@ -2,8 +2,8 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: localhost:3307
--- Tiempo de generación: 16-05-2025 a las 14:46:38
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 19-05-2025 a las 04:07:46
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -101,6 +101,28 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `egresos`
+--
+
+CREATE TABLE `egresos` (
+  `id` int(11) NOT NULL,
+  `hora` timestamp NOT NULL DEFAULT current_timestamp(),
+  `nombre` varchar(100) NOT NULL,
+  `tipo` int(4) NOT NULL,
+  `costo` int(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `egresos`
+--
+
+INSERT INTO `egresos` (`id`, `hora`, `nombre`, `tipo`, `costo`) VALUES
+(1, '2025-05-18 23:26:06', 'HEINEKEN BOTELLA', 1, 113900),
+(2, '2025-05-18 23:46:29', 'aguila botella', 1, 65000);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `empleado`
 --
 
@@ -189,9 +211,30 @@ CREATE TABLE `producto` (
 
 INSERT INTO `producto` (`id`, `nombre`, `tipo`, `cantidad`, `proveedor`, `precio`, `Costo`, `dir`, `minimo_cant`) VALUES
 (41, 'Nectar media', 5, 11, 13135465, 30000, 0, '/productos/1743967561585-media nectar.webp', 3),
-(42, 'aguila botella', 3, 33, 13135465, 3500, 0, '/productos/1745410336039-AGUILA.jpg', 15),
+(42, 'aguila botella', 3, 63, 13135465, 3500, 0, '/productos/1745410336039-AGUILA.jpg', 15),
 (43, 'poker botella', 3, 50, 13135465, 3500, 0, '/productos/1745410367573-images.jpeg', 15),
-(44, 'budweiser lata', 3, 17, 13135465, 3500, 0, '/productos/1745410420397-BUD.webp', 10);
+(44, 'budweiser lata', 3, 17, 13135465, 3500, 0, '/productos/1745410420397-BUD.webp', 10),
+(45, 'HEINEKEN BOTELLA', 3, 24, 13135465, 4000, 113900, '/productos/1747610766533-heineken.webp', 10);
+
+--
+-- Disparadores `producto`
+--
+DELIMITER $$
+CREATE TRIGGER `nuevo_egreso` AFTER INSERT ON `producto` FOR EACH ROW BEGIN
+    DECLARE nombre_producto VARCHAR(100);
+    DECLARE costo_producto INT(20);
+    
+    -- Obtener nombre y costo en una sola consulta
+    SELECT nombre, costo INTO nombre_producto, costo_producto
+    FROM producto 
+    WHERE id = NEW.id;
+    
+    -- Insertar en egresos
+    INSERT INTO egresos (nombre, tipo, costo) 
+    VALUES (nombre_producto, 1, costo_producto);
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -215,7 +258,8 @@ INSERT INTO `producto_add` (`id`, `cantidad`, `proveedor`, `Costo`) VALUES
 (22, 20, '13135465', 0),
 (23, 10, '13135465', 0),
 (26, 20, '13135465', 0),
-(41, 10, '1031648129', 0);
+(41, 10, '1031648129', 0),
+(42, 30, '13135465', 65000);
 
 --
 -- Disparadores `producto_add`
@@ -231,6 +275,22 @@ UPDATE producto
 SET cantidad =cant_p + new.cantidad
 WHERE id= new.id;
 end if;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `nuevo_egreso_add` AFTER INSERT ON `producto_add` FOR EACH ROW BEGIN
+    DECLARE nombre_producto VARCHAR(100);
+    DECLARE costo_producto INT(20);
+
+    -- Obtener el nombre del producto desde la tabla producto
+    SELECT nombre INTO nombre_producto
+    FROM producto
+    WHERE id = NEW.id;
+
+    -- Insertar en egresos con el nombre obtenido
+    INSERT INTO egresos (nombre, tipo, costo)
+    VALUES (nombre_producto, 1, NEW.costo);
 END
 $$
 DELIMITER ;
@@ -315,6 +375,26 @@ CREATE TRIGGER `mesa_es` AFTER INSERT ON `reservas` FOR EACH ROW BEGIN
 END
 $$
 DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tipo_egreso`
+--
+
+CREATE TABLE `tipo_egreso` (
+  `id` int(4) NOT NULL,
+  `nombre` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tipo_egreso`
+--
+
+INSERT INTO `tipo_egreso` (`id`, `nombre`) VALUES
+(1, 'Productos'),
+(2, 'Servicios'),
+(3, 'Impuestos');
 
 -- --------------------------------------------------------
 
@@ -426,6 +506,13 @@ ALTER TABLE `detalles_p`
   ADD KEY `producto_id` (`id_prod`) USING BTREE;
 
 --
+-- Indices de la tabla `egresos`
+--
+ALTER TABLE `egresos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `tipo` (`tipo`);
+
+--
 -- Indices de la tabla `empleado`
 --
 ALTER TABLE `empleado`
@@ -466,6 +553,12 @@ ALTER TABLE `proveedor`
 ALTER TABLE `reservas`
   ADD PRIMARY KEY (`Id_re`),
   ADD KEY `tipo_re` (`tipo_re`);
+
+--
+-- Indices de la tabla `tipo_egreso`
+--
+ALTER TABLE `tipo_egreso`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `tipo_pago`
@@ -509,6 +602,12 @@ ALTER TABLE `detalles_p`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
+-- AUTO_INCREMENT de la tabla `egresos`
+--
+ALTER TABLE `egresos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT de la tabla `mesa`
 --
 ALTER TABLE `mesa`
@@ -524,13 +623,19 @@ ALTER TABLE `pagos`
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT de la tabla `reservas`
 --
 ALTER TABLE `reservas`
   MODIFY `Id_re` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT de la tabla `tipo_egreso`
+--
+ALTER TABLE `tipo_egreso`
+  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `tipo_pago`
@@ -566,6 +671,12 @@ ALTER TABLE `ventas_res`
 ALTER TABLE `detalles_p`
   ADD CONSTRAINT `detalles_p_ibfk_2` FOREIGN KEY (`id_prod`) REFERENCES `producto` (`id`),
   ADD CONSTRAINT `mesa` FOREIGN KEY (`mesa_id`) REFERENCES `mesa` (`ID`);
+
+--
+-- Filtros para la tabla `egresos`
+--
+ALTER TABLE `egresos`
+  ADD CONSTRAINT `tipo` FOREIGN KEY (`tipo`) REFERENCES `tipo_egreso` (`id`);
 
 --
 -- Filtros para la tabla `empleado`
