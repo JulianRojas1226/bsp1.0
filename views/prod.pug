@@ -9,34 +9,34 @@ html(lang="es")
         link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer")
         
     body
-        nav.sliderbar
-            header
-                .image-text
-                    span.image
-                        img(src="/img/BASSPROD3.png", alt="")
-                    .text.header-text
-                        span.name
-                        | bassprod
-                        span.profession
-                        | web developer
+        //- nav.sliderbar
+        //-     header
+        //-         .image-text
+        //-             span.image
+        //-                 img(src="/img/BASSPROD3.png", alt="")
+        //-             .text.header-text
+        //-                 span.name
+        //-                 | bassprod
+        //-                 span.profession
+        //-                 | web developer
         HEADER
-            //- nav.navbar.navbar-expand-lg.bg-body-tertiary
-            //-     .container-fluid
-            //-         a.navbar-brand(href="#") Navbar
-            //-         button.navbar-toggler(type="button", data-bs-toggle="collapse", data-bs-target="#navbarSupportedContent", aria-controls="navbarSupportedContent", aria-expanded="false", aria-label="Toggle navigation")
-            //-             span.navbar-toggler-icon
-            //-         .collapse.navbar-collapse#navbarSupportedContent.justify-content-around.w-100                              
-            //-             form(action="/prod" method="get" id="filtro-busqueda")
-            //-                 .row
-            //-                     .col-lg-6                                
-            //-                         label(for="tipo") Filtrar por tipo:
-            //-                         select(name="filtro" id="tipo")
-            //-                             option(value="" selected=(filtro === "")) -- Mostrar todos --
-            //-                             each tipo in tipos
-            //-                                 option(value=tipo.id selected=(parseInt(tipo.id) === parseInt(filtro))) #{tipo.nombre}
-            //-                     .d-flex.busqueda.col-lg-6
-            //-                         input.form-control.me-2(type="text" name="query" id="query" placeholder="Buscar productos..." )
-            //-                         button.btn.btn-outline-success(type="submit") Aplicar
+            nav.navbar.navbar-expand-lg.bg-body-tertiary
+                .container-fluid
+                    a.navbar-brand(href="#") Navbar
+                    button.navbar-toggler(type="button", data-bs-toggle="collapse", data-bs-target="#navbarSupportedContent", aria-controls="navbarSupportedContent", aria-expanded="false", aria-label="Toggle navigation")
+                        span.navbar-toggler-icon
+                    .collapse.navbar-collapse#navbarSupportedContent.justify-content-around.w-100                              
+                        form(action="/prod" method="get" id="filtro-busqueda")
+                            .row
+                                .col-lg-6                                
+                                    label(for="tipo") Filtrar por tipo:
+                                    select(name="filtro" id="tipo")
+                                        option(value="" selected=(filtro === "")) -- Mostrar todos --
+                                        each tipo in tipos
+                                            option(value=tipo.id selected=(parseInt(tipo.id) === parseInt(filtro))) #{tipo.nombre}
+                                .d-flex.busqueda.col-lg-6
+                                    input.form-control.me-2(type="text" name="query" id="query" placeholder="Buscar productos..." )
+                                    button.btn.btn-outline-success(type="submit") Aplicar
         main(class="mainprod")
             button.btn.btn-primary(type="button", data-bs-toggle="modal", data-bs-target="#exampleModal")
                 i.fa-solid.fa-plus
