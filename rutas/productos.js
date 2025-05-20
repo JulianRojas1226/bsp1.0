@@ -14,7 +14,7 @@ routes.get("/sesion", csescion.getsesion)
 routes.post("/formprod", actualizar.single("imagen"), cprod.adddatos)
 routes.post("/cantprod", cprod.addcantidad)
 routes.post("/addproveedor", cprod.addproveedor)
-routes.post("/borrar/:id", cprod.borrarprod)
+routes.post("/eliminar/:id", cprod.borrarprod)
 routes.post("/actualizarprod/:id", cprod.actualizar)
 
 

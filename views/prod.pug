@@ -8,25 +8,35 @@ html(lang="es")
         link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous")
         link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer")
         
-    body 
+    body
+        nav.sliderbar
+            header
+                .image-text
+                    span.image
+                        img(src="/img/BASSPROD3.png", alt="")
+                    .text.header-text
+                        span.name
+                        | bassprod
+                        span.profession
+                        | web developer
         HEADER
-            nav.navbar.navbar-expand-lg.bg-body-tertiary
-                .container-fluid
-                    a.navbar-brand(href="#") Navbar
-                    button.navbar-toggler(type="button", data-bs-toggle="collapse", data-bs-target="#navbarSupportedContent", aria-controls="navbarSupportedContent", aria-expanded="false", aria-label="Toggle navigation")
-                        span.navbar-toggler-icon
-                    .collapse.navbar-collapse#navbarSupportedContent.justify-content-around.w-100                              
-                        form(action="/prod" method="get" id="filtro-busqueda")
-                            .row
-                                .col-lg-6                                
-                                    label(for="tipo") Filtrar por tipo:
-                                    select(name="filtro" id="tipo")
-                                        option(value="" selected=(filtro === "")) -- Mostrar todos --
-                                        each tipo in tipos
-                                            option(value=tipo.id selected=(parseInt(tipo.id) === parseInt(filtro))) #{tipo.nombre}
-                                .d-flex.busqueda.col-lg-6
-                                    input.form-control.me-2(type="text" name="query" id="query" placeholder="Buscar productos..." )
-                                    button.btn.btn-outline-success(type="submit") Aplicar
+            //- nav.navbar.navbar-expand-lg.bg-body-tertiary
+            //-     .container-fluid
+            //-         a.navbar-brand(href="#") Navbar
+            //-         button.navbar-toggler(type="button", data-bs-toggle="collapse", data-bs-target="#navbarSupportedContent", aria-controls="navbarSupportedContent", aria-expanded="false", aria-label="Toggle navigation")
+            //-             span.navbar-toggler-icon
+            //-         .collapse.navbar-collapse#navbarSupportedContent.justify-content-around.w-100                              
+            //-             form(action="/prod" method="get" id="filtro-busqueda")
+            //-                 .row
+            //-                     .col-lg-6                                
+            //-                         label(for="tipo") Filtrar por tipo:
+            //-                         select(name="filtro" id="tipo")
+            //-                             option(value="" selected=(filtro === "")) -- Mostrar todos --
+            //-                             each tipo in tipos
+            //-                                 option(value=tipo.id selected=(parseInt(tipo.id) === parseInt(filtro))) #{tipo.nombre}
+            //-                     .d-flex.busqueda.col-lg-6
+            //-                         input.form-control.me-2(type="text" name="query" id="query" placeholder="Buscar productos..." )
+            //-                         button.btn.btn-outline-success(type="submit") Aplicar
         main(class="mainprod")
             button.btn.btn-primary(type="button", data-bs-toggle="modal", data-bs-target="#exampleModal")
                 i.fa-solid.fa-plus
@@ -83,6 +93,7 @@ html(lang="es")
                                                     option(value=producto.id) #{producto.nombre}
                                         label(for="#") cantidad
                                         input(type="number" id="cantidad" name="cantidad" required min="1")
+                                        label(for="costo") costo
                                         input(type="number", name="costo")
                                         select(name="proveedor", id="proveedor") 
                                             if proveedores  && proveedores.length
@@ -116,51 +127,67 @@ html(lang="es")
                         p no hay productos agotados
 
             section.container-fluid(id="mostrarproductos")
-                if productos && productos.length
-                    each producto in productos
-                        div.card(style="width: 18rem" class="cartaprod")
-                            img.card-img-top(src=producto.dir alt="Imagen no disponible")
-                            div.card-body
-                                h5.card-title #{producto.nombre || 'Sin nombre'}
-                                p.card-text Precio: #{producto.precio || 'No especificado'} Cantidad: #{producto.cantidad || 'No especificada'}
-                                details
-                                    summary Ver más
-                                    p.card-text Tipo: #{producto.tipo || 'Sin tipo'}
-                                    if proveedores && proveedores.length
-                                        each proveedor in proveedores
-                                            if producto.proveedor == proveedor.NID
-                                                p Proveedor: #{proveedor.nombre}
-                                
-                                    else
-                                        p No hay información de proveedores disponible.
-                                form(action=`/borrar/${producto.id}` method="post" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este producto?')") 
-                                    button(type="submit" class="btn btn-danger") Eliminar
+            .container
+                .row.justify-content-arround.w-100
+                    if productos && productos.length
+                        each producto in productos
+                            .col-lg-4.col-md-6.col-sm-12
+                                div.card.col-lg-4(style="width: 18rem" class="cartaprod" id=`card-${producto.id}`)
+                                    img.card-img-top.imgprod(src=producto.dir alt="Imagen no disponible")
+                                    div.card-body
+                                        h5.card-title #{producto.nombre || 'Sin nombre'}
+                                        p.card-text Precio: #{producto.precio || 'No especificado'} Cantidad: #{producto.cantidad || 'No especificada'}
+                                        details
+                                            summary Ver más
+                                            p.card-text Tipo: #{producto.tipo || 'Sin tipo'}
+                                            if proveedores && proveedores.length
+                                                each proveedor in proveedores
+                                                    if producto.proveedor == proveedor.NID
+                                                        p Proveedor: #{proveedor.nombre}
+                                        
+                                            else
+                                                p No hay información de proveedores disponible.
+                                        .d-flex.row
+                                            .col-lg-5
+                                                form(action=`/eliminar/${producto.id}` method="post" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este producto?')") 
+                                                    button(type="submit") Eliminar
+                                            .col-lg-4
+                                                p.d-inline-flex.gap-1
+                                                    a.btn.btn-primary(
+                                                        data-bs-toggle="collapse",  
+                                                        data-bs-target=`#collapse${producto.id}`,  
+                                                        role="button",  
+                                                        aria-expanded="false",  
+                                                        aria-controls=`collapse${producto.id}`)
+                                                        | actualizar 
+                                        div.collapse(id=`collapse${producto.id}`)
+                                            .card.card-body
+                                                form(action=`/actualizarprod/${producto.id}`, method="post") 
+                                                    label(for="#") Nombre  
+                                                    input(type="text" name="nombre")  
+                                                    label(for="#") Cantidad mínima  
+                                                    input(type="number" name="cantidad_min")  
+                                                    label(for="#") Precio  
+                                                    input(type="number", name="precio")  
+                                                    label(for="#") Proveedor  
+                                                    select(name="proveedor", id="proveedor")  
+                                                        if proveedores  && proveedores.length  
+                                                            each proveedor in proveedores  
+                                                                option(value=proveedor.NID) #{proveedor.nombre}  
+                                                        else  
+                                                            option(value="") No hay opciones disponibles  
+                                                    label(for="#") Tipo  
+                                                    select(name="tipo", id="tipo")  
+                                                        if tipos && tipos.length  
+                                                            each tipo in tipos  
+                                                                option(value=tipo.id) #{tipo.nombre}  
+                                                        else  
+                                                            option(value="") No hay opciones disponibles  
+                                                    button(type="submit") Actualizar  
 
-                                button actualizar 
-                                form(action=`/actualizarprod/${producto.id}`, method="post") 
-                                    label(for="#") nombre 
-                                    input(type="text" name="nombre")
-                                    label(for="#") cantidad minima 
-                                    input(type="number", name="cantidad_min")
-                                    label(for="#") precio
-                                    input(type="number", name="precio") 
-                                    label(for="#") proveedor
-                                    select(name="proveedor", id="proveedor")  
-                                        if proveedores  && proveedores.length
-                                            each proveedor in proveedores
-                                                option(value=proveedor.NID) #{proveedor.nombre}
-                                        else
-                                            option(value="") No hay opciones disponibles
-                                    label(for="#") tipo
-                                     select(name="tipo", id="tipo") 
-                                        if tipos && tipos.length
-                                            each tipo in tipos 
-                                                option(value=tipo.id) #{tipo.nombre}
-                                        else
-                                            option(value="") No hay opciones disponibles 
-                                    button(type="submit") actualizar  
-                else
-                    p No hay productos disponibles.
+                                
+                    else
+                        p No hay productos disponibles.
 
 
                 
@@ -177,11 +204,9 @@ html(lang="es")
                 li.nav-item 
                     a.btn.btn-primary(href="#offcanvasExample" role="button" data-bs-toggle="offcanvas" aria-contols="offcanvasExample")  
                         i.fa-regular.fa-bell  
+
         script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous") 
             
-
-
-
 
         script(src="/js/main.js")
 

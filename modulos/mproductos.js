@@ -1,4 +1,9 @@
+import fs from "fs"
 import db from "../config/db.js";
+import path from "path";
+import { dirname } from "path";
+import { fileURLToPath } from 'url'
+const __dirname = dirname(fileURLToPath(import.meta.url))
 const mprod={
     tipo: async()=>{
         try {
@@ -114,12 +119,37 @@ const mprod={
             throw { status: 500, message: "Error al buscar productos en la base de datos." };
         }
     },
-    borrar: async ({id}) =>{
+    borrar: async ({id}) => {
+        const coneccion = await db.getConnection();
         try {
-            const [result] = await db.query("delete from producto where id = ?",
-                [id]
-            )
-            console.log("Producto eliminado:", result)
+            await coneccion.beginTransaction();
+
+            // Obtener ruta de la imagen antes de eliminar el producto
+            const [producto] = await coneccion.query("SELECT dir FROM producto WHERE id = ?", [id]);
+
+            if (!producto.length) throw new Error("Producto no encontrado.");
+
+            const imagePath = path.join(process.cwd(), "public", producto[0].dir);
+
+            // Eliminar el producto de la base de datos
+            const [result] = await coneccion.query("DELETE FROM producto WHERE id = ?", [id]);
+
+            if (result.affectedRows === 0) throw new Error("No se pudo eliminar el producto.");
+
+            // Verificar y eliminar imagen
+            if (fs.existsSync(imagePath)) {
+                await fs.promises.unlink(imagePath);
+                console.log("✅ Imagen eliminada:", imagePath);
+            } else {
+                console.warn("⚠️ La imagen no existe en la ruta:", imagePath);
+            }
+
+        await coneccion.commit();
+        console.log("✅ Producto eliminado correctamente:", result);
+
+        return result;
+
+        
         } catch (err) {
             console.error("❌ Error al eliminar el producto:", err.message);
             throw { status: 500, message: "Error al eliminar el producto de la base de datos." };

@@ -1,80 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
+
+:root{
+    --primary-color:  #EEEEEE;
+    --secundari-color: #373A40;
+    --third-color:#DC5F00;
+    --cuarter-color:#686D76;
+    --tipografia-1: "Lexend", sans-serif;
+}
+body{
+    background-color: var(--primary-color) !important;
+    height: 100vh;
+
+}
 #mainprod{
     position: relative;
 }
+.imgprod{
+    height: 300px;
+}
 
-
-#formsprod {
-    position: absolute;
-    top: -1100px;
-    left: 0;
-    width: 100vw;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #373a4048;
-    z-index: 1;
-}
-#formsprod.act {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #373a4048;
-    z-index: 1;
-}
-.formscontent{
-    width: 1000px;
-    height: 800px;
-    padding: 10px;
-    border-radius: 10px;
-    background-color: #EEEEEE;  
-    text-align: center;
-}
-.headerforms{
-    display: flex;
-    text-align: center;
-}
 #mostrarproductos{
     display: flex;
     justify-content: space-around;
 }
-#notificacionesprod{
-    position: absolute;
-    top: -1000;
-    left: 0;
-    width: 100vw;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: end;
-    background-color: #373a4048;
-    z-index: 1;
+/* resuable css */
+.slidebar .text{
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--primary-color);
 }
-#notificacionesprod.act{
-    position: absolute;
+.slidebar .image{
+    min-width: 60px;
+    display: flex;
+    align-items: center;
+}
+/* sidebar */
+.sliderbar{
+    position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: end;
-    background-color: #373a4048;
-    z-index: 1;
+    height: 100%;
+    width: 250px;
+    padding: 10px 14px;
+    background-color: var(--secundari-color);
 }
-.notmodalprod{
-    position: relative;
-    left: 73vh;
+.sliderbar .image-text img{
+    width: 40px ;
+    border-radius: 6px;
+}
+.image-text {
+    display: flex;
     align-items: center;
-    width: 400px;
-    height: 100vh;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #EEEEEE;  
-    text-align: center;
+}
+
+.slidebar header .image-text{
+    display: flex;
+    align-items: center;
+}
+header .image-text .header-text{
+    display: flex;
+    flex-direction: column;
+}
+.header-text .name{
+    font-weight: 600;
+}
+.header-text .profession{
+    margin-top: -2px;
 }

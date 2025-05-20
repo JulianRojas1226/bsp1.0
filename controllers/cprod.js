@@ -74,7 +74,7 @@ const cprod ={
   },
   borrarprod: async (req, res)=>{
     try {
-      const { id } = req.params
+      const {id} = req.params
       console.log("ID recibido:", id)
       if (!id) {
         return res.status(400).send("no se proporciono un id")
@@ -85,7 +85,6 @@ const cprod ={
     } catch (err) {
       console.error("❌ Error en el controlador:", err.message);
       res.status(500).send("Error al borrar el producto.");
-
     }  
   },
   actualizar: async(req,res)=>{
