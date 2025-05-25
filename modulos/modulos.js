@@ -29,6 +29,14 @@ const mlogin = {
               };
         }
       },
+      buscaremail: async ({email}) => {
+        try {
+          const [emails]= await db.query("select * from empleado where correo = ?",[email])
+          return emails[0]
+        } catch (error) {
+          throw { status: 500, message: "Error al encontrar datos" }
+        }
+      }
     
 }   
 export default mlogin   
