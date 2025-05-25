@@ -3,39 +3,85 @@ html(lang="en")
         meta(charset="UTF-8")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title sesion
-
+        link(rel="stylesheet", href="/css/stylesesion.css")
         link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous")
         script(src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js")
         link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css")
+        link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer")
 
 
     body
-        main 
-            section.graficos(class= "container-fluid")
-                div.row
-                    div#grafico_pie(style="width:600px;height:400px;" class="col-lg-4")
-                    div#grafico_ventas(style="width:600px;height:400px;" class="col-lg-4")
-                    div#grafico_lineal(style="width:600px;height:400px;" class="col-lg-4" )
-            section.container-fluid
-                .row 
-                    .col-lg-8 
-                        
-                    .col-lg-4
-                        #calendar(style="width:600px;height:400px;")
+        nav.sidebar.close
+            header
+                .image-text
+                    span.image
+                        img(src="/img/BASSPROD3.png", alt="logo")
+                .text.header-text
+                    span.name CodingLab
+                    span.profecion Web devoloper
+                i.fa-solid.fa-greater-than.toggle
+            .menu-bar
+                .menu
+                    ul.menu-links
+                        li.nav-link
+                            a(href="/sesion")
+                                i.fa-solid.fa-house
+                                span.text.nav-text Inicio
+                        li.nav-link
+                            a(href="/prod")
+                                i.fa-solid.fa-beer-mug-empty
+                                span.text.nav-text Productos
+                        li.nav-link
+                            a(href="/ventas")
+                                i.fa-solid.fa-cart-shopping
+                                span.text.nav-text Ventas
+                        li.nav-link
+                            a(href="/res")
+                                i.fa-solid.fa-calendar
+                                span.text.nav-text Reservas
 
-                        
-        footer 
-            ul.nav.justify-content-center
-                li.nav-item
-                    a.nav-link.active(aria-current="page" href="#") Active
-                li.nav-item
-                    a.nav-link(href="/sesion") home
-                li.nav-item
-                    a.nav-link(href="/prod") productos
-                li.nav-item
-                    a.nav-link(href="/res") Reservas
-                li.nav-item
-                    a.nav-link(href="/ventas") Ventas
+                .bottom-content
+                    li
+                        a(href="/logout")
+                            i.fa-solid.fa-right-from-bracket
+                            span.text.nav-text Logout
+                    li.mode
+                        .moon-sun
+                            i.fa-regular.fa-moon.icon.moon
+                            i.fa-solid.fa-sun.icon.sun
+                        span.mode-text.text Dark Mode
+                        .toggle-switch
+                            span.switch
+        .home
+            main 
+                section.graficos(class= "container-fluid")
+                    div.row
+                        .col-sm-4
+                            div#grafico-costos(style="width:600px;height:400px;")
+                            
+                        .col-sm-4
+                            div#grafico_ventas(style="width:600px;height:400px;")
+                        .col-sm-4
+                            div#grafico_lineal(style="width:600px;height:400px;" )
+                section.container-fluid
+                    .row 
+                        .col-lg-8 
+                          .carrusel
+                            .carrusel-items
+                                if productos && productos.length 
+                                    each producto in productos
+                                        div.card(style="width: 18rem;")
+                                            img.card-img-top(src=`${producto.dir}`  alt="...")
+                                            .card-body
+                                                h5.card-title #{producto.nombre}
+                                                p.card-text #{producto.total_vendido}
+                                                a.btn.btn-primary(href="#") Go somewhere    
+                                
+                        .col-lg-4
+                            #calendar
+
+                            
+            
         script(src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js")
         script(src="/js/sesion.js",type="module")
     

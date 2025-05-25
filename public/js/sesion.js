@@ -1,33 +1,26 @@
 
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded",async () => {
   try {
-    const response = await fetch("/graficopie"); // Obtiene los datos del backend
-    const data = await response.json();
-
-    const chartDom = document.getElementById("grafico_pie");
-    const myChart = echarts.init(chartDom);
-
-    const option = {
-      title: { text: "Productos Más Vendidos" },
+    const response = await fetch("/grafico-costo")
+    const data =  await response.json()
+    const chartDom= document.getElementById("grafico-costos")
+    const myChart= echarts.init(chartDom)
+    const option={
+      title: {text: "Costos meses"},
       tooltip: {},
-      series: [
-        {
-          name: "Ventas",
-          type: "pie",
-          radius: "50%",
-          data: data.labels.map((label, index) => ({
-            name: label,
-            value: data.values[index]
-          }))
-        }
-      ]
-    };
-
-    myChart.setOption(option);
+      xAxis: {type: "category", data: data.labels},
+      yAxis: {type: "value"},
+      series:{
+        name: "costo mensual",
+        type: "line",
+        data: data.values
+      }
+    }
+    myChart.setOption(option)
   } catch (error) {
     console.error("Error al cargar el gráfico:", error);
   }
-});
+})
 document.addEventListener("DOMContentLoaded", async ()=>{
   try {
   const response =await fetch("/graficobarras")
@@ -123,3 +116,34 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Error al cargar el claendario:", error);
   }
 })
+ const body = document.querySelector("body"),
+    sidebar = body.querySelector(".sidebar"),
+    toggle = body.querySelector(".toggle"), // Botón para colapsar/expandir
+    modeSwitch = body.querySelector(".toggle-switch"),
+    modeText = body.querySelector(".mode-text");
+
+    toggle.addEventListener("click", () => {
+        sidebar.classList.toggle("close");
+    });
+
+  if (localStorage.getItem("theme") === "dark") {
+    body.classList.add("dark");
+    modeText.innerText = "Light Mode";
+}
+modeSwitch.addEventListener("click", () => {
+        
+    body.classList.toggle("dark");
+
+    // Guardar la preferencia en localStorage
+    if (body.classList.contains("dark")) {
+        localStorage.setItem("theme", "dark");
+        modeText.innerText = "Light Mode";
+    } else {
+        localStorage.setItem("theme", "light");
+        modeText.innerText = "Dark Mode";
+    }
+
+    });
+    
+    ;
+

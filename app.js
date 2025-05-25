@@ -12,41 +12,42 @@ import routessesion from "./rutas/sesion.js"
 import routesproductos from "./rutas/productos.js";
 import routesreservas from "./rutas/reservas.js"
 import routesventas from "./rutas/ventas.js";
+import routescerrar from "./rutas/cerrar-sesion.js"
 
 const __dirname = process.cwd()
 const app = express()
 const port = 3000
 app.use(cors())
 app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      defaultSrc: ["'self'"],
-      styleSrc: [
-        "'self'",
-        "https://cdn.jsdelivr.net",
-        "https://cdnjs.cloudflare.com",
-        "https://fonts.googleapis.com", // ← necesario para cargar estilos de Google Fonts
-        "https://unpkg.com",
-        "'unsafe-inline'"
-      ],
-      fontSrc: [
-        "'self'",
-        "https://cdn.jsdelivr.net",
-        "https://cdnjs.cloudflare.com",
-        "https://fonts.gstatic.com", // ← AÑADE ESTO
-        "data:"
-      ],
-      scriptSrc: [
-        "'self'",
-        "https://cdn.jsdelivr.net",
-        "https://unpkg.com",
-        "'unsafe-inline'",
-        "'unsafe-eval'"
-      ],
-      connectSrc: ["'self'"],
-      imgSrc: ["'self'", "data:"],
-      objectSrc: ["'none'"]
-    }
+   helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        styleSrc: [
+          "'self'",
+          "https://cdn.jsdelivr.net",
+          "https://cdnjs.cloudflare.com",
+          "https://unpkg.com",
+          "https://fonts.googleapis.com",
+          "'unsafe-inline'",
+        ],
+        fontSrc: [
+          "'self'",
+          "https://cdn.jsdelivr.net",
+          "https://cdnjs.cloudflare.com",
+          "https://unpkg.com", // ✅ Agregado para permitir las fuentes
+           "https://fonts.gstatic.com",
+          "data:",
+        ],
+        scriptSrc: [
+          "'self'",
+          "https://cdn.jsdelivr.net",
+          "https://unpkg.com",
+          "'unsafe-inline'",
+          "'unsafe-eval'",
+        ],
+      },
+    },
   })
 )
 app.use(morgan("dev"))
@@ -64,12 +65,18 @@ app.use(session({
     resave: true,
     saveUninitialized: true,
 }))
+app.use((req, res, next) => {
+    res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, private");
+    res.setHeader("Pragma", "no-cache");
+    next();
+})
 app.use(routesindex)
 app.use(routeslogin)
 app.use(autenticado,routessesion)
 app.use(routesreservas)
 app.use(routesproductos)
 app.use(routesventas)
+app.use(routescerrar)
 app.use(error.e404);
 
 app.listen(port,()=> {console.log(`la aplicacion esta funcionando en http://localhost:${port}`)})

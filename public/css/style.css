@@ -1,5 +1,4 @@
 
-
 :root{
     --primary-color:#DC5F00;
     --secundary-color:#373A40;
@@ -212,4 +211,7 @@ main{
     border-radius: 5px;
     background-color: #EEEEEE;  
     text-align: center;
+}
+.img-reserva{
+    object-fit: cover !important;
 }

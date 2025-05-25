@@ -3,6 +3,7 @@ import cres from "../controllers/cres.js";
 import cprod from "../controllers/cprod.js";
 import csescion from "../controllers/csesion.js";
 import { Router } from "express";
+import cierre from "../controllers/close-sesion.js";
  const routes = Router()
 
  routes.post("/ingorden/:id", cventas.insorden)
@@ -10,6 +11,7 @@ import { Router } from "express";
  routes.post("/pagar/:mesa", cventas.pagar)
  routes.post("/duplicar/:id", cventas.duplicar)
  routes.get("/ventas/pdf",cventas.generarpdf)
+ routes.get("/logout",cierre.cierre)
 //  barrra navegacion 
  routes.get("/ventas", cventas.getventas)
  routes.get("/res", cres.getres)

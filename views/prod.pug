@@ -7,203 +7,273 @@ html(lang="es")
         link(rel="stylesheet", href="/css/styleprod.css")
         link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous")
         link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer")
+
         
+
     body
-        nav.sliderbar
+        nav.sidebar.close
             header
                 .image-text
                     span.image
-                        img(src="/img/BASSPROD3.png", alt="")
-                    .text.header-text
-                        span.name
-                        | bassprod
-                        span.profession
-                        | web developer
-        HEADER
-            //- nav.navbar.navbar-expand-lg.bg-body-tertiary
-            //-     .container-fluid
-            //-         a.navbar-brand(href="#") Navbar
-            //-         button.navbar-toggler(type="button", data-bs-toggle="collapse", data-bs-target="#navbarSupportedContent", aria-controls="navbarSupportedContent", aria-expanded="false", aria-label="Toggle navigation")
-            //-             span.navbar-toggler-icon
-            //-         .collapse.navbar-collapse#navbarSupportedContent.justify-content-around.w-100                              
-            //-             form(action="/prod" method="get" id="filtro-busqueda")
-            //-                 .row
-            //-                     .col-lg-6                                
-            //-                         label(for="tipo") Filtrar por tipo:
-            //-                         select(name="filtro" id="tipo")
-            //-                             option(value="" selected=(filtro === "")) -- Mostrar todos --
-            //-                             each tipo in tipos
-            //-                                 option(value=tipo.id selected=(parseInt(tipo.id) === parseInt(filtro))) #{tipo.nombre}
-            //-                     .d-flex.busqueda.col-lg-6
-            //-                         input.form-control.me-2(type="text" name="query" id="query" placeholder="Buscar productos..." )
-            //-                         button.btn.btn-outline-success(type="submit") Aplicar
-        main(class="mainprod")
-            button.btn.btn-primary(type="button", data-bs-toggle="modal", data-bs-target="#exampleModal")
-                i.fa-solid.fa-plus
-            .modal.fade#exampleModal(tabindex="-1", aria-labelledby="exampleModalLabel", aria-hidden="true")
-                .modal-dialog
-                    .modal-content.prod
-                        .modal-header
-                            h1.modal-title.fs-5#exampleModalLabel Productos 
-                            button.btn-close(type="button", data-bs-dismiss="modal", aria-label="Close")
-
-                        .modal-body.form
-                            ul.nav.nav-tabs#myTab(role="tablist")
-                                li.nav-item(role="presentation")
-                                    button.nav-link.active#home-tab(type="button", data-bs-toggle="tab", data-bs-target="#home-tab-pane", role="tab", aria-controls="home-tab-pane", aria-selected="true") Nuevo producto
-                                li.nav-item(role="presentation")
-                                    button.nav-link#profile-tab(type="button", data-bs-toggle="tab", data-bs-target="#profile-tab-pane", role="tab", aria-controls="profile-tab-pane", aria-selected="false") Agregar Cantidad
-                                li.nav-item(role="presentation")
-                                    button.nav-link#contact-tab(type="button", data-bs-toggle="tab", data-bs-target="#contact-tab-pane", role="tab", aria-controls="contact-tab-pane", aria-selected="false") Proveedores
-
-                            .tab-content#myTabContent
-                                .tab-pane.fade.active.show#home-tab-pane(role="tabpanel", aria-labelledby="home-tab", tabindex="0")
-                                    form(action="/formprod" method="post" enctype="multipart/form-data" id="formprod")
-                                        label(for="#") Nombre 
-                                        input(type="text", name="nombre" id="nombre")
-                                        label(for="#") Precio 
-                                        input(type="number", name="precio", id="precio")
-                                        label(for="#") cantidad 
-                                        input(type="number", name="cantidad",id="cantidad")
-                                        label(for="") Costo
-                                        input(type="number" name="costo" id="costo")
-                                        label(for="#") cantidad minima
-                                        input(type="number", name="cantidad_min", id="cantidad_min")
-                                        select(name="tipo", id="tipo") 
-                                            if tipos && tipos.length
-                                                each tipo in tipos 
-                                                    option(value=tipo.id) #{tipo.nombre}
-                                            else
-                                                option(value="") No hay opciones disponibles
-                                        select(name="proveedor", id="proveedor") 
-                                            if proveedores  && proveedores.length
-                                                each proveedor in proveedores
-                                                    option(value=proveedor.NID) #{proveedor.nombre}
-                                            else
-                                                option(value="") No hay opciones disponibles
-                                        input(type="file" name="imagen" id="imagen" class="form-control" required)
-                                        button(type="submit") ingresar
-                                            
-
-                                .tab-pane.fade#profile-tab-pane(role="tabpanel", aria-labelledby="profile-tab", tabindex="0")
-                                    form(action="/cantprod" method="post") 
-                                        select(name="producto" id="producto") 
-                                            if productos && productos.length 
-                                                each producto in productos
-                                                    option(value=producto.id) #{producto.nombre}
-                                        label(for="#") cantidad
-                                        input(type="number" id="cantidad" name="cantidad" required min="1")
-                                        label(for="costo") costo
-                                        input(type="number", name="costo")
-                                        select(name="proveedor", id="proveedor") 
-                                            if proveedores  && proveedores.length
-                                                each proveedor in proveedores
-                                                    option(value=proveedor.NID) #{proveedor.nombre}
-                                            else
-                                                option(value="") No hay opciones disponibles
-                                        button(type="submit") agregar
-
-                                .tab-pane.fade#contact-tab-pane(role="tabpanel", aria-labelledby="contact-tab", tabindex="0")
-                                    form(action="/addproveedor" method="post") 
-                                        label(for="#") NID 
-                                        input(type="number", id="NID" name="nid")
-                                        label(for="#") nombre 
-                                        input(type="text", id="nombre" name="nombre")
-                                        label(for="#") celular 
-                                        input(type="number", id="celular" name="celular")
-                                        label(for="#") correo 
-                                        input(type="text", name="correo" id="correo")
-                                        button(type="submit") agregar
-            div.offcanvas.offcanvas-start(tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel")
-                div.offcanvas-header
-                    h5.offcanvas-title#offcanvasExampleLabel Offcanvas
-                    button.btn-close(type="button" data-bs-dismiss="offcanvas" aria-label="Close")
-                div.offcanvas-body
-                    if minimo_cants && minimo_cants.length 
-                        each minimo_cant in minimo_cants 
-                            p #{minimo_cant.nombre}
-                            p  #{minimo_cant.cantidad}
-                    else 
-                        p no hay productos agotados
-
-            section.container-fluid(id="mostrarproductos")
-            .container
-                .row.justify-content-arround.w-100
-                    if productos && productos.length
-                        each producto in productos
-                            .col-lg-4.col-md-6.col-sm-12
-                                div.card.col-lg-4(style="width: 18rem" class="cartaprod" id=`card-${producto.id}`)
-                                    img.card-img-top.imgprod(src=producto.dir alt="Imagen no disponible")
-                                    div.card-body
-                                        h5.card-title #{producto.nombre || 'Sin nombre'}
-                                        p.card-text Precio: #{producto.precio || 'No especificado'} Cantidad: #{producto.cantidad || 'No especificada'}
-                                        details
-                                            summary Ver más
-                                            p.card-text Tipo: #{producto.tipo || 'Sin tipo'}
-                                            if proveedores && proveedores.length
-                                                each proveedor in proveedores
-                                                    if producto.proveedor == proveedor.NID
-                                                        p Proveedor: #{proveedor.nombre}
+                        img(src="/img/BASSPROD3.png", alt="logo")
+                .text.header-text
+                    span.name CodingLab
+                    span.profecion Web devoloper
+                i.fa-solid.fa-greater-than.toggle
+            .menu-bar
+                .menu
+                    .filtros
+                        form(action="/prod", method="get") 
+                            li.search-box
+                                i.fa-solid.fa-magnifying-glass.icon
+                                input(type="search",name="query" placeholder="Search...")
+                            li.search-filtro
+                                .custom-select-wrapper                              
+                                    select.custom-select(name="filtro" id="tipo")
+                                        option(value="" selected=(filtro === "")) -- Mostrar todos --
+                                        each tipo in tipos
+                                            option(value=tipo.id selected=(parseInt(tipo.id) === parseInt(filtro))) #{tipo.nombre}
+                            .botones
+                                button(type="submit")
+                                    i.fa-solid.fa-magnifying-glass.icon
                                         
-                                            else
-                                                p No hay información de proveedores disponible.
-                                        .d-flex.row
-                                            .col-lg-5
-                                                form(action=`/eliminar/${producto.id}` method="post" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este producto?')") 
-                                                    button(type="submit") Eliminar
-                                            .col-lg-4
-                                                p.d-inline-flex.gap-1
-                                                    a.btn.btn-primary(
-                                                        data-bs-toggle="collapse",  
-                                                        data-bs-target=`#collapse${producto.id}`,  
-                                                        role="button",  
-                                                        aria-expanded="false",  
-                                                        aria-controls=`collapse${producto.id}`)
-                                                        | actualizar 
-                                        div.collapse(id=`collapse${producto.id}`)
-                                            .card.card-body
-                                                form(action=`/actualizarprod/${producto.id}`, method="post") 
-                                                    label(for="#") Nombre  
-                                                    input(type="text" name="nombre")  
-                                                    label(for="#") Cantidad mínima  
-                                                    input(type="number" name="cantidad_min")  
-                                                    label(for="#") Precio  
-                                                    input(type="number", name="precio")  
-                                                    label(for="#") Proveedor  
-                                                    select(name="proveedor", id="proveedor")  
-                                                        if proveedores  && proveedores.length  
-                                                            each proveedor in proveedores  
-                                                                option(value=proveedor.NID) #{proveedor.nombre}  
-                                                        else  
-                                                            option(value="") No hay opciones disponibles  
-                                                    label(for="#") Tipo  
-                                                    select(name="tipo", id="tipo")  
-                                                        if tipos && tipos.length  
-                                                            each tipo in tipos  
-                                                                option(value=tipo.id) #{tipo.nombre}  
-                                                        else  
-                                                            option(value="") No hay opciones disponibles  
-                                                    button(type="submit") Actualizar  
+                    ul.menu-links
+                        li.nav-link
+                            a(href="/sesion")
+                                i.fa-solid.fa-house
+                                span.text.nav-text Inicio
+                        li.nav-link
+                            a(href="/prod")
+                                i.fa-solid.fa-beer-mug-empty
+                                span.text.nav-text Productos
+                        li.nav-link
+                            a(href="/ventas")
+                                i.fa-solid.fa-cart-shopping
+                                span.text.nav-text Ventas
+                        li.nav-link
+                            a(href="/res")
+                                i.fa-solid.fa-calendar
+                                span.text.nav-text Reservas
 
-                                
-                    else
-                        p No hay productos disponibles.
+                .bottom-content
+                    li
+                        a(href="/logout")
+                            i.fa-solid.fa-right-from-bracket
+                            span.text.nav-text Logout
+                    li.mode
+                        .moon-sun
+                            i.fa-regular.fa-moon.icon.moon
+                            i.fa-solid.fa-sun.icon.sun
+                        span.mode-text.text Dark Mode
+                        .toggle-switch
+                            span.switch
+        .home
+            main(class="mainprod")
+                .cambios
+                    button.productos(type="button", data-bs-toggle="modal", data-bs-target="#exampleModal")
+                        i.fa-solid.fa-plus
+                    .modal.fade#exampleModal(tabindex="-1", aria-labelledby="exampleModalLabel", aria-hidden="true")
+                        .modal-dialog
+                            .modal-content.contenedor-prod
+                                .modal-header
+                                    h1.modal-title.fs-5#exampleModalLabel Productos 
+                                    button.btn-close(type="button", data-bs-dismiss="modal", aria-label="Close")
 
+                                .modal-body.form
+                                    ul.nav.nav-tabs#myTab(role="tablist")
+                                        li.nav-item(role="presentation")
+                                            button.nav-link.active#home-tab.nav-cambio(type="button", data-bs-toggle="tab", data-bs-target="#home-tab-pane", role="tab", aria-controls="home-tab-pane", aria-selected="true") Nuevo producto
+                                        li.nav-item(role="presentation")
+                                            button.nav-link#profile-tab.nav-cambio(type="button", data-bs-toggle="tab", data-bs-target="#profile-tab-pane", role="tab", aria-controls="profile-tab-pane", aria-selected="false") Agregar Cantidad
+                                        li.nav-item(role="presentation")
+                                            button.nav-link#contact-tab.nav-cambio(type="button", data-bs-toggle="tab", data-bs-target="#contact-tab-pane", role="tab", aria-controls="contact-tab-pane", aria-selected="false") Proveedores
 
-                
-        footer 
-            ul.nav.justify-content-center
-                li.nav-item
-                    a.nav-link(href="/ventas") Ventas
-                li.nav-item
-                    a.nav-link(href="/sesion") home
-                li.nav-item
-                    a.nav-link(href="/prod") Productos
-                li.nav-item
-                    a.nav-link(href="/res") Reservas
-                li.nav-item 
-                    a.btn.btn-primary(href="#offcanvasExample" role="button" data-bs-toggle="offcanvas" aria-contols="offcanvasExample")  
-                        i.fa-regular.fa-bell  
+                                    .tab-content#myTabContent
+                                        .tab-pane.fade.active.show#home-tab-pane(role="tabpanel", aria-labelledby="home-tab", tabindex="0")
+                                            form(action="/formprod" method="post" enctype="multipart/form-data" id="formprod")
+                                                .row
+                                                    .col-sm-6
+                                                        .input-wrapper
+                                                            input(type="text", name="nombre" id="nombre" placeholder="Nombre")
+                                                            .underline
+                                                    .col-sm-6
+                                                        .input-wrapper            
+                                                            input(type="number", name="precio", id="precio" placeholder="Precio")
+                                                            .underline
+                                                .row
+                                                    .col-sm-6
+                                                        .input-wrapper                                                
+                                                            input(type="number", name="cantidad",id="cantidad" placeholder="Cantidad")
+                                                            .underline
+                                                    .col-sm-6
+                                                        .input-wrapper                                                
+                                                            input(type="number" name="costo" id="costo" placeholder="Costo")
+                                                            .underline
+                                                .row 
+                                                    .col-sm-12
+                                                        .input-wrapper                                            
+                                                            input(type="number", name="cantidad_min", id="cantidad_min" placeholder="Cantidad MInima")
+                                                            .underline
+                                                .row
+                                                    .col-sm-6
+                                                        .custom-select-wrapper
+                                                            select.custom-select(name="tipo", id="tipo") 
+                                                                if tipos && tipos.length
+                                                                    each tipo in tipos 
+                                                                        option(value=tipo.id) #{tipo.nombre}
+                                                                else
+                                                                    option(value="") No hay opciones disponibles
+                                                    .col-sm-6
+                                                        .custom-select-wrapper
+                                                            select.custom-select(name="proveedor", id="proveedor") 
+                                                                if proveedores  && proveedores.length
+                                                                    each proveedor in proveedores
+                                                                        option(value=proveedor.NID) #{proveedor.nombre}
+                                                                else
+                                                                    option(value="") No hay opciones disponibles
+                                                .row 
+                                                    .col-sm-12
+                                                        .input-wrapper
+                                                            input(type="file" name="imagen" id="imagen" class="form-control" required)
+                                        
+                                                button.btn-prod(type="submit") ingresar
+                                                    
+
+                                        .tab-pane.fade#profile-tab-pane(role="tabpanel", aria-labelledby="profile-tab", tabindex="0")
+                                            form(action="/cantprod" method="post")
+                                                .row 
+                                                    .col-sm-6
+                                                        .custom-select-wrapper
+                                                            select.custom-select(name="producto" id="producto") 
+                                                                if productos && productos.length 
+                                                                    each producto in productos
+                                                                        option(value=producto.id) #{producto.nombre}
+                                                    .col-sm-6
+                                                        .input-wrapper 
+                                                            input(type="number" id="cantidad" name="cantidad" required min="1" placeholder="cantidad")
+                                                            .underline
+                                                .row
+                                                    .col-sm-6 
+                                                        .input-wrapper 
+                                                            input(type="number", name="costo" placeholder)
+                                                            .underline
+                                                    .col-sm-6
+                                                        .custom-select-wrapper
+                                                            select.custom-select(name="proveedor", id="proveedor") 
+                                                                if proveedores  && proveedores.length
+                                                                    each proveedor in proveedores
+                                                                        option(value=proveedor.NID) #{proveedor.nombre}
+                                                                else
+                                                                    option(value="") No hay opciones disponibles
+                                                button.btn-prod(type="submit") agregar
+
+                                        .tab-pane.fade#contact-tab-pane(role="tabpanel", aria-labelledby="contact-tab", tabindex="0")
+                                            form(action="/addproveedor" method="post") 
+                                                .row
+                                                    .col-sm-6
+                                                        .input-wrapper 
+                                                            input(type="number", id="NID" name="nid" placeholder="NID")
+                                                            .underline
+                                                    .col-sm-6    
+                                                        .input-wrapper                                               
+                                                            input(type="text", id="nombre" name="nombre" placeholder="Nombre")
+                                                            .underline
+                                                .row
+                                                    .col-sm-6
+                                                        .input-wrapper
+                                                            input(type="number", id="celular" name="celular" placeholder="Celular")
+                                                            .underline
+                                                    .col-sm-6 
+                                                        .input-wrapper
+                                                            input(type="text", name="correo" id="correo" placeholder="Correo")
+                                                            .underline
+                                                button.btn-prod(type="submit") agregar
+                div.offcanvas.offcanvas-start(tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel")
+                    div.offcanvas-header
+                        h5.offcanvas-title#offcanvasExampleLabel Offcanvas
+                        button.btn-close(type="button" data-bs-dismiss="offcanvas" aria-label="Close")
+                    div.offcanvas-body
+                        if minimo_cants && minimo_cants.length 
+                            each minimo_cant in minimo_cants 
+                                p #{minimo_cant.nombre}
+                                p  #{minimo_cant.cantidad}
+                        else 
+                            p no hay productos agotados
+
+                section.container-fluid(id="mostrarproductos")
+                .container
+                    .row.justify-content-arround.w-100
+                        if productos && productos.length
+                            each producto in productos
+                                .col-lg-3.col-md-6.col-sm-12
+                                    div.card.productos-card(style="width: 18rem" class="cartaprod" id=`card-${producto.id}`)
+                                        img.card-img-top.imgprod(src=producto.dir alt="Imagen no disponible")
+                                        div.card-body
+                                            h5.card-title #{producto.nombre || 'Sin nombre'}
+                                            p.card-text Precio: #{producto.precio || 'No especificado'}         
+                                            |Cantidad: #{producto.cantidad || 'No especificada'}
+                                            details
+                                                summary Ver más
+                                                p.card-text Tipo: #{producto.tipo || 'Sin tipo'}
+                                                if proveedores && proveedores.length
+                                                    each proveedor in proveedores
+                                                        if producto.proveedor == proveedor.NID
+                                                            p Proveedor: #{proveedor.nombre}
+                                            
+                                                else
+                                                    p No hay información de proveedores disponible.
+                                            .d-flex.row
+                                                .col-lg-5
+                                                   form#eliminarproducto(action=`/eliminar/${producto.id}` method="post" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este producto?');")
+                                                        button.delete(type="submit") Eliminar
+                                                .col-lg-4
+                                                    p.d-inline-flex.gap-1
+                                                        a.delete(
+                                                            data-bs-toggle="collapse",  
+                                                            data-bs-target=`#collapse${producto.id}`,  
+                                                            role="button",  
+                                                            aria-expanded="false",  
+                                                            aria-controls=`collapse${producto.id}`)
+                                                            | Actualizar 
+                                            div.collapse(id=`collapse${producto.id}`)
+                                                .card.card-body.card-act
+                                                    form(action=`/actualizarprod/${producto.id}`, method="post") 
+                                                        .row
+                                                            .col-sm-6 
+                                                                .input-wrapper
+                                                                    input(type="text" name="nombre" placeholder="Nombre")
+                                                                    .underline  
+                                                            .col-sm-6
+                                                                .input-wrapper
+                                                                    input(type="number" name="cantidad_min" placeholder="Cantidad minima")  
+                                                                    .underline
+                                                        .row 
+                                                            .col-sm-6 
+                                                                .input-wrapper
+                                                                    input(type="number", name="precio" placeholder="Precio")
+                                                                    .underline  
+                                                            .col-sm-6
+                                                                .custom-select-wrapper
+                                                                    select.custom-select(name="proveedor", id="proveedor")  
+                                                                        if proveedores  && proveedores.length  
+                                                                            each proveedor in proveedores  
+                                                                                option(value=proveedor.NID) #{proveedor.nombre}  
+                                                                        else  
+                                                                            option(value="") No hay opciones disponibles  
+                                                        .row 
+                                                            .col-sm-12
+                                                                .custom-select-wrapper
+                                                                    select.custom-select(name="tipo", id="tipo")  
+                                                                        if tipos && tipos.length  
+                                                                            each tipo in tipos  
+                                                                                option(value=tipo.id) #{tipo.nombre}  
+                                                                        else  
+                                                                            option(value="") No hay opciones disponibles  
+                                                        button.btn-prod(type="submit") Actualizar  
+
+                                    
+                        else
+                            p No hay productos disponibles.
 
         script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous") 
             
