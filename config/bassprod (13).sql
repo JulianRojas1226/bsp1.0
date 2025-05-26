@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 19-05-2025 a las 04:07:46
+-- Tiempo de generación: 26-05-2025 a las 05:02:25
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -117,8 +117,11 @@ CREATE TABLE `egresos` (
 --
 
 INSERT INTO `egresos` (`id`, `hora`, `nombre`, `tipo`, `costo`) VALUES
-(1, '2025-05-18 23:26:06', 'HEINEKEN BOTELLA', 1, 113900),
-(2, '2025-05-18 23:46:29', 'aguila botella', 1, 65000);
+(11, '2025-05-19 18:07:28', 'Smirnoff Tamarindo *750', 1, 500000),
+(15, '2025-05-23 19:11:01', 'Club Roja Botella', 1, 85000),
+(16, '2025-05-23 19:29:45', 'Stella Artois Lata', 1, 84000),
+(17, '2025-05-23 19:31:53', 'CLUB DORADA BOTELLA', 1, 85000),
+(18, '2025-05-23 19:53:51', 'Corona botella', 1, 105000);
 
 -- --------------------------------------------------------
 
@@ -138,6 +141,8 @@ CREATE TABLE `empleado` (
 --
 
 INSERT INTO `empleado` (`codigo`, `nombre`, `correo`, `cargo`) VALUES
+('$2b$10$6iI8FIQVkpLmZuvxCc3nl.aEpA12m/gnuhI7RwNrQfpyAmm90ftF2', 'esteban', 'julianrojasc1226@gmail.com', 1),
+('$2b$10$avTosT2BMjSqZaadO6efYeSIMxNP7xUgMRoh6aMMKJ7Zymw44fBDq', 'Administrador', 'julisrojas26@gmail.com', 1),
 ('$2b$10$nydUkpmTg6krzvv1GkrmSuWAClw7g.iyMD9pr.vKu4WdeVnucGXhy', 'julian', 'julsdad@gmail.com', 1);
 
 -- --------------------------------------------------------
@@ -185,7 +190,11 @@ CREATE TABLE `pagos` (
 INSERT INTO `pagos` (`id`, `mesa`, `fecha_inicio`, `fecha_fin`, `metodo_pago`, `total`) VALUES
 (1, 1, '2025-05-02 18:03:00', '2025-05-03 04:16:40', 1, 10500),
 (2, 2, '2025-05-02 18:19:46', '2025-05-03 04:19:55', 1, 7000),
-(3, 2, '2025-05-02 18:22:11', '2025-05-07 01:02:09', 1, 70500);
+(3, 2, '2025-05-02 18:22:11', '2025-05-07 01:02:09', 1, 70500),
+(4, 1, '2025-05-24 20:39:52', '2025-05-25 01:40:01', 1, 480000),
+(5, 2, '2025-05-24 20:40:07', '2025-05-25 01:40:19', 2, 90000),
+(6, 3, '2025-05-24 20:40:24', '2025-05-25 01:40:32', 1, 45000),
+(7, 2, '2025-05-24 23:41:45', '2025-05-25 04:41:54', 1, 90000);
 
 -- --------------------------------------------------------
 
@@ -210,11 +219,11 @@ CREATE TABLE `producto` (
 --
 
 INSERT INTO `producto` (`id`, `nombre`, `tipo`, `cantidad`, `proveedor`, `precio`, `Costo`, `dir`, `minimo_cant`) VALUES
-(41, 'Nectar media', 5, 11, 13135465, 30000, 0, '/productos/1743967561585-media nectar.webp', 3),
-(42, 'aguila botella', 3, 63, 13135465, 3500, 0, '/productos/1745410336039-AGUILA.jpg', 15),
-(43, 'poker botella', 3, 50, 13135465, 3500, 0, '/productos/1745410367573-images.jpeg', 15),
-(44, 'budweiser lata', 3, 17, 13135465, 3500, 0, '/productos/1745410420397-BUD.webp', 10),
-(45, 'HEINEKEN BOTELLA', 3, 24, 13135465, 4000, 113900, '/productos/1747610766533-heineken.webp', 10);
+(54, 'Smirnoff Tamarindo *750', 5, 6, 13135465, 120000, 500000, '/productos/1747678048272-smirnoff tamarindo.webp', 2),
+(58, 'Club Roja Botella', 3, 30, 13135465, 4500, 85000, '/productos/1748027461138-club roja.png', 10),
+(59, 'Stella Artois Lata', 3, 9, 13135465, 6000, 84000, '/productos/1748028585796-CERVEZA-STELLA-ARTOIS-LATA-.webp', 10),
+(60, 'CLUB DORADA BOTELLA', 3, 10, 13135465, 4500, 85000, '/productos/1748028713139-club dorada.png', 10),
+(61, 'Corona botella', 3, 20, 13135465, 4500, 105000, '/productos/1748030030900-84257633-corona-extra.webp', 10);
 
 --
 -- Disparadores `producto`
@@ -341,8 +350,7 @@ CREATE TABLE `reservas` (
 --
 
 INSERT INTO `reservas` (`Id_re`, `fecha_hora`, `hora`, `NID`, `nombre`, `correo`, `celular`, `tipo_re`, `cantidad_p`, `mesa_asig`, `obser`) VALUES
-(15, '2025-04-18', '00:00:00', 103153250, 'SAMUEL R', '', 0, 1, 0, 3, ''),
-(16, '2025-04-25', '00:00:00', 1231231234, 'julian r', 'sad@gmail.com', 2147483647, 1, 10, 5, 'ND');
+(17, '2025-05-24', '20:10:00', 1031648129, 'julian r', 'ASDASD@GMAIL.COM', 2147483647, 1, 10, 5, 'NINGUNA');
 
 --
 -- Disparadores `reservas`
@@ -480,12 +488,12 @@ CREATE TABLE `ventas_res` (
 --
 
 INSERT INTO `ventas_res` (`id`, `id_orden`, `hora`, `mesa`, `id_prod`, `producto`, `precio_u`, `cantidad`, `total_p`, `pago`) VALUES
-(1, 13, '2025-04-24 20:00:43', 1, 43, 'poker botell', 3500, 10, 35000, 1),
-(2, 14, '2025-04-25 00:23:23', 1, 41, 'Nectar media', 30000, 2, 60000, 1),
-(3, 17, '2025-04-28 16:14:02', 1, 44, 'budweiser la', 3500, 10, 35000, 3),
-(4, 18, '2025-05-02 18:03:00', 1, 42, 'aguila botel', 3500, 3, 10500, 1),
-(5, 19, '2025-05-02 18:19:46', 2, 42, 'aguila botel', 3500, 2, 7000, 1),
-(6, 20, '2025-05-02 18:22:11', 2, 41, 'Nectar media', 30000, 2, 60000, 1);
+(7, 22, '2025-05-24 20:39:52', 1, 54, 'Smirnoff Tam', 120000, 2, 240000, 1),
+(8, 23, '2025-05-24 20:39:56', 1, 54, 'Smirnoff Tam', 120000, 2, 240000, 1),
+(9, 24, '2025-05-24 20:40:07', 2, 60, 'CLUB DORADA ', 4500, 10, 45000, 2),
+(10, 25, '2025-05-24 20:40:10', 2, 60, 'CLUB DORADA ', 4500, 10, 45000, 2),
+(11, 26, '2025-05-24 20:40:24', 3, 61, 'Corona botel', 4500, 10, 45000, 1),
+(12, 27, '2025-05-24 23:41:45', 2, 59, 'Stella Artoi', 6000, 15, 90000, 1);
 
 --
 -- Índices para tablas volcadas
@@ -599,13 +607,13 @@ ALTER TABLE `cargo`
 -- AUTO_INCREMENT de la tabla `detalles_p`
 --
 ALTER TABLE `detalles_p`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT de la tabla `egresos`
 --
 ALTER TABLE `egresos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT de la tabla `mesa`
@@ -617,19 +625,19 @@ ALTER TABLE `mesa`
 -- AUTO_INCREMENT de la tabla `pagos`
 --
 ALTER TABLE `pagos`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT de la tabla `reservas`
 --
 ALTER TABLE `reservas`
-  MODIFY `Id_re` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `Id_re` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de la tabla `tipo_egreso`
@@ -659,7 +667,7 @@ ALTER TABLE `tipo_re`
 -- AUTO_INCREMENT de la tabla `ventas_res`
 --
 ALTER TABLE `ventas_res`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Restricciones para tablas volcadas

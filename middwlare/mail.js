@@ -43,7 +43,7 @@ async function enviar_recuperacion({ destinatario, token }) {
         console.log('Correo enviado:', info.messageId);
         return info;
     } catch (error) {
-        console.error('Error al enviar el correo:', error?.response?.data || error)
+        
         throw error;
     }
 }
