@@ -255,7 +255,8 @@ body.dark .switch::before{
   width: 100%;
   overflow: hidden;
   position: relative;
-}
+  align-items: center;
+}   
 
 .carrusel-items {
   display: flex;
@@ -266,4 +267,7 @@ body.dark .switch::before{
 @keyframes moverCarrusel {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); } /* ✅ Se mueve la mitad y luego reinicia */
+}
+.carta-prod{
+    margin-right: 20px;
 }

@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt"
+import bcrypt, { hash } from "bcrypt"
 import  db from "../config/db.js";
 const mlogin = {
     creacion: async (usuario) => {
@@ -35,6 +35,20 @@ const mlogin = {
           return emails[0]
         } catch (error) {
           throw { status: 500, message: "Error al encontrar datos" }
+        }
+      },
+      actualizar_contraseña: async({email,nuevaContraseña})=>{
+        try {
+          hash = await bcrypt.hash(nuevaContraseña,10)
+        const [result] = await db.query("update empleado set codigo = ? where correo = ?",
+          [hash,email]
+        )
+        return result
+        } catch (error) {
+          throw {
+            status: 500,
+            message: `Error al crear el usuario ${usuario.nombre_r}`,
+          }
         }
       }
     

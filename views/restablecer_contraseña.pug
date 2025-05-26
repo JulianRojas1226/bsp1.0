@@ -1,0 +1,18 @@
+doctype html
+html
+  head
+    title Restablecer Contraseña
+  body
+    h2 Restablecer Contraseña
+    p Ingresa tu nueva contraseña
+    
+    form(method="POST", action="/reset-password")
+      //- Campo oculto para el token
+      input(type="hidden", name="token", value=token)
+
+      label(for="nuevaContraseña") Nueva contraseña:
+      input(type="password", name="nuevaContraseña", required=true)
+
+      br
+
+      button(type="submit") Cambiar contraseña

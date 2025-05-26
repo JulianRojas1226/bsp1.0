@@ -1,7 +1,7 @@
 document.getElementById("btn_registrarse").addEventListener("click",register);
 document.getElementById("btn_iniciarsesion").addEventListener("click",InicarSesion);
 var contenedor_is_r = document.querySelector(".contenedor_is_r")
-var inicio_sesion =document.querySelector(".iniar_sesion");
+var inicio_sesion =document.querySelector(".inicio_sesion");
 var register =document.querySelector(".REGISTRO");
 var caja_trasera_is =document.querySelector(".caja_trasera_is");
 var caja_trasera_reg  =document.querySelector(".caja_trasera_reg");

@@ -1,13 +1,19 @@
-import { JsonWebTokenError } from "jsonwebtoken";
-const claveSecreta = 'clave_secreta_segura'
+import pkg from 'jsonwebtoken';
+const { sign, verify, JsonWebTokenError } = pkg;
+
+const claveSecreta = 'clave_secreta_segura';
 
 function generartoken(email) {
-    return jwt.sign({email},claveSecreta,{expiresIn: '2m'})
+    return sign({ email }, claveSecreta, { expiresIn: '15m' }); // Aquí usamos `sign`
 }
-function validartoken(token){
+
+function validartoken(token) {
     try {
-        return jwt.verify(token,claveSecreta)
+        return verify(token, claveSecreta); // Aquí usamos `verify`
     } catch (error) {
-        return null
+        return null;
     }
 }
+
+
+export default {generartoken, validartoken}

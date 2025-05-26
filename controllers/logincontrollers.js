@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import mlogin  from "../modulos/modulos.js";
 import error from "../middwlare/err.js";
+
 // inicio login
 const clogin=
 { 
@@ -47,7 +48,8 @@ const clogin=
         } catch (err) {
           error.e500(req, res, err);
         }
-    }
+    },
+    
 }
 
 export default clogin

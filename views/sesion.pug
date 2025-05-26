@@ -64,20 +64,20 @@ html(lang="en")
                         .col-sm-4
                             div#grafico_lineal(style="width:600px;height:400px;" )
                 section.container-fluid
-                    .row 
-                        .col-lg-8 
+                    .row.justify-content-center 
+                        .col-lg-6
                           .carrusel
                             .carrusel-items
                                 if productos && productos.length 
                                     each producto in productos
-                                        div.card(style="width: 18rem;")
+                                        div.card.carta-prod(style="width: 18rem;")
                                             img.card-img-top(src=`${producto.dir}`  alt="...")
                                             .card-body
-                                                h5.card-title #{producto.nombre}
-                                                p.card-text #{producto.total_vendido}
-                                                a.btn.btn-primary(href="#") Go somewhere    
+                                                h5.card-title #{producto.producto}
+                                                p.card-text Cantidad vendida: #{producto.total_vendido}
+                                                
                                 
-                        .col-lg-4
+                        .col-lg-6
                             #calendar
 
                             

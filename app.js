@@ -13,16 +13,18 @@ import routesproductos from "./rutas/productos.js";
 import routesreservas from "./rutas/reservas.js"
 import routesventas from "./rutas/ventas.js";
 import routescerrar from "./rutas/cerrar-sesion.js"
+import routescod from "./rutas/codigo.js"
 
 const __dirname = process.cwd()
 const app = express()
 const port = 3000
 app.use(cors())
 app.use(
-   helmet({
+  helmet({
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
+        connectSrc: ["'self'", "smtp.gmail.com"], // 🚀 Permite Nodemailer/Gmail SMTP
         styleSrc: [
           "'self'",
           "https://cdn.jsdelivr.net",
@@ -35,8 +37,8 @@ app.use(
           "'self'",
           "https://cdn.jsdelivr.net",
           "https://cdnjs.cloudflare.com",
-          "https://unpkg.com", // ✅ Agregado para permitir las fuentes
-           "https://fonts.gstatic.com",
+          "https://unpkg.com",
+          "https://fonts.gstatic.com",
           "data:",
         ],
         scriptSrc: [
@@ -49,7 +51,8 @@ app.use(
       },
     },
   })
-)
+);
+
 app.use(morgan("dev"))
 
 app.use("/node_modules", express.static("node_modules"));
@@ -72,6 +75,7 @@ app.use((req, res, next) => {
 })
 app.use(routesindex)
 app.use(routeslogin)
+app.use(routescod)
 app.use(autenticado,routessesion)
 app.use(routesreservas)
 app.use(routesproductos)
