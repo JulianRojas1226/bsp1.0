@@ -2,10 +2,37 @@
 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
 
 :root{
-    --primary-color:#DC5F00;
-    --secundary-color:#373A40;
-    --third-color:#686D76;
-    --quarter-color:#EEEEEE;
+    --primary-color: #EEEEEE;
+    --secondary-color: #373A40;
+    --accent-color: #DC5F00;
+    --neutral-color: #686D76;
+    
+    --background-color: var(--primary-color);
+    --text-color: var(--secondary-color);
+    --button-background: var(--accent-color);
+    --button-text: var(--primary-color);
+
+    --tran-02: all 0.2s ease;
+    --tran-03: all 0.3s ease;
+    --tran-04: all 0.4s ease;
+    --tran-05: all 0.5s ease;
+}
+body{
+    height: 100vh;
+    background: var(--body-color);
+    transition: var(--tran-05);
+}
+body.dark{
+    --primary-color: #373A40;
+    --secondary-color: #EEEEEE;
+    --accent-color: #DC5F00;
+    --neutral-color: #686D76;
+    
+    --background-color: var(--primary-color);
+    --text-color: var(--secondary-color);
+    --button-background: var(--accent-color);
+    --button-text: var(--secondary-color);
+
 }
 
 .modal {
@@ -45,8 +72,8 @@ body {
 
 /* Estilo para los botones de mesa */
 .btn-mesa {
-    background-color: var(--third-color);
-    color: white;
+    background-color: var(--background-color);
+    color: var(--text-color);
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
@@ -56,7 +83,11 @@ body {
 }
 
 .btn-mesa:hover {
-    background-color:var(--primary-color);
+    background-color:var(--button-background);
+}
+.btn-mesa.ocupada{
+    background-color: var(--button-background);
+    color: var(--button-text);
 }
 
 /* Tabla */

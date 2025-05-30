@@ -9,7 +9,7 @@ const mprod={
         try {
             console.log("📌 Ejecutando consulta en la BD...");
             const [results] = await db.query("SELECT id, nombre FROM tipo_pr");
-            console.log("🟢 Resultados obtenidos de la BD:", results)
+           
             return results;
         } catch (err) {
             throw {status:500,message:"error al cargar datos"}
@@ -18,7 +18,7 @@ const mprod={
     proveedor: async()=>{
         try {
             const [resultspro] = await db.query("SELECT NID, nombre from proveedor")
-            console.log("🟢 Resultado   s obtenidos de la BD:", resultspro)
+            
             return resultspro
         } catch (err) {
             throw {status:500,message:"error al cargar datos"}
@@ -36,8 +36,7 @@ const mprod={
     },
     mostpod: async()=>{
         try {
-            const [resultprod] = await db.query("SELECT id,nombre,tipo,cantidad,proveedor,precio,dir FROM producto")
-            console.log("🟢 Resultados obtenidos de la BD:", resultprod)
+            const [resultprod] = await db.query("SELECT id,nombre,tipo,cantidad,proveedor,precio,dir FROM producto") 
             return resultprod
         } catch (err) {
             throw {status:500,message:"error al cargar datos"}
@@ -156,13 +155,20 @@ const mprod={
         }
     },
     actualizar: async({id, nombre, cantidad_min, precio, proveedor, tipo })=>{
-        
         try {
             const [result] = await db.query(`UPDATE producto SET nombre = COALESCE(?, nombre),minimo_cant = COALESCE(?, minimo_cant),precio = COALESCE(?, precio),proveedor = COALESCE(?, proveedor),tipo = COALESCE(?, tipo) WHERE id = ?`,
             [nombre || null, cantidad_min || null, precio || null, proveedor || null, tipo || null, id])
         } catch (err) {
             console.error("❌ Error al actualizar el producto:", err.message);
             throw { status: 500, message: "Error al actualizar el producto en la base de datos." };
+        }
+    },
+    not: async () => {
+        try {
+            const [result] = await db.query("select count(*) as total_not from producto where cantidad < minimo_cant")
+            return result
+        } catch (error) {
+            console.error("❌ error al contar la cantidad de productos", error)
         }
     }
     

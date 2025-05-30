@@ -6,11 +6,11 @@ const cprod ={
       try {
          // Recoge el filtro desde la URL o usa un string vacío
         const filtro = req.query.filtro ? parseInt(req.query.filtro) : ""; // Convierte a INT si hay filtro
-        console.log("Filtro procesado:", filtro);
+        
         // recoge el de busqueda
         
           const query = req.query.query || ""; // Recoge el término de búsqueda
-          console.log("Término de búsqueda recibido:", query);
+          
           let productos
   
           if (filtro && query) {
@@ -97,6 +97,23 @@ const cprod ={
     } catch (err) {
       console.error("❌ Error en el controlador:", error.message);
         res.status(500).send("Error al actualizar el producto.")
+    }
+  },
+  low_stock: async (req,res) => {
+    try {
+      const datos = await mprod.lowstock()
+      res.json(datos)
+    } catch (error) {
+      console.error("se ha generado un error: ",error)
+    }
+    
+  },
+  notificacion: async (req,res) => {
+    try {
+      const [datos] = await mprod.not()
+      res.json({total: datos.total_not})
+    } catch (error) {
+      console.error("se ha generado un problema al traer los datos", error)
     }
   }
 

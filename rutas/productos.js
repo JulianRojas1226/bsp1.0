@@ -7,17 +7,20 @@ import cventas from "../controllers/cventas.js";
 import csescion from "../controllers/csesion.js";   
 import cierre from "../controllers/close-sesion.js";
 const routes = Router()
-
+// barra navegacion
 routes.get("/prod", cprod.getprod)
 routes.get("/res", cres.getres)
 routes.get("/ventas", cventas.getventas)
 routes.get("/sesion", csescion.getsesion)
 routes.get("logout", cierre.cierre)
+// funcionalidad prod
 routes.post("/formprod", actualizar.single("imagen"), cprod.adddatos)
 routes.post("/cantprod", cprod.addcantidad)
 routes.post("/addproveedor", cprod.addproveedor)
 routes.post("/eliminar/:id", cprod.borrarprod)
 routes.post("/actualizarprod/:id", cprod.actualizar)
+routes.get("/lowstock", cprod.low_stock)
+routes.get("/notificacion",cprod.notificacion)
 
 
 export default routes

@@ -7,7 +7,7 @@ import cierre from "../controllers/close-sesion.js";
  const routes = Router()
 
  routes.post("/ingorden/:id", cventas.insorden)
- routes.post("/eliminar/:id", cventas.eliminarorden)
+ routes.post("/eliminar-orden/:id", cventas.eliminarorden)
  routes.post("/pagar/:mesa", cventas.pagar)
  routes.post("/duplicar/:id", cventas.duplicar)
  routes.get("/ventas/pdf",cventas.generarpdf)

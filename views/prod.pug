@@ -53,8 +53,13 @@ html(lang="es")
                             a(href="/res")
                                 i.fa-solid.fa-calendar
                                 span.text.nav-text Reservas
+                        
 
                 .bottom-content
+                    li.nav-link.not
+                            a(href="#offcanvasExample" role="button" data-bs-toggle="offcanvas" aria-contols="offcanvasExample" onclick="mostrarNotificaciones()")  
+                                i.fa-solid.fa-bell
+                                span#badge-noti
                     li
                         a(href="/logout")
                             i.fa-solid.fa-right-from-bracket
@@ -187,15 +192,19 @@ html(lang="es")
                                                             input(type="text", name="correo" id="correo" placeholder="Correo")
                                                             .underline
                                                 button.btn-prod(type="submit") agregar
-                div.offcanvas.offcanvas-start(tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel")
-                    div.offcanvas-header
-                        h5.offcanvas-title#offcanvasExampleLabel Offcanvas
-                        button.btn-close(type="button" data-bs-dismiss="offcanvas" aria-label="Close")
+                div.offcanvas.offcanvas-end.notificaciones(tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel")
+                    div.offcanvas-header.header-not.d-flex.justify-content-between
+                                h5.offcanvas-title#offcanvasExampleLabel Notificacion 
+                                i.fa-solid.fa-xmark(type="button" data-bs-dismiss="offcanvas" aria-label="Close")
                     div.offcanvas-body
+                        h6 Productos agotados
                         if minimo_cants && minimo_cants.length 
-                            each minimo_cant in minimo_cants 
-                                p #{minimo_cant.nombre}
-                                p  #{minimo_cant.cantidad}
+                            each minimo_cant in minimo_cants
+                                .row 
+                                    .col-sm-6 
+                                        p #{minimo_cant.nombre}
+                                    .col-sm-6
+                                        p  #{minimo_cant.cantidad}
                         else 
                             p no hay productos agotados
 
@@ -213,7 +222,10 @@ html(lang="es")
                                             |Cantidad: #{producto.cantidad || 'No especificada'}
                                             details
                                                 summary Ver más
-                                                p.card-text Tipo: #{producto.tipo || 'Sin tipo'}
+                                                if tipos && tipos.length 
+                                                    each tipo in tipos
+                                                        if producto.tipo == tipo.id
+                                                            p.card-text Tipo: #{tipo.nombre}
                                                 if proveedores && proveedores.length
                                                     each proveedor in proveedores
                                                         if producto.proveedor == proveedor.NID
@@ -253,7 +265,7 @@ html(lang="es")
                                                                     .underline  
                                                             .col-sm-6
                                                                 .custom-select-wrapper
-                                                                    select.custom-select(name="proveedor", id="proveedor")  
+                                                                    select.custom-select(name="proveedor", id="proveedor") vb   
                                                                         if proveedores  && proveedores.length  
                                                                             each proveedor in proveedores  
                                                                                 option(value=proveedor.NID) #{proveedor.nombre}  
@@ -273,10 +285,9 @@ html(lang="es")
                                     
                         else
                             p No hay productos disponibles.
+                    #alert-container 
 
         script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous") 
-            
-
         script(src="/js/main.js")
 
         

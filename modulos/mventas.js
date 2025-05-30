@@ -11,7 +11,7 @@ const mventas = {
     },
     mostprod: async()=>{
         try {
-            const [results] = await db.query("select id,nombre from producto where cantidad > minimo_cant")
+            const [results] = await db.query("select id,nombre,cantidad from producto where cantidad > 0")
             return results
         } catch (error) {
             throw {status:500,message:"error al cargar datos"}
@@ -193,8 +193,14 @@ const mventas = {
         }
 
     },
-      
-      
-    
+    lowstock: async()=>{
+        try {
+           const [resultsmin_prod]= await db.query("select * from producto where cantidad < minimo_cant")
+           return resultsmin_prod
+        } catch (err) {
+            console.error("❌ Error al guardar los datos en la base de datos:", err);
+            throw { status: 500, message: "Error al guardar los datos"};
+        }
+    }
 }
 export default mventas

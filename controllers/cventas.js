@@ -23,7 +23,8 @@ const cventas = {
             const tipo_pagos = await mventas.metodo_pago()
             const pagos = await mventas.mostventas()
             const ventasu = await mventas.mostventau()
-            res.render("ventas", {mesas,productos,ordenes,totales,tipo_pagos,pagos,ventasu})
+            const lowstocks = await mventas.lowstock()
+            res.render("ventas", {mesas,productos,ordenes,totales,tipo_pagos,pagos,ventasu,lowstocks})
         } catch (err) {
             error.e500(req, res, err);  
         }
@@ -32,7 +33,7 @@ const cventas = {
         try {
             const {id} = req.params
             const {producto,cantidad}= req.body
-            console.log("✅ Datos recibidos en el controlador:", { id, producto, cantidad }); // Depuración  b v  
+            console.log("✅ Datos recibidos en el controlador:", { id, producto, cantidad })  
             await mventas.insorden({id,producto,cantidad})
             res.redirect("/ventas")
         } catch (err) {

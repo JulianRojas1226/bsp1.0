@@ -526,7 +526,7 @@ select.custom-select:focus {
   outline: none;
 }
 .custom-select option{
-    background-color: var(--secundari-color);
+    background-color: var(--background-color);
     color: var(--text-color);
 }
 main .cartaprod{
@@ -551,4 +551,52 @@ body.dark main .cartaprod{
 }
 body.dark main .card-act{
     background-color: transparent !important;
+}
+.notificaciones{
+    background-color: var(--background-color) !important;
+    color: var(--text-color) !important;
+}
+.notificaciones h5{
+    color: var(--text-color) !important;
+}
+.notificaciones .offcanvas-header {
+    border-bottom: 1px solid var(--button-background);
+}
+#alert-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  max-width: 300px;
+  font-family: Arial, sans-serif;
+}
+
+.alerta {
+  background-color: var(--background-color); /* rojo intenso para alerta */
+  color: var(--text-color);
+  padding: 12px 18px;
+  margin: 8px 0;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+.alerta.termino {
+  opacity: 0;
+}
+.nav-link.not{
+    position: relative;
+}
+#badge-noti{
+    position: absolute;
+    top: 2px;
+    left: 25px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-size: 10px;
+    padding: 1px 4px;
+    border-radius: 50%;
+    display: none;
+    font-family: sans-serif;
 }
