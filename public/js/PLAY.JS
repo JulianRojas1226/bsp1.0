@@ -22,4 +22,4 @@ caja_trasera_reg.style.opacity="0";
 caja_trasera_is.style.opacity="1";
 }
 
-// productos
+

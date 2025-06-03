@@ -15,7 +15,10 @@ html(lang="en")
                         img(src="/img/BASSPROD3.png", alt="logo")
                 .text.header-text
                     span.name CodingLab
-                    span.profecion Web devoloper
+                    if cargo == 1
+                        span.profecion Admin 
+                    else 
+                        span.profecion Empleado
                 i.fa-solid.fa-greater-than.toggle
             .menu-bar
                 .menu
@@ -24,6 +27,11 @@ html(lang="en")
                             a(href="/sesion")
                                 i.fa-solid.fa-house
                                 span.text.nav-text Inicio
+                        if cargo == 1
+                            li.nav-link
+                                a(href="/res")
+                                    i.fa-solid.fa-user-tie
+                                    span.text.nav-text Admin
                         li.nav-link
                             a(href="/prod")
                                 i.fa-solid.fa-beer-mug-empty

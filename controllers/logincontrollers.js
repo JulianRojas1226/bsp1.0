@@ -3,10 +3,12 @@ import mlogin  from "../modulos/modulos.js";
 import error from "../middwlare/err.js";
 
 // inicio login
-const clogin=
-{ 
-    getlogin: (req,res)=>{
-    res.render("login")
+const clogin={ 
+    getlogin: async (req,res)=>{
+        const cargos = await mlogin.mostrarcargo()
+        console.log("datos cargos", cargos)
+
+        res.render("login",{cargos})
     },
     autenticacion: async (req,res)=>{
     try { 

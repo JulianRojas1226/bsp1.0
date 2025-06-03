@@ -16,6 +16,7 @@ const printer = new PdfPrinter(fonts);
 const cventas = {
     getventas: async(req,res)=>{
         try {
+            const {usuario,cargo}= req.session
             const productos = await  mventas.mostprod()
             const mesas = await mventas.mostmesa()
             const totales = await mventas.totalmesa()
@@ -24,8 +25,7 @@ const cventas = {
             const pagos = await mventas.mostventas()
             const ventasu = await mventas.mostventau()
             const lowstocks = await mventas.lowstock()
-            res.render("ventas", {mesas,productos,ordenes,totales,tipo_pagos,pagos,ventasu,lowstocks,   msg: req.query.msg,
-            error: req.query.error})
+            res.render("ventas", {mesas,productos,ordenes,totales,tipo_pagos,pagos,ventasu,lowstocks,usuario,cargo})
         } catch (err) {
             error.e500(req, res, err);  
         }

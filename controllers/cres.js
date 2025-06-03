@@ -3,6 +3,7 @@ import mres from "../modulos/mreservas.js"
 const cres ={
     getres: async (req,res)=>{
         try {
+            const {usuario,cargo}= req.session
             const hoy = new Date().toLocaleDateString("es-ES",{ year:"numeric",month:"long", day:"numeric"})
             const dia = req.query.dia
             const mes =req.query.mes
@@ -24,7 +25,7 @@ const cres ={
             const tipos = await mres.mosttipo()
             const mesas = await mres.mostmesa()
             const fechareservada = await mres.dia()
-            res.render("res",{tipos, mesas, reservas,fechareservada,hoy})
+            res.render("res",{tipos, mesas, reservas,fechareservada,hoy,usuario,cargo})
         } catch (err) {
             error.e500(req, res, err);
         }

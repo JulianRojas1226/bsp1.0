@@ -46,7 +46,7 @@ const msesion ={
             throw {status:500,message:"error al cargar datos de reserva"} 
         }
     },
-    most_prod: async () => {
+     most_prod: async () => {
         try {
             const [result] = await db.query(`select v.id_prod, v.producto, sum(v.cantidad) as total_vendido, p.dir 
                 from ventas_res v

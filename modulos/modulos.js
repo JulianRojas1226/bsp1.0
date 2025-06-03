@@ -37,18 +37,14 @@ const mlogin = {
           throw { status: 500, message: "Error al encontrar datos" }
         }
       },
-      actualizar_contraseña: async({email,nuevaContraseña})=>{
+      mostrarcargo: async()=>{
         try {
-          hash = await bcrypt.hash(nuevaContraseña,10)
-        const [result] = await db.query("update empleado set codigo = ? where correo = ?",
-          [hash,email]
-        )
-        return result
+          console.log("📌 Ejecutando consulta en la BD...");
+          const [result] = await db.query("SELECT id,cargo from cargo")
+          console.log("datos a pasar", result)
+          return result
         } catch (error) {
-          throw {
-            status: 500,
-            message: `Error al crear el usuario ${usuario.nombre_r}`,
-          }
+          throw { status: 500, message: "Error al encontrar datos" }    
         }
       }
     

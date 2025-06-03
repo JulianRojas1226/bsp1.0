@@ -4,6 +4,7 @@ import mprod from "../modulos/mproductos.js"
 const cprod ={
     getprod: async (req,res) => {
       try {
+        const {usuario,cargo}=req.session
          // Recoge el filtro desde la URL o usa un string vacío
         const filtro = req.query.filtro ? parseInt(req.query.filtro) : ""; // Convierte a INT si hay filtro
         
@@ -32,7 +33,7 @@ const cprod ={
         
   
         const minimo_cants= await mprod.lowstock()
-        res.render("prod", { tipos, proveedores, productos, minimo_cants}); // Enviamos los datos a la vista
+        res.render("prod", { tipos, proveedores, productos, minimo_cants,usuario,cargo}); // Enviamos los datos a la vista
     } catch (err) {
         console.error("❌ Error en el controlador:", err);
         res.status(500).send("Error al obtener los tipos"); // Enviamos una respuesta de error
