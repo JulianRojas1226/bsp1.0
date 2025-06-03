@@ -3,8 +3,9 @@ import msesion from "../modulos/msesion.js";
 const csescion = {
     getsesion: async (req, res) => {
         try {
+          const {cargo,usuario}= req.session
           const productos = await msesion.most_prod()
-          res.render("sesion",{productos});  
+          res.render("sesion",{productos,cargo,usuario});  
         } catch (err) {
           error.e500(req, res, err);
         }

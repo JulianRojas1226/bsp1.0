@@ -9,7 +9,7 @@ import cierre from "../controllers/close-sesion.js";
  routes.post("/ingorden/:id", cventas.insorden)
  routes.post("/eliminar-orden/:id", cventas.eliminarorden)
  routes.post("/pagar/:mesa", cventas.pagar)
- routes.post("/duplicar/:id", cventas.duplicar)
+ routes.post("/ventas/duplicar/:id", cventas.duplicar)
  routes.get("/ventas/pdf",cventas.generarpdf)
  routes.get("/logout",cierre.cierre)
 //  barrra navegacion 

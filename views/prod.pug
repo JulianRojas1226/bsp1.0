@@ -159,7 +159,7 @@ html(lang="es")
                                                 .row
                                                     .col-sm-6 
                                                         .input-wrapper 
-                                                            input(type="number", name="costo" placeholder)
+                                                            input(type="number", name="costo" placeholder="Costo")
                                                             .underline
                                                     .col-sm-6
                                                         .custom-select-wrapper
@@ -219,7 +219,7 @@ html(lang="es")
                                         div.card-body
                                             h5.card-title #{producto.nombre || 'Sin nombre'}
                                             p.card-text Precio: #{producto.precio || 'No especificado'}         
-                                            |Cantidad: #{producto.cantidad || 'No especificada'}
+                                            |Cantidad: #{producto.cantidad || '0'}
                                             details
                                                 summary Ver más
                                                 if tipos && tipos.length 

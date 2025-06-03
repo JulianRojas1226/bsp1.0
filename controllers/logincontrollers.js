@@ -32,7 +32,8 @@ const clogin=
             error.e403(req, res, err);
         }
         
-        req.session.usuario = usuario
+         req.session.usuario = usuario;
+        req.session.cargo = user.cargo; // <-- aquí guardas el tipo de cuenta
         res.redirect("/sesion")
         
 

@@ -11,7 +11,7 @@ const mventas = {
     },
     mostprod: async()=>{
         try {
-            const [results] = await db.query("select id,nombre,cantidad from producto where cantidad > 0")
+            const [results] = await db.query("select id,nombre,cantidad from producto where cantidad >= 1")
             return results
         } catch (error) {
             throw {status:500,message:"error al cargar datos"}
@@ -29,17 +29,45 @@ const mventas = {
         }
     },
     duplicar_orden: async ({id}) => {
-        const coneccion = await db.getConnection()
+         const conexion = await db.getConnection();
         try {
-            await coneccion.beginTransaction()
-            const [orden]= await coneccion.query(`select mesa_id,id_prod,cantidad from detalles_p where id = ?`, [id])
-            const {mesa_id,id_prod,cantidad}=orden[0]
-            await coneccion.query(`insert into detalles_p(mesa_id,id_prod,cantidad) values (?,?,?)`,[mesa_id,id_prod,cantidad])
-            await coneccion.commit()
+            await conexion.beginTransaction();
+
+            const [[orden]] = await conexion.query(
+            `SELECT mesa_id, id_prod, cantidad FROM detalles_p WHERE id = ?`,
+            [id]
+            );
+
+            if (!orden) {
+            throw { status: 404, message: "Orden no encontrada" };
+            }
+
+            const { mesa_id, id_prod, cantidad } = orden;
+
+            const [[producto]] = await conexion.query(
+            `SELECT cantidad AS stock FROM producto WHERE id = ?`,
+            [id_prod]
+            );
+
+            if (!producto) {
+            throw { status: 404, message: "Producto no encontrado" };
+            }
+
+            const stockDisponible = producto.stock;
+
+            if (stockDisponible < cantidad) {
+            throw { status: 400, message: "Stock insuficiente para duplicar la orden." };
+            }
+
+            await conexion.query(
+            `INSERT INTO detalles_p(mesa_id, id_prod, cantidad) VALUES (?, ?, ?)`,
+            [mesa_id, id_prod, cantidad]
+            );
+
+            await conexion.commit();
         } catch (error) {
             console.error("Error al duplicar orden:", error);
-            throw { status: 500, message: "Error al duplicar datos" };
-    
+            throw error; // Se lanza el error para que el controlador lo maneje
         }
     },
     mostorden: async()=>{

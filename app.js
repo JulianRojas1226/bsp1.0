@@ -14,6 +14,7 @@ import routesreservas from "./rutas/reservas.js"
 import routesventas from "./rutas/ventas.js";
 import routescerrar from "./rutas/cerrar-sesion.js"
 import routescod from "./rutas/codigo.js"
+import routesadmin from "./rutas/admin.js";
 
 const __dirname = process.cwd()
 const app = express()

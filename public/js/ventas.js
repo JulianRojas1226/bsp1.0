@@ -73,3 +73,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 })
+document.addEventListener("DOMContentLoaded",()=>{
+  document.querySelectorAll(`select[name="producto"]`).forEach(select=>{
+    const inputCantidad = select.closest('form').querySelector('input[name="cantidad"]')
+    const actualuizarMax = ()=>{
+      const selectedOption = select.options[select.selectedIndex]
+      const max =selectedOption.getAttribute('data-max')
+      inputCantidad.max = max
+    }
+    select.addEventListener('change', actualuizarMax)
+    actualuizarMax()
+  })
+})

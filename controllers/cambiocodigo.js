@@ -28,7 +28,11 @@ const ccodigo={
             const token = generartoken(email);
             await enviar_recuperacion({ destinatario: email, token });
 
-            res.json({ mensaje: 'Correo enviado correctamente' });
+            res.render("mensaje_temporal",{
+                mensaje: "Se ha enviado correctamente el correo,si no lo encuentras revisa en spam",
+                redireccion :"/",
+                tiempo: 5000
+            });
         } catch (err) {
             console.error("Error en buscarcorreo:", err);
             error.e500(req, res, err);

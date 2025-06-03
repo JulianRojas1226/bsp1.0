@@ -24,7 +24,8 @@ const cventas = {
             const pagos = await mventas.mostventas()
             const ventasu = await mventas.mostventau()
             const lowstocks = await mventas.lowstock()
-            res.render("ventas", {mesas,productos,ordenes,totales,tipo_pagos,pagos,ventasu,lowstocks})
+            res.render("ventas", {mesas,productos,ordenes,totales,tipo_pagos,pagos,ventasu,lowstocks,   msg: req.query.msg,
+            error: req.query.error})
         } catch (err) {
             error.e500(req, res, err);  
         }
@@ -57,9 +58,12 @@ const cventas = {
         const result =await mventas.duplicar_orden({id})
         console.log("✅ Datos recibidos en el controlador:", { id});
         res.redirect("/ventas")  
-      } catch (error) {
-        console.error("❌ Error al duplicar datos:", error);
-        res.status(500).json({ message: "Error al duplicar datos", error })
+      } catch (err) {
+        res.render("mensaje_temporal", {
+            mensaje: "Stock insuficiente para duplicar",
+            redireccion: "/ventas",
+            tiempo: 3000 // milisegundos = 3 segundos
+        })
       }
     },
     pagar: async(req,res)=>{

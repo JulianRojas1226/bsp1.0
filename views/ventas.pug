@@ -51,12 +51,10 @@ html(lang="en")
                             span.switch
         .home
             header
-                nav
-                    button.btn-mesa(
-                    type="button", 
-                    data-bs-toggle="modal", 
-                    data-bs-target="#staticBackdrop"
-                    ) Ventas
+                if mensaje
+                    .alert.alert-success= mensaje
+                if error
+                    .alert.alert-danger= error
 
             main 
                 if mesas && mesas.length
@@ -82,15 +80,13 @@ html(lang="en")
                                                 if productos && productos.length 
                                                     each producto in productos
                                                         if lowstocks && lowstocks.find(p => p.id === producto.id)
-                                                            option(value=producto.id data-lowstock="true") #{producto.nombre}
+                                                            option(value=producto.id data-lowstock="true" data-max=producto.cantidad) #{producto.nombre}
                                                         else
-                                                            option(value=producto.id) #{producto.nombre}
+                                                            option(value=producto.id data-max=producto.cantidad) #{producto.nombre}
                                                 else    
                                                     option(value="") no se encontaron productos 
                                             label.mt-2(for="cantidad") Cantidad
-                                            if productos && productos.length 
-                                                each producto in productos
-                                                    input.form-control(type="number", name="cantidad" max=producto.cantidad)
+                                            input.form-control(type="number", name="cantidad")
                                             button.btn.btn-primary.mt-2(type="submit") Agregar
                                         h5.mt-4 Productos consumidos
                                         table.table.table-bordered.mt-2
@@ -116,7 +112,7 @@ html(lang="en")
                                                                     form.d-inline(action=`/eliminar-orden/${orden.id}`, method="post")
                                                                         button(type="submit", class="btn btn-danger btn-sm me-1") 
                                                                             i.fa-regular.fa-trash-can
-                                                                    form.d-inline(action=`/duplicar/${orden.id}`, method="post")
+                                                                    form.d-inline(action=`/ventas/duplicar/${orden.id}`, method="post")
                                                                         button(type="submit", class="btn btn-success btn-sm") 
                                                                             i.fa-solid.fa-repeat
                                                 else    
@@ -165,88 +161,6 @@ html(lang="en")
                                                 else 
                                                     option(value="") no hay opciones
                                             button.btn.btn-success.mt-3(type="submit") Pagar
-
-                div.modal.fade#staticBackdrop(
-                data-bs-backdrop="static", 
-                data-bs-keyboard="false", 
-                tabindex="-1", 
-                aria-labelledby="staticBackdropLabel", 
-                aria-hidden="true"
-                )
-                    .modal-dialog.modal-dialog-centered
-                        .modal-content
-                            .modal-header
-                                h1.modal-title.fs-5#staticBackdropLabel Modal title
-                                button.btn-close(
-                                type="button", 
-                                data-bs-dismiss="modal", 
-                                aria-label="Close"
-                                )
-                            .modal-body
-                                    if pagos && pagos.length 
-                                        each pago in pagos 
-                                            details 
-                                                summary  mesa: #{pago.mesa} fecha: #{new Date(pago.fecha_fin).toLocaleDateString("es-ES",{ year:"numeric",month:"long", day:"numeric"})} metodo pago: #{pago.metodo_pago} total:  #{pago.total}
-                                                table 
-                                                    thead 
-                                                        tr 
-                                                            th hora 
-                                                            th producto 
-                                                            th cantidad 
-                                                            th precio unitario 
-                                                            th total
-                                                    tbody 
-                                                        if ventasu && ventasu.length 
-                                                            each ventau in ventasu 
-                                                                if pago.fecha_inicio <= ventau.hora && pago.fecha_fin >= ventau.hora && pago.mesa === ventau.mesa 
-                                                                    tr 
-                                                                        td #{new Date(ventau.hora).toLocaleDateString("es-ES", {year:"numeric",month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit",hopur12:true})}
-                                                                        td #{ventau.producto}
-                                                                        td #{ventau.cantidad} 
-                                                                        td #{ventau.precio_u}
-                                                                        td #{ventau.total_p}
-                                    form#filtroForm(action="/ventas/pdf" method="GET")
-                                        label(for="inicio") Fecha Inicio:
-                                        input(type="date" name="inicio")
-
-                                        label(for="fin") Fecha Fin:
-                                        input(type="date" name="fin")
-
-                                        label(for="mes") Mes:
-                                        select(name="mes")
-                                            option(value="") Todos
-                                            option(value="1") Enero
-                                            option(value="2") Febrero
-                                            option(value="3") Marzo
-                                            option(value="4") Abril
-                                            option(value="5") Mayo
-                                            option(value="6") Junio
-                                            option(value="7") Julio
-                                            option(value="8") Agosto
-                                            option(value="9") Septiembre
-                                            option(value="10") Octubre
-                                            option(value="11") Noviembre
-                                            option(value="12") Diciembre
-
-                                        label(for="dia") Día de la Semana:
-                                        select(name="dia")
-                                            option(value="") Todos
-                                            option(value="1") Domingo
-                                            option(value="2") Lunes
-                                            option(value="3") Martes
-                                            option(value="4") Miércoles
-                                            option(value="5") Jueves
-                                            option(value="6") Viernes
-                                            option(value="7") Sábado
-
-                                        label(for="pago") Tipo de Pago:
-                                        select(name="pago")
-                                            if tipo_pagos && tipo_pagos.length 
-                                                each tipo_pago in tipo_pagos                                    
-                                                    option(value=tipo_pago.id) #{tipo_pago.nombre} 
-                                            else 
-                                                    option(value="") no hay opciones
-                                        button(type="submit") Generar PDF
                             .modal-footer
                                 button.btn.btn-secondary(
                                 type="button", 
@@ -256,73 +170,7 @@ html(lang="en")
                                 type="button"
                                 ) Understood
 
-                div#modal-ventas-res.modal-ventas-res
-                    div.modal-contenido-VENTAS
-                        span#cerrarModal.cerrar ×
-                        if pagos && pagos.length 
-                            each pago in pagos 
-                                details 
-                                    summary  mesa: #{pago.mesa} fecha: #{new Date(pago.fecha_fin).toLocaleDateString("es-ES",{ year:"numeric",month:"long", day:"numeric"})} metodo pago: #{pago.metodo_pago} total:  #{pago.total}
-                                    table 
-                                        thead 
-                                            tr 
-                                                th hora 
-                                                th producto 
-                                                th cantidad 
-                                                th precio unitario 
-                                                th total 
-                                        if ventasu && ventasu.length 
-                                            each ventau in ventasu 
-                                                if pago.fecha_inicio <= ventau.hora && pago.fecha_fin >= ventau.hora && pago.mesa === ventau.mesa 
-                                                    tbody  
-                                                        tr 
-                                                            td #{new Date(ventau.hora).toLocaleDateString("es-ES", {year:"numeric",month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit",hopur12:true})}
-                                                            td #{ventau.producto}
-                                                            td #{ventau.cantidad} 
-                                                            td #{ventau.precio_u}
-                                                            td #{ventau.total_p}
-                        form#filtroForm(action="/ventas/pdf" method="GET")
-                            label(for="inicio") Fecha Inicio:
-                            input(type="date" name="inicio")
-
-                            label(for="fin") Fecha Fin:
-                            input(type="date" name="fin")
-
-                            label(for="mes") Mes:
-                            select(name="mes")
-                                option(value="") Todos
-                                option(value="1") Enero
-                                option(value="2") Febrero
-                                option(value="3") Marzo
-                                option(value="4") Abril
-                                option(value="5") Mayo
-                                option(value="6") Junio
-                                option(value="7") Julio
-                                option(value="8") Agosto
-                                option(value="9") Septiembre
-                                option(value="10") Octubre
-                                option(value="11") Noviembre
-                                option(value="12") Diciembre
-
-                            label(for="dia") Día de la Semana:
-                            select(name="dia")
-                                option(value="") Todos
-                                option(value="1") Domingo
-                                option(value="2") Lunes
-                                option(value="3") Martes
-                                option(value="4") Miércoles
-                                option(value="5") Jueves
-                                option(value="6") Viernes
-                                option(value="7") Sábado
-
-                            label(for="pago") Tipo de Pago:
-                            select(name="pago")
-                                if tipo_pagos && tipo_pagos.length 
-                                    each tipo_pago in tipo_pagos                                    
-                                        option(value=tipo_pago.id) #{tipo_pago.nombre} 
-                                else 
-                                        option(value="") no hay opciones
-                            button(type="submit") Generar PDF
+                
                 if lowstocks && lowstocks.length
                     .modal.fade#stockMinimoModal(tabindex="-1" aria-labelledby="stockMinimoLabel" aria-hidden="true")
                         .modal-dialog
