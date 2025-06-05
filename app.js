@@ -82,6 +82,7 @@ app.use(routesreservas)
 app.use(routesproductos)
 app.use(routesventas)
 app.use(routescerrar)
+app.use(routesadmin)
 app.use(error.e404);
 
 app.listen(port,()=> {console.log(`la aplicacion esta funcionando en http://localhost:${port}`)})

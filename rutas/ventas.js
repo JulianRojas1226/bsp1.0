@@ -4,6 +4,8 @@ import cprod from "../controllers/cprod.js";
 import csescion from "../controllers/csesion.js";
 import { Router } from "express";
 import cierre from "../controllers/close-sesion.js";
+import cadmin from "../controllers/cadmin.js";
+
  const routes = Router()
 
  routes.post("/ingorden/:id", cventas.insorden)
@@ -17,6 +19,6 @@ import cierre from "../controllers/close-sesion.js";
  routes.get("/res", cres.getres)
  routes.get("/prod", cprod.getprod)
  routes.get("/sesion", csescion.getsesion)
-
+routes.get("/admin",cadmin.getadmin)
 
  export default routes

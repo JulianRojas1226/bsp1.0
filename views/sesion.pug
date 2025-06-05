@@ -32,7 +32,7 @@ html(lang="en")
                                 span.text.nav-text Inicio
                         if cargo == 1
                             li.nav-link
-                                a(href="/res")
+                                a(href="/admin")
                                     i.fa-solid.fa-user-tie
                                     span.text.nav-text Admin
                         li.nav-link
@@ -63,16 +63,15 @@ html(lang="en")
                             span.switch
         .home
             main 
-                section.graficos(class= "container-fluid")
-                    div.row
-                        .col-sm-4
-                            div#grafico-costos(style="width:600px;height:400px;")
+                .container-fluid
+                    .row.graficos.d-flex.justify-content-around
+                        .col-sm-3.grafico
+                            div#grafico-costos
                             
-                        .col-sm-4
-                            div#grafico_ventas(style="width:600px;height:400px;")
-                        .col-sm-4
-                            div#grafico_lineal(style="width:600px;height:400px;" )
-                section.container-fluid
+                        .col-sm-3.grafico
+                            div#grafico_ventas
+                        .col-sm-3.grafico
+                            div#grafico_lineal
                     .row.justify-content-center 
                         .col-lg-6
                           .carrusel
@@ -84,8 +83,7 @@ html(lang="en")
                                             .card-body
                                                 h5.card-title #{producto.producto}
                                                 p.card-text Cantidad vendida: #{producto.total_vendido}
-                                                
-                                
+                                                    
                         .col-lg-6
                             #calendar
 

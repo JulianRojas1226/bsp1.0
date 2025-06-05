@@ -6,12 +6,14 @@ import cres from "../controllers/cres.js";
 import cventas from "../controllers/cventas.js";
 import csescion from "../controllers/csesion.js";   
 import cierre from "../controllers/close-sesion.js";
+import cadmin from "../controllers/cadmin.js";
 const routes = Router()
 // barra navegacion
 routes.get("/prod", cprod.getprod)
 routes.get("/res", cres.getres)
 routes.get("/ventas", cventas.getventas)
 routes.get("/sesion", csescion.getsesion)
+routes.get("/admin",cadmin.getadmin)
 routes.get("logout", cierre.cierre)
 // funcionalidad prod
 routes.post("/formprod", actualizar.single("imagen"), cprod.adddatos)

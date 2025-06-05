@@ -35,13 +35,16 @@ html(lang="en")
             h2 REGISTRARSE
             input(type="text" id="nombre_r" name="nombre_r" placeholder="nombre")
             input(type="text" id="correo" name="correo" placeholder="correo")
-            select(name="cargo" )
-              option(value="") escoja su
+            select(name="cargo" id=" cargo")
+              option(value="") escoja su cargo
               if cargos && cargos.length 
                 each cargo in cargos
                   option(value=cargo.id) #{cargo.cargo}
               else
                 option(value="") no hay cargos
+            div(id="codigoDiv" style="display: none;")
+              label(for="codigo") Código de admin:
+              input(type="password" name="codigo" id="codigo")
             input(type="password" id="password" name="password"  placeholder="password")
             
             button(type="submit") REGISTRARSE
