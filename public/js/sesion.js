@@ -139,6 +139,7 @@ async function cargarGraficoCostos() {
     graficosCargados.costos.setOption({
       title: { 
         text: "Costos meses",
+        subtext: "En millones de pesos ($)",
         textStyle: {
           color: colores.text,
           fontSize: 18,

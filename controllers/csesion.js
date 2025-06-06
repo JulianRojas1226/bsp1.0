@@ -4,8 +4,21 @@ const csescion = {
     getsesion: async (req, res) => {
         try {
           const {cargo,usuario}= req.session
+          const ventashoy = await msesion.ventashoy()
+           if (ventashoy) {
+            ventashoy.total = parseInt(ventashoy.total?.trim() || 0);
+            ventashoy.total_pago = parseInt(ventashoy.total_pago?.trim() || 0);
+            }
+          console.log("📌 Datos después de limpiar:", { ventashoy });
+          const promedio = await msesion.ticketPromedio()
+          const ventasmeses = await msesion.ventasmes()
+          if (ventasmeses) {
+            ventasmeses.total = parseInt(ventasmeses.total?.trim() || 0);
+            ventasmeses.total_pago = parseInt(ventasmeses.total_pago?.trim() || 0);
+            }
+          const productosVendidos = await msesion.productosVendidos()
           const productos = await msesion.most_prod()
-          res.render("sesion",{productos,cargo,usuario});  
+          res.render("sesion",{productos,cargo,usuario,ventashoy,ventasmeses,promedio, productosVendidos});  
         } catch (err) {
           error.e500(req, res, err);
         }
