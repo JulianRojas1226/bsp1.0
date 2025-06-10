@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-05-2025 a las 05:02:25
+-- Tiempo de generación: 10-06-2025 a las 06:01:44
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -54,12 +54,21 @@ CREATE TABLE `detalles_p` (
   `producto` varchar(12) NOT NULL,
   `precio_u` int(20) NOT NULL,
   `cantidad` int(3) NOT NULL,
-  `total_p` int(30) NOT NULL
+  `total_p` int(30) NOT NULL,
+  `empleado` varchar(60) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Disparadores `detalles_p`
 --
+DELIMITER $$
+CREATE TRIGGER `actualizar_estado_mesa` AFTER INSERT ON `detalles_p` FOR EACH ROW BEGIN
+    UPDATE mesa
+    SET estado = 'ocupada'
+    WHERE id = NEW.mesa_id;
+END
+$$
+DELIMITER ;
 DELIMITER $$
 CREATE TRIGGER `asignar_nombre` BEFORE INSERT ON `detalles_p` FOR EACH ROW BEGIN
     -- Validar que el ID no sea nulo antes de buscar el nombre
@@ -78,6 +87,14 @@ CREATE TRIGGER `d_cant` AFTER INSERT ON `detalles_p` FOR EACH ROW BEGIN
         SET cantidad = cantidad - NEW.cantidad
         WHERE id = NEW.id_prod;
     END IF;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `liberar_mesa` BEFORE DELETE ON `detalles_p` FOR EACH ROW BEGIN
+    UPDATE mesa
+    SET estado = 'disponible'
+    WHERE id = OLD.mesa_id;
 END
 $$
 DELIMITER ;
@@ -109,19 +126,25 @@ CREATE TABLE `egresos` (
   `hora` timestamp NOT NULL DEFAULT current_timestamp(),
   `nombre` varchar(100) NOT NULL,
   `tipo` int(4) NOT NULL,
-  `costo` int(20) NOT NULL
+  `costo` int(20) NOT NULL,
+  `empleado` varchar(60) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `egresos`
 --
 
-INSERT INTO `egresos` (`id`, `hora`, `nombre`, `tipo`, `costo`) VALUES
-(11, '2025-05-19 18:07:28', 'Smirnoff Tamarindo *750', 1, 500000),
-(15, '2025-05-23 19:11:01', 'Club Roja Botella', 1, 85000),
-(16, '2025-05-23 19:29:45', 'Stella Artois Lata', 1, 84000),
-(17, '2025-05-23 19:31:53', 'CLUB DORADA BOTELLA', 1, 85000),
-(18, '2025-05-23 19:53:51', 'Corona botella', 1, 105000);
+INSERT INTO `egresos` (`id`, `hora`, `nombre`, `tipo`, `costo`, `empleado`) VALUES
+(1, '2025-06-10 01:18:08', 'AGUILA ligth BOTELLA', 1, 70000, 'julian'),
+(4, '2025-06-10 01:36:27', 'AGUILA ligth BOTELLA', 1, 70000, NULL),
+(5, '2025-06-10 01:37:45', 'AGUILA ligth BOTELLA', 1, 70000, NULL),
+(6, '2025-06-10 01:39:55', 'POKER BOTELLA', 1, 65000, NULL),
+(7, '2025-06-10 01:40:33', 'POKER BOTELLA', 1, 65000, NULL),
+(8, '2025-06-10 01:44:34', 'POKER BOTELLA', 1, 70000, NULL),
+(9, '2025-06-10 01:46:09', 'POKER BOTELLA', 1, 70000, NULL),
+(10, '2025-06-10 01:54:49', 'POKER BOTELLA', 1, 60000, NULL),
+(11, '2025-06-10 01:57:29', 'POKER BOTELLA', 1, 65000, NULL),
+(12, '2025-06-10 02:00:07', 'POKER BOTELLA', 1, 70000, NULL);
 
 -- --------------------------------------------------------
 
@@ -130,8 +153,8 @@ INSERT INTO `egresos` (`id`, `hora`, `nombre`, `tipo`, `costo`) VALUES
 --
 
 CREATE TABLE `empleado` (
-  `codigo` varchar(300) NOT NULL,
   `nombre` varchar(60) NOT NULL,
+  `codigo` varchar(300) NOT NULL,
   `correo` varchar(60) NOT NULL,
   `cargo` int(3) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -140,10 +163,10 @@ CREATE TABLE `empleado` (
 -- Volcado de datos para la tabla `empleado`
 --
 
-INSERT INTO `empleado` (`codigo`, `nombre`, `correo`, `cargo`) VALUES
-('$2b$10$6iI8FIQVkpLmZuvxCc3nl.aEpA12m/gnuhI7RwNrQfpyAmm90ftF2', 'esteban', 'julianrojasc1226@gmail.com', 1),
-('$2b$10$avTosT2BMjSqZaadO6efYeSIMxNP7xUgMRoh6aMMKJ7Zymw44fBDq', 'Administrador', 'julisrojas26@gmail.com', 1),
-('$2b$10$nydUkpmTg6krzvv1GkrmSuWAClw7g.iyMD9pr.vKu4WdeVnucGXhy', 'julian', 'julsdad@gmail.com', 1);
+INSERT INTO `empleado` (`nombre`, `codigo`, `correo`, `cargo`) VALUES
+('Administrador', '$2b$10$avTosT2BMjSqZaadO6efYeSIMxNP7xUgMRoh6aMMKJ7Zymw44fBDq', 'julisrojas26@gmail.com', 1),
+('esteban', '$2b$10$6iI8FIQVkpLmZuvxCc3nl.aEpA12m/gnuhI7RwNrQfpyAmm90ftF2', 'julianrojasc1226@gmail.com', 1),
+('julian', '$2b$10$nydUkpmTg6krzvv1GkrmSuWAClw7g.iyMD9pr.vKu4WdeVnucGXhy', 'julsdad@gmail.com', 1);
 
 -- --------------------------------------------------------
 
@@ -162,11 +185,11 @@ CREATE TABLE `mesa` (
 --
 
 INSERT INTO `mesa` (`ID`, `NumeroMesa`, `estado`) VALUES
-(1, 1, 'Reservado'),
-(2, 2, 'Reservado'),
+(1, 1, 'disponible'),
+(2, 2, 'disponible'),
 (3, 3, 'disponible'),
-(4, 4, '[DISPONIBLE]'),
-(5, 0, '[disponible]');
+(4, 4, 'disponible'),
+(5, 5, 'disponible');
 
 -- --------------------------------------------------------
 
@@ -188,13 +211,8 @@ CREATE TABLE `pagos` (
 --
 
 INSERT INTO `pagos` (`id`, `mesa`, `fecha_inicio`, `fecha_fin`, `metodo_pago`, `total`) VALUES
-(1, 1, '2025-05-02 18:03:00', '2025-05-03 04:16:40', 1, 10500),
-(2, 2, '2025-05-02 18:19:46', '2025-05-03 04:19:55', 1, 7000),
-(3, 2, '2025-05-02 18:22:11', '2025-05-07 01:02:09', 1, 70500),
-(4, 1, '2025-05-24 20:39:52', '2025-05-25 01:40:01', 1, 480000),
-(5, 2, '2025-05-24 20:40:07', '2025-05-25 01:40:19', 2, 90000),
-(6, 3, '2025-05-24 20:40:24', '2025-05-25 01:40:32', 1, 45000),
-(7, 2, '2025-05-24 23:41:45', '2025-05-25 04:41:54', 1, 90000);
+(23, 1, '2025-06-09 21:16:49', '2025-06-10 02:16:53', 1, 35000),
+(25, 1, '2025-06-09 22:13:16', '2025-06-10 03:15:51', 1, 35000);
 
 -- --------------------------------------------------------
 
@@ -204,6 +222,7 @@ INSERT INTO `pagos` (`id`, `mesa`, `fecha_inicio`, `fecha_fin`, `metodo_pago`, `
 
 CREATE TABLE `producto` (
   `id` int(11) NOT NULL,
+  `hora` timestamp NOT NULL DEFAULT current_timestamp(),
   `nombre` varchar(100) NOT NULL,
   `tipo` int(3) NOT NULL,
   `cantidad` int(4) NOT NULL,
@@ -211,19 +230,16 @@ CREATE TABLE `producto` (
   `precio` int(20) NOT NULL,
   `Costo` int(11) NOT NULL,
   `dir` varchar(500) DEFAULT NULL,
-  `minimo_cant` int(3) NOT NULL
+  `minimo_cant` int(3) NOT NULL,
+  `empleado` varchar(60) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `producto`
 --
 
-INSERT INTO `producto` (`id`, `nombre`, `tipo`, `cantidad`, `proveedor`, `precio`, `Costo`, `dir`, `minimo_cant`) VALUES
-(54, 'Smirnoff Tamarindo *750', 5, 6, 13135465, 120000, 500000, '/productos/1747678048272-smirnoff tamarindo.webp', 2),
-(58, 'Club Roja Botella', 3, 30, 13135465, 4500, 85000, '/productos/1748027461138-club roja.png', 10),
-(59, 'Stella Artois Lata', 3, 9, 13135465, 6000, 84000, '/productos/1748028585796-CERVEZA-STELLA-ARTOIS-LATA-.webp', 10),
-(60, 'CLUB DORADA BOTELLA', 3, 10, 13135465, 4500, 85000, '/productos/1748028713139-club dorada.png', 10),
-(61, 'Corona botella', 3, 20, 13135465, 4500, 105000, '/productos/1748030030900-84257633-corona-extra.webp', 10);
+INSERT INTO `producto` (`id`, `hora`, `nombre`, `tipo`, `cantidad`, `proveedor`, `precio`, `Costo`, `dir`, `minimo_cant`, `empleado`) VALUES
+(67, '2025-06-10 01:39:55', 'POKER BOTELLA', 3, 10, 13135465, 3500, 65000, '/productos/1749519595554-Cerveza Poker botella 330 ml.png', 10, 'julian');
 
 --
 -- Disparadores `producto`
@@ -252,23 +268,13 @@ DELIMITER ;
 --
 
 CREATE TABLE `producto_add` (
-  `id` int(3) NOT NULL,
+  `id` int(10) NOT NULL,
+  `id_prod` int(11) NOT NULL,
   `cantidad` int(4) NOT NULL,
-  `proveedor` varchar(11) NOT NULL,
-  `Costo` int(11) NOT NULL
+  `hora` timestamp NOT NULL DEFAULT current_timestamp(),
+  `costo` int(20) NOT NULL,
+  `empleado` varchar(60) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `producto_add`
---
-
-INSERT INTO `producto_add` (`id`, `cantidad`, `proveedor`, `Costo`) VALUES
-(0, 10, '13135465', 0),
-(22, 20, '13135465', 0),
-(23, 10, '13135465', 0),
-(26, 20, '13135465', 0),
-(41, 10, '1031648129', 0),
-(42, 30, '13135465', 65000);
 
 --
 -- Disparadores `producto_add`
@@ -288,7 +294,7 @@ END
 $$
 DELIMITER ;
 DELIMITER $$
-CREATE TRIGGER `nuevo_egreso_add` AFTER INSERT ON `producto_add` FOR EACH ROW BEGIN
+CREATE TRIGGER `egreso` AFTER INSERT ON `producto_add` FOR EACH ROW BEGIN
     DECLARE nombre_producto VARCHAR(100);
     DECLARE costo_producto INT(20);
 
@@ -298,8 +304,8 @@ CREATE TRIGGER `nuevo_egreso_add` AFTER INSERT ON `producto_add` FOR EACH ROW BE
     WHERE id = NEW.id;
 
     -- Insertar en egresos con el nombre obtenido
-    INSERT INTO egresos (nombre, tipo, costo)
-    VALUES (nombre_producto, 1, NEW.costo);
+    INSERT INTO egresos (nombre, tipo, costo,empleado)
+    VALUES (nombre_producto, 1, NEW.costo,empleado);
 END
 $$
 DELIMITER ;
@@ -342,15 +348,16 @@ CREATE TABLE `reservas` (
   `tipo_re` int(2) NOT NULL,
   `cantidad_p` int(3) NOT NULL,
   `mesa_asig` int(2) NOT NULL,
-  `obser` text NOT NULL
+  `obser` text NOT NULL,
+  `estado` varchar(50) NOT NULL DEFAULT 'Reservada'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `reservas`
 --
 
-INSERT INTO `reservas` (`Id_re`, `fecha_hora`, `hora`, `NID`, `nombre`, `correo`, `celular`, `tipo_re`, `cantidad_p`, `mesa_asig`, `obser`) VALUES
-(17, '2025-05-24', '20:10:00', 1031648129, 'julian r', 'ASDASD@GMAIL.COM', 2147483647, 1, 10, 5, 'NINGUNA');
+INSERT INTO `reservas` (`Id_re`, `fecha_hora`, `hora`, `NID`, `nombre`, `correo`, `celular`, `tipo_re`, `cantidad_p`, `mesa_asig`, `obser`, `estado`) VALUES
+(17, '2025-05-24', '20:10:00', 1031648129, 'julian r', 'ASDASD@GMAIL.COM', 2147483647, 1, 10, 5, 'NINGUNA', 'Reservada');
 
 --
 -- Disparadores `reservas`
@@ -472,11 +479,13 @@ INSERT INTO `tipo_re` (`tipo`, `nombre`) VALUES
 
 CREATE TABLE `ventas_res` (
   `id` int(3) NOT NULL,
-  `id_orden` int(3) NOT NULL,
+  `id_orden` int(11) NOT NULL,
+  `empleado` varchar(60) DEFAULT NULL,
   `hora` datetime NOT NULL,
   `mesa` int(3) NOT NULL,
   `id_prod` int(3) NOT NULL,
   `producto` varchar(100) NOT NULL,
+  `tipo` int(11) DEFAULT NULL,
   `precio_u` int(20) NOT NULL,
   `cantidad` int(3) NOT NULL,
   `total_p` int(30) NOT NULL,
@@ -487,13 +496,9 @@ CREATE TABLE `ventas_res` (
 -- Volcado de datos para la tabla `ventas_res`
 --
 
-INSERT INTO `ventas_res` (`id`, `id_orden`, `hora`, `mesa`, `id_prod`, `producto`, `precio_u`, `cantidad`, `total_p`, `pago`) VALUES
-(7, 22, '2025-05-24 20:39:52', 1, 54, 'Smirnoff Tam', 120000, 2, 240000, 1),
-(8, 23, '2025-05-24 20:39:56', 1, 54, 'Smirnoff Tam', 120000, 2, 240000, 1),
-(9, 24, '2025-05-24 20:40:07', 2, 60, 'CLUB DORADA ', 4500, 10, 45000, 2),
-(10, 25, '2025-05-24 20:40:10', 2, 60, 'CLUB DORADA ', 4500, 10, 45000, 2),
-(11, 26, '2025-05-24 20:40:24', 3, 61, 'Corona botel', 4500, 10, 45000, 1),
-(12, 27, '2025-05-24 23:41:45', 2, 59, 'Stella Artoi', 6000, 15, 90000, 1);
+INSERT INTO `ventas_res` (`id`, `id_orden`, `empleado`, `hora`, `mesa`, `id_prod`, `producto`, `tipo`, `precio_u`, `cantidad`, `total_p`, `pago`) VALUES
+(38, 65, 'julian', '2025-06-09 21:16:49', 1, 67, 'POKER BOTELL', 3, 3500, 10, 35000, 1),
+(39, 66, 'julian', '2025-06-09 22:13:16', 1, 67, 'POKER BOTELL', 3, 3500, 10, 35000, 1);
 
 --
 -- Índices para tablas volcadas
@@ -511,20 +516,22 @@ ALTER TABLE `cargo`
 ALTER TABLE `detalles_p`
   ADD PRIMARY KEY (`id`),
   ADD KEY `mesa` (`mesa_id`),
-  ADD KEY `producto_id` (`id_prod`) USING BTREE;
+  ADD KEY `producto_id` (`id_prod`) USING BTREE,
+  ADD KEY `empleado` (`empleado`);
 
 --
 -- Indices de la tabla `egresos`
 --
 ALTER TABLE `egresos`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `tipo` (`tipo`);
+  ADD KEY `tipo` (`tipo`),
+  ADD KEY `empleado` (`empleado`);
 
 --
 -- Indices de la tabla `empleado`
 --
 ALTER TABLE `empleado`
-  ADD PRIMARY KEY (`codigo`),
+  ADD PRIMARY KEY (`nombre`),
   ADD KEY `cargo` (`cargo`);
 
 --
@@ -550,6 +557,14 @@ ALTER TABLE `producto`
   ADD KEY `proveedor` (`proveedor`);
 
 --
+-- Indices de la tabla `producto_add`
+--
+ALTER TABLE `producto_add`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_prod` (`id_prod`),
+  ADD KEY `empleado` (`empleado`);
+
+--
 -- Indices de la tabla `proveedor`
 --
 ALTER TABLE `proveedor`
@@ -560,7 +575,8 @@ ALTER TABLE `proveedor`
 --
 ALTER TABLE `reservas`
   ADD PRIMARY KEY (`Id_re`),
-  ADD KEY `tipo_re` (`tipo_re`);
+  ADD KEY `tipo_re` (`tipo_re`),
+  ADD KEY `mesa_asig` (`mesa_asig`);
 
 --
 -- Indices de la tabla `tipo_egreso`
@@ -591,7 +607,8 @@ ALTER TABLE `tipo_re`
 --
 ALTER TABLE `ventas_res`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `pago` (`pago`);
+  ADD KEY `pago` (`pago`),
+  ADD KEY `empleado` (`empleado`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -607,13 +624,13 @@ ALTER TABLE `cargo`
 -- AUTO_INCREMENT de la tabla `detalles_p`
 --
 ALTER TABLE `detalles_p`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- AUTO_INCREMENT de la tabla `egresos`
 --
 ALTER TABLE `egresos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `mesa`
@@ -625,13 +642,19 @@ ALTER TABLE `mesa`
 -- AUTO_INCREMENT de la tabla `pagos`
 --
 ALTER TABLE `pagos`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+
+--
+-- AUTO_INCREMENT de la tabla `producto_add`
+--
+ALTER TABLE `producto_add`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `reservas`
@@ -667,7 +690,7 @@ ALTER TABLE `tipo_re`
 -- AUTO_INCREMENT de la tabla `ventas_res`
 --
 ALTER TABLE `ventas_res`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- Restricciones para tablas volcadas
@@ -678,20 +701,21 @@ ALTER TABLE `ventas_res`
 --
 ALTER TABLE `detalles_p`
   ADD CONSTRAINT `detalles_p_ibfk_2` FOREIGN KEY (`id_prod`) REFERENCES `producto` (`id`),
+  ADD CONSTRAINT `detalles_p_ibfk_3` FOREIGN KEY (`empleado`) REFERENCES `empleado` (`nombre`),
   ADD CONSTRAINT `mesa` FOREIGN KEY (`mesa_id`) REFERENCES `mesa` (`ID`);
 
 --
 -- Filtros para la tabla `egresos`
 --
 ALTER TABLE `egresos`
+  ADD CONSTRAINT `egresos_ibfk_1` FOREIGN KEY (`empleado`) REFERENCES `empleado` (`nombre`),
   ADD CONSTRAINT `tipo` FOREIGN KEY (`tipo`) REFERENCES `tipo_egreso` (`id`);
 
 --
 -- Filtros para la tabla `empleado`
 --
 ALTER TABLE `empleado`
-  ADD CONSTRAINT `empleado_ibfk_1` FOREIGN KEY (`cargo`) REFERENCES `cargo` (`id`),
-  ADD CONSTRAINT `empleado_ibfk_2` FOREIGN KEY (`cargo`) REFERENCES `cargo` (`id`);
+  ADD CONSTRAINT `empleado_ibfk_1` FOREIGN KEY (`cargo`) REFERENCES `cargo` (`id`);
 
 --
 -- Filtros para la tabla `pagos`
@@ -707,15 +731,24 @@ ALTER TABLE `producto`
   ADD CONSTRAINT `producto_ibfk_2` FOREIGN KEY (`proveedor`) REFERENCES `proveedor` (`NID`);
 
 --
+-- Filtros para la tabla `producto_add`
+--
+ALTER TABLE `producto_add`
+  ADD CONSTRAINT `producto_add_ibfk_1` FOREIGN KEY (`id_prod`) REFERENCES `producto` (`id`),
+  ADD CONSTRAINT `producto_add_ibfk_2` FOREIGN KEY (`empleado`) REFERENCES `empleado` (`nombre`);
+
+--
 -- Filtros para la tabla `reservas`
 --
 ALTER TABLE `reservas`
-  ADD CONSTRAINT `reservas_ibfk_2` FOREIGN KEY (`tipo_re`) REFERENCES `tipo_re` (`tipo`);
+  ADD CONSTRAINT `reservas_ibfk_2` FOREIGN KEY (`tipo_re`) REFERENCES `tipo_re` (`tipo`),
+  ADD CONSTRAINT `reservas_ibfk_3` FOREIGN KEY (`mesa_asig`) REFERENCES `mesa` (`ID`);
 
 --
 -- Filtros para la tabla `ventas_res`
 --
 ALTER TABLE `ventas_res`
+  ADD CONSTRAINT `fk_ventas_empleado` FOREIGN KEY (`empleado`) REFERENCES `empleado` (`nombre`),
   ADD CONSTRAINT `pago` FOREIGN KEY (`pago`) REFERENCES `tipo_pago` (`id`);
 COMMIT;
 
