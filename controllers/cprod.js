@@ -44,9 +44,10 @@ const cprod ={
       if (!req.file) {
         return res.status(400).send("no se subio ninguna imagen.")
       }
+      const {usuario} = req.session
       const ruta = `/productos/${req.file.filename}`
       const {nombre,cantidad, costo,tipo,proveedor,precio,cantidad_min}=req.body  
-      await mprod.insertdatos({ruta,nombre,tipo,cantidad,costo,proveedor,precio,cantidad_min})
+      await mprod.insertdatos({ruta,nombre,tipo,cantidad,costo,proveedor,precio,cantidad_min,usuario})
       res.redirect("/prod"); 
     } catch (err) {
       console.error("❌ Error al guardar los datos:", err);
@@ -116,8 +117,15 @@ const cprod ={
     } catch (error) {
       console.error("se ha generado un problema al traer los datos", error)
     }
-  }
-
- 
+  },
+  get_duplicados: async (req,res) => {
+    try {
+      const producto = await mprod.duplicados()
+      console.log("controlador",producto)
+      res.json(producto)
+    } catch (error) {
+      console.error("no se pudo traer datoas")
+    }
+  } 
 }
 export default cprod

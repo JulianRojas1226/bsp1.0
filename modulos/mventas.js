@@ -121,7 +121,7 @@ const mventas = {
 
         }
     },
-    pagar: async({mesa,pago})=>{
+    pagar: async({mesa,pago,usuario})=>{
         const coneccion = await db.getConnection()
         try {
             console.log("📡 Datos recibidos en el modelo:", { mesa,pago});
@@ -130,7 +130,8 @@ const mventas = {
                 select  HORA,id,mesa_id,id_prod,producto,precio_u,cantidad,total_p from detalles_p
                 where mesa_id = ?
                 `,[mesa])
-            
+            const {id_prod}= ordenes[0]
+            const [[{ tipo }]] = await coneccion.query("select tipo from producto where id = ?", [id_prod])
             // insertar en ventas realizadas
             const[result_hora]= await coneccion.query(`
                 select min(HORA) as hora_inicial
@@ -150,9 +151,9 @@ const mventas = {
              
             for (const orden of ordenes) {
                 await coneccion.query(`
-                    INSERT INTO ventas_res (id_orden, hora, mesa, id_prod, producto, precio_u, cantidad, total_p, pago) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-                    [orden.id, orden.HORA, orden.mesa_id, orden.id_prod, orden.producto, orden.precio_u, orden.cantidad, orden.total_p, pago]);
+                    INSERT INTO ventas_res (id_orden, hora, mesa, id_prod, producto,tipo, precio_u, cantidad, total_p, pago, empleado) 
+                    VALUES (?, ?, ?, ?,?, ?, ?, ?, ?, ?,?)`, 
+                    [orden.id, orden.HORA, orden.mesa_id, orden.id_prod, orden.producto,tipo, orden.precio_u, orden.cantidad, orden.total_p, pago,usuario]);
             }
     
             

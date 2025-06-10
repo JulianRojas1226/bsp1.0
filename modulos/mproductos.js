@@ -24,10 +24,10 @@ const mprod={
             throw {status:500,message:"error al cargar datos"}
         }
     },
-    insertdatos: async({ruta,nombre,tipo,cantidad,costo,proveedor,precio,cantidad_min})=>{
+    insertdatos: async({ruta,nombre,tipo,cantidad,costo,proveedor,precio,cantidad_min,usuario})=>{
         try {
-            await db.query("Insert into producto (nombre,tipo,cantidad,proveedor,precio,costo,dir,minimo_cant) values (?,?,?,?,?,?,?,?)",
-                [nombre,tipo,cantidad,proveedor,precio,costo,ruta,cantidad_min]
+            await db.query("Insert into producto (nombre,tipo,cantidad,proveedor,precio,costo,dir,minimo_cant,empleado) values (?,?,?,?,?,?,?,?,?)",
+                [nombre,tipo,cantidad,proveedor,precio,costo,ruta,cantidad_min,usuario]
             )
         } catch (err) {
             console.error("❌ Error al guardar los datos en la base de datos:", err);
@@ -170,10 +170,16 @@ const mprod={
         } catch (error) {
             console.error("❌ error al contar la cantidad de productos", error)
         }
+    },
+    duplicados: async () => {
+        try {
+            const [result] = await db.query("select nombre from PRODUCTO")
+            console.log(result)
+            return result
+        } catch (error) {
+            console.error("error al traer datos")
+        }
     }
-    
-
-  
 }
 
 export default mprod

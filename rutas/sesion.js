@@ -8,11 +8,9 @@ import cadmin from "../controllers/cadmin.js";
 
 const routes = Router()
 
-routes.get("/graficobarras", csescion.get_graficos_mes)
-routes.get("/graficolineal", csescion.get_lineal)
 routes.get("/calendario", csescion.get_calendar)
-routes.get("/grafico-costo", csescion.get_costo_mes)
-
+routes.get("/graficoventas_diarias", csescion.get_venta_diaria)
+routes.get("/grafico_categoria",csescion.get_ventas_categorias)
 // barra de navegacion
 routes.get("logout",cierre.cierre)
 routes.get("/sesion",csescion.getsesion)

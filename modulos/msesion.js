@@ -90,7 +90,7 @@ const msesion ={
         try {
             const [result]=await  db.query("select avg(total_p) as promedio from ventas_res where date(hora) >= NOW() - INTERVAL 30 DAY")
             console.log("datos traidos", result)
-            return result 
+            return result [0]
         } catch (error) {
             console.error("se ha producido un error: ",error)
         }
@@ -102,7 +102,8 @@ const msesion ={
                 FROM ventas_res
                 WHERE hora >= NOW() - INTERVAL 30 DAY
             `);
-            return row?.total || 0;
+            console.log("total vendido", row)
+            return row
         } catch (error) {
             throw new Error("Error al obtener el total de productos vendidos");
         }
@@ -154,12 +155,12 @@ const msesion ={
         try {
             const [datos] = await db.query(`
                 SELECT 
-                    DATE(fecha) as fecha,
-                    COUNT(*) as cantidad_ventas,
+                    DATE(hora) as fecha,
+                    sum(cantidad) as cantidad_ventas,
                     SUM(total_p) as total_ventas
                 FROM ventas_res 
-                WHERE DATE(fecha) >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
-                GROUP BY DATE(fecha)
+                WHERE DATE(hora) >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+                GROUP BY DATE(hora)
                 ORDER BY fecha
             `);
             return datos;
@@ -173,16 +174,16 @@ const msesion ={
         try {
             const [datos] = await db.query(`
                 SELECT 
-                    p.categoria,
-                    SUM(dv.cantidad) as cantidad_vendida,
-                    SUM(dv.cantidad * dv.precio_unitario) as total_ingresos
-                FROM detalle_ventas dv
-                JOIN producto p ON dv.producto_id = p.id
-                JOIN ventas_res v ON dv.venta_id = v.id
-                WHERE DATE(v.fecha) >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
-                GROUP BY p.categoria
+                    tp.nombre AS categoria,
+                    SUM(vr.cantidad) AS cantidad_vendida,
+                    SUM(vr.total_p) AS total_ingresos
+                FROM ventas_res vr
+                JOIN tipo_pr tp ON vr.tipo = tp.id
+                WHERE DATE(vr.hora) >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+                GROUP BY tp.nombre
                 ORDER BY total_ingresos DESC
             `);
+            console.log("datos categoria", datos)
             return datos;
         } catch (error) {
             console.error("Error al obtener ventas por categoría:", error);

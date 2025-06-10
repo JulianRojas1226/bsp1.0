@@ -1,6 +1,7 @@
 
 
 
+
  const body = document.querySelector("body"),
     sidebar = body.querySelector(".sidebar"),
     toggle = body.querySelector(".toggle"), // Botón para colapsar/expandir
@@ -94,3 +95,55 @@ document.addEventListener("DOMContentLoaded",()=>{
 function mostrarnotificaciones() {
     alert('Aquí podrías mostrar los detalles de las notificaciones.')
 }
+let productosexistentes = [];
+
+async function cargarproductos() {
+  try {
+    const response = await fetch('/producto_duplicado'); // Esta ruta debe devolver [{nombre: 'Coca Cola'}, ...]
+    const data = await response.json();
+    console.log("js", data);
+    productosexistentes = data.map(p => p.nombre.toLowerCase());
+  } catch (error) {
+    console.error("No se trajeron los datos", error);
+  }
+}
+
+function verificarduplicado(nombre) {
+  return productosexistentes.includes(nombre.toLowerCase());
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const inputnombre = document.getElementById("nombreprod");
+  const mensaje = document.getElementById("mensaje");
+  const botonGuardar = document.getElementById("btnGuardar");
+  const form = document.getElementById("formProducto");
+
+  cargarproductos();
+  setInterval(cargarproductos, 30000); // Opcional
+
+  inputnombre.addEventListener('input', () => {
+    const nombre = inputnombre.value.trim();
+
+    if (nombre === "") {
+      mensaje.textContent = "";
+      botonGuardar.disabled = false;
+      return;
+    }
+
+    if (verificarduplicado(nombre)) {
+      mensaje.textContent = "⚠️ Este producto ya existe.";
+      botonGuardar.disabled = true;
+    } else {
+      mensaje.textContent = "";
+      botonGuardar.disabled = false;
+    }
+  });
+
+  form.addEventListener('submit', (e) => {
+    const nombre = inputnombre.value.trim();
+    if (verificarduplicado(nombre)) {
+      e.preventDefault();
+      alert("No puedes guardar un producto duplicado.");
+    }
+  });
+});

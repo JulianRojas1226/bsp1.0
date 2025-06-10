@@ -23,6 +23,7 @@ routes.post("/eliminar/:id", cprod.borrarprod)
 routes.post("/actualizarprod/:id", cprod.actualizar)
 routes.get("/lowstock", cprod.low_stock)
 routes.get("/notificacion",cprod.notificacion)
+routes.get("/producto_duplicado",cprod.get_duplicados)
 
 
 export default routes

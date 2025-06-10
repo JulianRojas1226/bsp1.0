@@ -9,41 +9,25 @@ const csescion = {
             ventashoy.total = parseInt(ventashoy.total?.trim() || 0);
             ventashoy.total_pago = parseInt(ventashoy.total_pago?.trim() || 0);
             }
-          console.log("📌 Datos después de limpiar:", { ventashoy });
           const promedio = await msesion.ticketPromedio()
+
           const ventasmeses = await msesion.ventasmes()
           if (ventasmeses) {
             ventasmeses.total = parseInt(ventasmeses.total?.trim() || 0);
             ventasmeses.total_pago = parseInt(ventasmeses.total_pago?.trim() || 0);
             }
           const productosVendidos = await msesion.productosVendidos()
+          if (productosVendidos) {
+            productosVendidos.total = parseInt(productosVendidos.total?.trim() || 0);
+            }
+          const lowstocks = await msesion.lowstock()
+          
           const productos = await msesion.most_prod()
-          res.render("sesion",{productos,cargo,usuario,ventashoy,ventasmeses,promedio, productosVendidos});  
+          res.render("sesion",{productos,cargo,usuario,ventashoy,ventasmeses,promedio, productosVendidos,lowstocks});  
         } catch (err) {
           error.e500(req, res, err);
         }
       },
-      
-      get_graficos_mes: async (req,res) => {
-          try {
-          const datosbarras =await msesion.ventas_meses()
-          const labels = datosbarras.map(d => d.nombre_mes)
-          const values = datosbarras.map(d => d.total_mensual)
-          res.json({labels,values})
-          } catch (error) {
-          res.status(500).send("Error al obtener datos.");
-          }
-        },
-      get_lineal: async (req,res) => {
-          try {
-          const datalineal = await msesion.progresion_ventas()
-          const labels = datalineal.map(d => `${d.mes} ${d.año}`)
-          const values = datalineal.map(d => d.totales)
-          res.json({labels,values})
-          } catch (error) {
-          res.status(500).send("Error al obtener datos.");
-          }
-        },
       get_calendar: async (req,res) => {
         try {
             const reservas = await msesion.mostres();
@@ -58,19 +42,36 @@ const csescion = {
           res.status(500).send("Error al obtener datos.");
         }
       },
-      get_costo_mes: async (req,res) => {
+      get_venta_diaria: async (req,res) => {
         try {
-          const datalineal = await msesion.costo_mes()
-          const labels = datalineal.map(d => `${d.mes} ${d.año}`)
-          const values = datalineal.map(d=> `${d.costos_mensual}`)
-          console.log("Labels generados:", labels);  // ✅ Ver los valores de 'labels'
-          console.log("Values generados:", values); 
-          res.json({labels,values})
-          
+          const data = await msesion.ventasDiarias()
+          const labels = data.map(d=>`${d.fecha}`)
+          const values_cantidad = data.map(d=>`${d.cantidad_ventas}`)
+          const values_ventas = data.map(d =>`${d.total_ventas}`)
+          console.log("Labels generados:", labels); 
+          console.log("valor de cantidades",values_cantidad)
+          console.log("valor ventas",values_ventas)
+          res.json({labels,values_cantidad,values_ventas})
         } catch (error) {
-          res.status(500).send("Error al obtener datos.");
+          res.status(500).send("error al obtener datos")
         }
-        
+      },
+      get_ventas_categorias: async (req, res) => {
+        try {
+          const data = await msesion.ventasPorCategoria()
+          const categorias = data.map(d => `${d.categoria}`)
+          const cantidades = data.map(d => `${d.cantidad_vendida}`)
+          const ingresos = data.map(d => `${d.total_ingresos}`)
+          
+          console.log("Categorías generadas:", categorias)
+          console.log("Cantidades por categoría:", cantidades)
+          console.log("Ingresos por categoría:", ingresos)
+          
+          res.json({ categorias, cantidades, ingresos })
+        } catch (error) {
+          console.error("Error al obtener datos de categorías:", error)
+          res.status(500).send("Error al obtener datos")
+        }
       }
       
 }

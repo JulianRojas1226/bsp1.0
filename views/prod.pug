@@ -81,6 +81,7 @@ html(lang="es")
                             span.switch
         .home
             main(class="mainprod")
+                
                 .cambios
                     button.productos(type="button", data-bs-toggle="modal", data-bs-target="#exampleModal")
                         i.fa-solid.fa-plus
@@ -102,12 +103,13 @@ html(lang="es")
 
                                     .tab-content#myTabContent
                                         .tab-pane.fade.active.show#home-tab-pane(role="tabpanel", aria-labelledby="home-tab", tabindex="0")
-                                            form(action="/formprod" method="post" enctype="multipart/form-data" id="formprod")
+                                            form#formProducto(action="/formprod" method="post" enctype="multipart/form-data" )
                                                 .row
                                                     .col-sm-6
                                                         .input-wrapper
-                                                            input(type="text", name="nombre" id="nombre" placeholder="Nombre")
+                                                            input(type="text", name="nombre" id="nombreprod" placeholder="Nombre")
                                                             .underline
+                                                            span#mensaje(style="color:red;")
                                                     .col-sm-6
                                                         .input-wrapper            
                                                             input(type="number", name="precio", id="precio" placeholder="Precio")
@@ -148,7 +150,7 @@ html(lang="es")
                                                         .input-wrapper
                                                             input(type="file" name="imagen" id="imagen" class="form-control" required)
                                         
-                                                button.btn-prod(type="submit") ingresar
+                                                button.btn-prod#btnGuardar(type="submit") ingresar
                                                     
 
                                         .tab-pane.fade#profile-tab-pane(role="tabpanel", aria-labelledby="profile-tab", tabindex="0")

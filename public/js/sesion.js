@@ -1,19 +1,23 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  await cargarGraficoCostos();
-  await cargarGraficoVentas();
-  await cargarGraficoLineal();
   await inicializarCalendario();
+  await cargargraficodiario();
+  await cargarcategoria()
   inicializarSidebar();
   aplicarTemaGuardado();
 });
 
 // ─────────────── FUNCIONES DE GRÁFICOS ─────────────── //
 let graficosCargados = {
-  costos: null,
-  ventas: null,
-  lineal: null
+  diario: null,
+  categoria: null
 };
-
+function formatCurrency(value) {
+            return new Intl.NumberFormat('es-CO', {
+                style: 'currency',
+                currency: 'COP',
+                minimumFractionDigits: 0
+            }).format(value);
+        }
 // Función para obtener colores según el tema actual
 function obtenerColores() {
   const tema = localStorage.getItem("theme");
@@ -54,10 +58,7 @@ async function actualizarGraficos() {
     
     // Pequeño delay para asegurar que el DOM se actualice
     await new Promise(resolve => setTimeout(resolve, 100));
-    
-    await cargarGraficoCostos();
-    await cargarGraficoVentas();
-    await cargarGraficoLineal();
+    await cargargraficodiario();
     
     // También actualizar el calendario si existe
     if (typeof inicializarCalendario === 'function') {
@@ -118,329 +119,276 @@ function obtenerTema() {
 }
 
 // ─────────────── FUNCIONES DE CARGA DE GRÁFICOS ─────────────── //
-async function cargarGraficoCostos() {
+async function cargargraficodiario() {
   try {
-    const response = await fetch("/grafico-costo");
-    const data = await response.json();
-    const colores = obtenerColores();
+    const response = await fetch("/graficoventas_diarias")
+    const data = await response.json()
+    const colores = obtenerColores()
     
-    // Si ya existe el gráfico, lo destruimos antes de crear uno nuevo
-    if (graficosCargados.costos) {
-      graficosCargados.costos.dispose();
+    // Limpiar gráfico anterior si existe
+    if(graficosCargados.diario){
+      graficosCargados.diario.dispose()
     }
     
-    const contenedor = document.getElementById("grafico-costos");
-    if (!contenedor) {
-      console.error('Contenedor grafico-costos no encontrado');
-      return;
+    const contenedor = document.getElementById("ventasDiarias")
+    if(!contenedor){
+      console.error('Contenedor ventasDiarias no encontrado')
+      return
     }
     
-    graficosCargados.costos = echarts.init(contenedor, obtenerTema());
-    graficosCargados.costos.setOption({
-      title: { 
-        text: "Costos meses",
-        subtext: "En millones de pesos ($)",
-        textStyle: {
-          color: colores.text,
-          fontSize: 18,
-          fontWeight: 'bold'
-        }
-      },
+    // Inicializar nuevo gráfico
+    graficosCargados.diario = echarts.init(contenedor, obtenerTema())
+    
+    graficosCargados.diario.setOption({
       tooltip: {
+        trigger: 'axis', // Agregar trigger para mostrar ambas series
         backgroundColor: colores.isDark ? 'rgba(55, 58, 64, 0.95)' : 'rgba(238, 238, 238, 0.95)',
         borderColor: colores.accent,
         borderWidth: 1,
         textStyle: { color: colores.text },
         formatter: function(params) {
-          return params.seriesName + '<br/>' + 
-                 params.name + ': $' + Number(params.value).toLocaleString('es-ES');
+          let tooltip = `<strong>${params[0].axisValue}</strong><br/>`;
+          params.forEach(param => {
+            const value = param.seriesName === 'Ventas ($)' 
+              ? `$${Number(param.value).toLocaleString('es-ES')}` 
+              : `${param.value} unidades`;
+            tooltip += `${param.marker} ${param.seriesName}: ${value}<br/>`;
+          });
+          return tooltip;
         }
       },
-      xAxis: { 
-        type: "category", 
-        data: data.labels,
-        axisLine: { lineStyle: { color: colores.neutral } },
-        axisLabel: { color: colores.text },
-        splitLine: { lineStyle: { color: colores.isDark ? 'rgba(238, 238, 238, 0.1)' : 'rgba(55, 58, 64, 0.1)' } }
+      
+      legend: {
+        data: ['Ventas ($)', 'Cantidad'],
+        textStyle: { color: colores.text }
       },
-      yAxis: { 
-        type: "value",
-        scale: true,
+      
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+      },
+      
+      xAxis: {
+        type: "category",
+        data: data.labels = data.labels.map(label => {
+          const fecha = new Date(label);
+          return `${fecha.getFullYear()}/${(fecha.getMonth() + 1).toString().padStart(2, '0')}/${fecha.getDate().toString().padStart(2, '0')}`;
+        }),
         axisLine: { lineStyle: { color: colores.neutral } },
-        axisLabel: {
+        axisLabel: { 
           color: colores.text,
-          formatter: function(value) {
-            if (value >= 1000000) {
-              return (value / 1000000).toFixed(1) + 'M';
-            } else if (value >= 1000) {
-              return (value / 1000).toFixed(0) + 'K';
-            }
-            return value.toString();
-          }
+           // Rotar etiquetas si hay muchas fechas
         },
-        splitLine: { lineStyle: { color: colores.isDark ? 'rgba(238, 238, 238, 0.1)' : 'rgba(55, 58, 64, 0.1)' } }
-      },
-      series: {
-        name: "Costo mensual",
-        type: "line",
-        data: data.values.map(v => Number(v)),
-        itemStyle: {
-          color: colores.accent,
-          borderColor: colores.accent,
-          borderWidth: 2
-        },
-        lineStyle: {
-          color: colores.accent,
-          width: 3
-        },
-        areaStyle: {
-          color: {
-            type: 'linear',
-            x: 0, y: 0, x2: 0, y2: 1,
-            colorStops: [
-              { offset: 0, color: colores.accent + '40' },
-              { offset: 1, color: colores.accent + '10' }
-            ]
-          }
-        },
-        symbol: 'circle',
-        symbolSize: 6,
-        emphasis: {
-          itemStyle: {
-            color: colores.accent,
-            borderColor: colores.text,
-            borderWidth: 2,
-            shadowColor: colores.accent,
-            shadowBlur: 10
-          }
-        }
-      }
-    });
-    
-    // Redimensionar en cambio de ventana
-    window.addEventListener('resize', () => {
-      if (graficosCargados.costos) {
-        graficosCargados.costos.resize();
-      }
-    });
-    
-  } catch (error) {
-    console.error("Error al cargar el gráfico de costos:", error);
-  }
-}
-
-async function cargarGraficoVentas() {
-  try {
-    const response = await fetch("/graficobarras");
-    const data = await response.json();
-    const colores = obtenerColores();
-    
-    // Si ya existe el gráfico, lo destruimos antes de crear uno nuevo
-    if (graficosCargados.ventas) {
-      graficosCargados.ventas.dispose();
-    }
-    
-    const contenedor = document.getElementById("grafico_ventas");
-    if (!contenedor) {
-      console.error('Contenedor grafico_ventas no encontrado');
-      return;
-    }
-    
-    graficosCargados.ventas = echarts.init(contenedor, obtenerTema());
-    graficosCargados.ventas.setOption({
-      title: { 
-        text: "Ventas por mes",
-        subtext: "En millones de pesos ($)",
-        textStyle: {
-          color: colores.text,
-          fontSize: 18,
-          fontWeight: 'bold'
-        },
-        subtextStyle: {
-          color: colores.neutral,
-          fontSize: 14
+        splitLine: { 
+          lineStyle: { 
+            color: colores.isDark ? 'rgba(238, 238, 238, 0.1)' : 'rgba(55, 58, 64, 0.1)' 
+          } 
         }
       },
-      tooltip: {
-        backgroundColor: colores.isDark ? 'rgba(55, 58, 64, 0.95)' : 'rgba(238, 238, 238, 0.95)',
-        borderColor: colores.accent,
-        borderWidth: 1,
-        textStyle: { color: colores.text },
-        formatter: function(params) {
-          return params.seriesName + '<br/>' + 
-                 params.name + ': $' + Number(params.value).toLocaleString('es-ES');
-        }
-      },
-      xAxis: { 
-        type: "category", 
-        data: data.labels,
-        axisLine: { lineStyle: { color: colores.neutral } },
-        axisLabel: { color: colores.text },
-        splitLine: { lineStyle: { color: colores.isDark ? 'rgba(238, 238, 238, 0.1)' : 'rgba(55, 58, 64, 0.1)' } }
-      },
-      yAxis: { 
-        type: "value",
-        scale: true,
-        axisLine: { lineStyle: { color: colores.neutral } },
-        axisLabel: {
-          color: colores.text,
-          formatter: function(value) {
-            if (value >= 1000000) {
-              return (value / 1000000).toFixed(1) + 'M';
-            } else if (value >= 1000) {
-              return (value / 1000).toFixed(0) + 'K';
-            }
-            return value.toLocaleString('es-ES');
-          }
-        },
-        splitLine: { lineStyle: { color: colores.isDark ? 'rgba(238, 238, 238, 0.1)' : 'rgba(55, 58, 64, 0.1)' } }
-      },
-      series: {
-        name: "Ventas mensual",
-        type: "bar",
-        data: data.values.map(v => Number(v)),
-        itemStyle: {
-          color: {
-            type: 'linear',
-            x: 0, y: 0, x2: 0, y2: 1,
-            colorStops: [
-              { offset: 0, color: colores.accent },
-              { offset: 1, color: colores.accent + 'CC' }
-            ]
+      
+      yAxis: [
+        {
+          type: "value",
+          name: 'Ventas ($)',
+          position: 'left',
+          scale: true,
+          axisLine: { lineStyle: { color: colores.neutral } },
+          axisLabel: {
+            color: colores.text,
+            formatter: '${value}' // Corregir formato
           },
-          borderColor: colores.accent,
-          borderWidth: 1
-        },
-        emphasis: {
-          itemStyle: {
-            color: colores.accent,
-            shadowColor: colores.accent,
-            shadowBlur: 10,
-            shadowOffsetY: 2
+          splitLine: {
+            lineStyle: { 
+              color: colores.isDark ? 'rgba(238, 238, 238, 0.1)' : 'rgba(55, 58, 64, 0.1)' 
+            }
           }
         },
-        barWidth: '60%'
-      }
-    });
+        {
+          type: 'value',
+          name: 'Cantidad',
+          position: 'right', // Corregir 'rigth' por 'right'
+          axisLine: { lineStyle: { color: colores.neutral } },
+          axisLabel: {
+            color: colores.text,
+            formatter: '{value}' // Corregir formato para cantidad
+          },
+          splitLine: { show: false } // Ocultar líneas del segundo eje
+        }
+      ],
+      
+      series: [
+        {
+          name: 'Ventas ($)',
+          type: 'line',
+          yAxisIndex: 0,
+          data: data.values_ventas.map(v => parseFloat(v)), // Usar data en lugar de datosVentas
+          
+          symbol: 'circle',
+          symbolSize: 6,
+          lineStyle: {
+            color: colores.text
+          },
+          areaStyle: {
+            opacity: 0.3,
+            color: colores.neutral
+          },
+          itemStyle: {
+            color: colores.text 
+          }
+        },
+        {
+          name: 'Cantidad',
+          type: 'bar',
+          yAxisIndex: 1,
+          data: data.values_cantidad.map(v => parseInt(v)),
+          itemStyle: {
+            color: colores.primary,
+            borderRadius: [4, 4, 0, 0] // Esquinas redondeadas
+          },
+          emphasis: {
+            itemStyle: {
+              color: colores.accent// Color más oscuro al hacer hover
+            }
+          }
+        }
+      ],
+      
+      // Agregar animaciones
+      animationDuration: 1500,
+      animationEasing: 'cubicOut'
+    })
     
-    // Redimensionar en cambio de ventana
-    window.addEventListener('resize', () => {
-      if (graficosCargados.ventas) {
-        graficosCargados.ventas.resize();
+    // Manejar resize de ventana
+    const resizeHandler = () => {
+      if (graficosCargados.diario) {
+        graficosCargados.diario.resize();
       }
-    });
+    };
+    
+    // Remover listener anterior si existe para evitar duplicados
+    window.addEventListener('resize', () => {
+      if (graficosCargados.categoria) {
+        graficosCargados.diario.resize();
+      }
+    })
+    
+    console.log('Gráfico de ventas diarias cargado exitosamente');
     
   } catch (error) {
-    console.error("Error al cargar el gráfico de ventas:", error);
+    console.error("Error al cargar el gráfico diario:", error);
+    // Opcional: mostrar mensaje de error al usuario
+    const contenedor = document.getElementById("ventasDiarias");
+    if (contenedor) {
+      contenedor.innerHTML = '<div style="text-align: center; padding: 20px; color: #dc3545;">Error al cargar los datos del gráfico</div>';
+    }
   }
 }
 
-async function cargarGraficoLineal() {
+let modoCategoria = 'cantidad'; // puede ser 'cantidad' o 'ingreso'
+
+async function cargarcategoria() {
   try {
-    const response = await fetch("/graficolineal");
+    const response = await fetch("/grafico_categoria");
     const data = await response.json();
     const colores = obtenerColores();
-    
-    // Si ya existe el gráfico, lo destruimos antes de crear uno nuevo
-    if (graficosCargados.lineal) {
-      graficosCargados.lineal.dispose();
-    }
-    
-    const contenedor = document.getElementById("grafico_lineal");
+    const contenedor = document.getElementById("categoria");
+
     if (!contenedor) {
-      console.error('Contenedor grafico_lineal no encontrado');
+      console.error('Contenedor "categoria" no encontrado');
       return;
     }
-    
-    graficosCargados.lineal = echarts.init(contenedor, obtenerTema());
-    graficosCargados.lineal.setOption({
-      title: { 
-        text: "Ventas totales",
-        subtext: "En millones de pesos ($)",
-        textStyle: {
-          color: colores.text,
-          fontSize: 18,
-          fontWeight: 'bold'
-        },
-        subtextStyle: {
-          color: colores.neutral,
-          fontSize: 14
-        }
+
+    const formatoCOP = new Intl.NumberFormat('es-CO', {
+      style: 'currency',
+      currency: 'COP',
+      minimumFractionDigits: 0
+    });
+
+    // Elegir datos según el modo actual
+    const valores = modoCategoria === 'ingreso'
+      ? data.ingresos.map((v, i) => ({ name: data.categorias[i], value: Number(v) }))
+      : data.cantidades.map((v, i) => ({ name: data.categorias[i], value: Number(v) }));
+
+    // Inicializar o reutilizar
+    if (!graficosCargados.categoria) {
+      graficosCargados.categoria = echarts.init(contenedor, obtenerTema());
+    }
+
+    graficosCargados.categoria.setOption({
+      title: {
+        text: modoCategoria === 'ingreso' ? 'Ingresos por categoría' : 'Cantidad por categoría',
+        left: 'center',
+        textStyle: { color: colores.text }
       },
       tooltip: {
+        trigger: 'item',
         backgroundColor: colores.isDark ? 'rgba(55, 58, 64, 0.95)' : 'rgba(238, 238, 238, 0.95)',
         borderColor: colores.accent,
         borderWidth: 1,
         textStyle: { color: colores.text },
-        formatter: function(params) {
-          return params.seriesName + '<br/>' + 
-                 params.name + ': $' + Number(params.value).toLocaleString('es-ES');
+        formatter: params => {
+          const valorFormateado = modoCategoria === 'ingreso'
+            ? formatoCOP.format(params.value)
+            : params.value;
+          return `${params.name}<br/>Valor: ${valorFormateado}<br/>Porcentaje: ${params.percent}%`;
         }
       },
-      xAxis: { 
-        type: "category", 
-        data: data.labels,
-        axisLine: { lineStyle: { color: colores.neutral } },
-        axisLabel: { color: colores.text },
-        splitLine: { lineStyle: { color: colores.isDark ? 'rgba(238, 238, 238, 0.1)' : 'rgba(55, 58, 64, 0.1)' } }
-      },
-      yAxis: { 
-        type: "value",
-        scale: true,
-        axisLine: { lineStyle: { color: colores.neutral } },
-        axisLabel: {
-          color: colores.text,
-          formatter: function(value) {
-            if (value >= 1000000) {
-              return (value / 1000000).toFixed(1) + 'M';
-            } else if (value >= 1000) {
-              return (value / 1000).toFixed(0) + 'K';
-            }
-            return value.toLocaleString('es-ES');
-          }
-        },
-        splitLine: { lineStyle: { color: colores.isDark ? 'rgba(238, 238, 238, 0.1)' : 'rgba(55, 58, 64, 0.1)' } }
+      legend: {
+        orient: 'horizontal',
+        bottom: 10,
+        data: data.categorias,
+        textStyle: { color: colores.text }
       },
       series: {
-        name: "Venta",
-        type: "line",
-        data: data.values.map(v => Number(v)),
-        itemStyle: {
-          color: colores.accent,
-          borderColor: colores.accent,
-          borderWidth: 2,
-          borderRadius: '10px'
-        },
-        lineStyle: {
-          color: colores.accent,
-          width: 3
-        },
-        symbol: 'circle',
-        symbolSize: 6,
-        smooth: true,
+        type: 'pie',
+        radius: ['40%', '70%'],
+        center: ['50%', '50%'],
+        data: valores,
         emphasis: {
           itemStyle: {
-            color: colores.accent,
-            borderColor: colores.text,
-            borderWidth: 2,
-            shadowColor: colores.accent,
-            shadowBlur: 10
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)'
           }
-        }
+        },
+        label: {
+          show: true,
+          formatter: '{b}\n{d}%',
+          fontSize: 12,
+          fontWeight: 'bold',
+          color: colores.text
+        },
+        animationType: 'scale',
+        animationEasing: 'elasticOut',
+        animationDelay: idx => Math.random() * 200
       }
     });
-    
-    // Redimensionar en cambio de ventana
-    window.addEventListener('resize', () => {
-      if (graficosCargados.lineal) {
-        graficosCargados.lineal.resize();
-      }
-    });
-    
+
+    graficosCargados.categoria.resize();
+
   } catch (error) {
-    console.error("Error al cargar el gráfico lineal:", error);
+    console.error("Error al cargar el gráfico categoria:", error);
+    const contenedor = document.getElementById("categoria");
+    if (contenedor) {
+      contenedor.innerHTML = '<div style="text-align: center; padding: 20px; color: #dc3545;">Error al cargar los datos del gráfico</div>';
+    }
   }
 }
+
+// Botón o selector para alternar el modo
+document.getElementById("modoCategoriaBtn").addEventListener("click", () => {
+  modoCategoria = modoCategoria === 'cantidad' ? 'ingreso' : 'cantidad';
+  cargarcategoria();
+});
+
+// Resize seguro
+window.addEventListener('resize', () => {
+  if (graficosCargados.categoria) graficosCargados.categoria.resize();
+});
+
+
 
 // ─────────────── FUNCIONES AUXILIARES ─────────────── //
 // Función para limpiar todos los gráficos (útil para limpiar memoria)

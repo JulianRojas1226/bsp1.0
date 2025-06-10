@@ -68,10 +68,11 @@ const cventas = {
     },
     pagar: async(req,res)=>{
         try {
+            const {usuario}= req.session
             const{mesa}= req.params
             const{pago}= req.body
             console.log("✅ Datos recibidos en el controlador:", { mesa,pago})
-            const result = await mventas.pagar({mesa,pago})
+            const result = await mventas.pagar({mesa,pago,usuario})
             res.redirect("/ventas")
         } catch (error) {
             console.error("❌ Error en pagar:", error);

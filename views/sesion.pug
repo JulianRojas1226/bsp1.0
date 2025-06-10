@@ -65,28 +65,6 @@ html(lang="en")
             
             main 
                 .container-fluid
-                    .row.graficos.d-flex.justify-content-around
-                        .col-sm-3.grafico
-                            div#grafico-costos
-                            
-                        .col-sm-3.grafico
-                            div#grafico_ventas
-                        .col-sm-3.grafico
-                            div#grafico_lineal
-                    .row.justify-content-center 
-                        .col-lg-6
-                          .carrusel
-                            .carrusel-items
-                                if productos && productos.length 
-                                    each producto in productos
-                                        div.card.carta-prod(style="width: 18rem;")
-                                            img.card-img-top(src=`${producto.dir}`  alt="...")
-                                            .card-body
-                                                h5.card-title #{producto.producto}
-                                                p.card-text Cantidad vendida: #{producto.total_vendido}
-                                                    
-                        .col-lg-6
-                            #calendar
                     .row.d-flex.justify-content-between
                         .col-sm-2
                             .div.card.border-success.mb-3(style="max-width: 18rem;")
@@ -105,16 +83,54 @@ html(lang="en")
                             .div.card.border-success.mb-3(style="max-width: 18rem;")
                                 .card-header.bg-transparent.border-success Promedio
                                 .card-body.text-success
-                                    h5.card-title #{ventasmeses[0].total}   
-                                    p.card-text $#{parseInt(ventasmeses[0].total_pago).toLocaleString()}
+                                    h5.card-title $#{parseInt(promedio.promedio).toLocaleString()}
+                                    p.card-text Ultimos 30 dias
                         .col-sm-2
                             .div.card.border-success.mb-3(style="max-width: 18rem;")
-                                .card-header.bg-transparent.border-success Promedio
+                                .card-header.bg-transparent.border-success Productos vendidos
                                 .card-body.text-success
-                                    h5.card-title #{ventasmeses[0].total}
-                                    p.card-text $#{parseInt(ventasmeses[0].total_pago).toLocaleString()}
-                        .col-sm-4
-                            p hola
+                                    h5.card-title #{parseInt(productosVendidos[0].total).toLocaleString() || '0'}
+                                    p.card-text ultimos 30 dias
+                        .col-xl-4.col-md-8.col-sm-12.mb-3
+                            .alert.alert-stock.mb-0.h-100.d-flex.align-items-center#lowStockAlert
+                                .flex-shrink-0.me-3
+                                    i.fa-regular.fa-bell(style="font-size: 2rem;")
+                                .flex-grow-1
+                                    h6.alert-heading.mb-2
+                                        i.fa-solid.fa-triangle-exclamation
+                                        |  Productos con Stock Bajo
+                                    #lowStockList
+                                        if lowstocks && lowstocks.length 
+                                            each lowstock in lowstocks
+                                                span.badge.bg-danger.me-2.mb-1 #{lowstock.nombre} (#{lowstock.cantidad})
+                                        else    
+                                            p no hay productos con bajo stock
+                    .row.d-flex
+                        .col-lg-8.mb-4
+                            .chart-container
+                                .d-flex.justify-content-between.align-items-center.mb-3
+                                    h5.mb-0
+                                        i.bi.bi-graph-up.text-primary.me-2
+                                        | Ventas Diarias
+                                    small.text-muted Últimos 7 días
+                                #ventasDiarias(style="height: 400px;")
+                        .col-lg-4.mb-4
+                            .chart-container
+                                .d-flex.justify-content-between.align-items-center.mb-3
+                                    h5.mb-0
+                                        i.bi.bi-pie-chart.text-success.me-2
+                                        | Por Categoría
+                                    button#modoCategoriaBtn boton por categoria
+                                    small.text-muted Últimos 30 días
+                                #categoria(style="height: 400px;")
+                    .row.justify-content-around
+                        .col-lg-8.mb-4
+                          
+                        .col-lg-4.mb-4
+                            #calendar
+
+                                        
+
                             
             
         script(src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js")
