@@ -125,7 +125,14 @@ html(lang="en")
                                 #categoria(style="height: 400px;")
                     .row.justify-content-around
                         .col-lg-8.mb-4
-                          
+                            .chart-container
+                                .d-flex.justify-content-between.align-items-center.mb-3
+                                    h5.mb-0
+                                        i.bi.bi-bar-chart.text-info.me-2
+                                        | Tendencia de Ventas
+                                    small.text-muted Últimos 12 meses
+                                #comparativoAnualChart(style="height: 400px;")
+
                         .col-lg-4.mb-4
                             #calendar
 

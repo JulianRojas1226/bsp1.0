@@ -15,23 +15,23 @@ const clogin={
         const {usuario,codigo} = req.body
         const results = await mlogin.autenticacionlogi(usuario)
         if (results.length === 0){
-            let err = {
-                status: 401,
-                message: `El usuario ${usuario} no fue encontrado en la BD`,
-            }
-            error.e401(req, res, err);
+            res.render("mensaje_temporal", {
+            mensaje: "usuario no encontrado",
+            redireccion: "/",
+            tiempo: 3000 // milisegundos = 3 segundos
+        })
+            
         }
         
 
         let user = results[0]
         let imatch = await bcrypt.compare(codigo,user.codigo)
         if (!imatch) {
-            let err = {
-                status: 403,
-                message: "Contraseña incorrecta",
-              };
-      
-            error.e403(req, res, err);
+            res.render("mensaje_temporal", {
+            mensaje: "Contraseña incorrecta",
+            redireccion: "/",
+            tiempo: 3000 // milisegundos = 3 segundos
+        })
         }
         
          req.session.usuario = usuario;
@@ -40,8 +40,12 @@ const clogin={
         
 
     } catch (err) {
-        error.e500(req, res, err);
-    }
+        res.render("mensaje_temporal", {
+            mensaje: "usuario no encontrado",
+            redireccion: "/",
+            tiempo: 3000 // milisegundos = 3 segundos
+        })
+      }
     },
     Registro: async (req, res) => {
         try {

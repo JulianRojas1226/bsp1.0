@@ -26,8 +26,8 @@ html(lang="en")
         .contenedor_is_r
           form.inicio_sesion(action="/login/autenticacion" method="post")
             h2 INICIAR SESION
-            input(type="text" id="usuario" name="usuario" placeholder="usuario")
-            input(type="password" id="codigo" name="codigo" placeholder="codigo")
+            input(type="text" id="usuario" name="usuario" placeholder="usuario" required)
+            input(type="password" id="codigo" name="codigo" placeholder="codigo" required)
             a(href="/solicitud") Olvide la contraseña
             button(type="submit") INICIAR
 

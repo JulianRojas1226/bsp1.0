@@ -1,4 +1,4 @@
-import error from "../middwlare/err.js";
+         import error from "../middwlare/err.js";
 import msesion from "../modulos/msesion.js";
 const csescion = {
     getsesion: async (req, res) => {
@@ -71,6 +71,18 @@ const csescion = {
         } catch (error) {
           console.error("Error al obtener datos de categorías:", error)
           res.status(500).send("Error al obtener datos")
+        }
+      },
+      get_ventas_anuales: async (req,res) => {
+        try {
+          const data = await msesion.ventasAnuales()
+          const mes = data.map(d => `${d.mes}`)
+          const cantidad = data.map(d =>`${d.cantidad_ventas}`)
+          const total = data.map(d =>`${d.total_ventas}`)
+          const promedio = data.map(d => `${d.ticket_promedio}`)
+          res.json({mes,cantidad,total,promedio})
+        } catch (error) {
+          console.error("no se trajeron los datos", error)
         }
       }
       
