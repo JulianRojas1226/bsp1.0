@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 10-06-2025 a las 06:01:44
+-- Tiempo de generación: 13-06-2025 a las 05:05:26
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -135,16 +135,10 @@ CREATE TABLE `egresos` (
 --
 
 INSERT INTO `egresos` (`id`, `hora`, `nombre`, `tipo`, `costo`, `empleado`) VALUES
-(1, '2025-06-10 01:18:08', 'AGUILA ligth BOTELLA', 1, 70000, 'julian'),
-(4, '2025-06-10 01:36:27', 'AGUILA ligth BOTELLA', 1, 70000, NULL),
-(5, '2025-06-10 01:37:45', 'AGUILA ligth BOTELLA', 1, 70000, NULL),
-(6, '2025-06-10 01:39:55', 'POKER BOTELLA', 1, 65000, NULL),
-(7, '2025-06-10 01:40:33', 'POKER BOTELLA', 1, 65000, NULL),
-(8, '2025-06-10 01:44:34', 'POKER BOTELLA', 1, 70000, NULL),
-(9, '2025-06-10 01:46:09', 'POKER BOTELLA', 1, 70000, NULL),
-(10, '2025-06-10 01:54:49', 'POKER BOTELLA', 1, 60000, NULL),
-(11, '2025-06-10 01:57:29', 'POKER BOTELLA', 1, 65000, NULL),
-(12, '2025-06-10 02:00:07', 'POKER BOTELLA', 1, 70000, NULL);
+(12, '2025-06-10 02:00:07', 'POKER BOTELLA', 1, 70000, 'julian'),
+(13, '2025-06-12 21:34:56', 'Corona botella', 1, 102000, 'julian'),
+(15, '2025-06-12 21:58:38', 'POKER BOTELLA', 1, 70000, 'julian'),
+(16, '2025-06-13 00:12:40', 'BUDWEISER LATA', 1, 58320, 'julian');
 
 -- --------------------------------------------------------
 
@@ -212,7 +206,8 @@ CREATE TABLE `pagos` (
 
 INSERT INTO `pagos` (`id`, `mesa`, `fecha_inicio`, `fecha_fin`, `metodo_pago`, `total`) VALUES
 (23, 1, '2025-06-09 21:16:49', '2025-06-10 02:16:53', 1, 35000),
-(25, 1, '2025-06-09 22:13:16', '2025-06-10 03:15:51', 1, 35000);
+(25, 1, '2025-06-09 22:13:16', '2025-06-10 03:15:51', 1, 35000),
+(26, 1, '2025-06-10 15:32:20', '2025-06-10 20:32:30', 1, 35000);
 
 -- --------------------------------------------------------
 
@@ -239,7 +234,9 @@ CREATE TABLE `producto` (
 --
 
 INSERT INTO `producto` (`id`, `hora`, `nombre`, `tipo`, `cantidad`, `proveedor`, `precio`, `Costo`, `dir`, `minimo_cant`, `empleado`) VALUES
-(67, '2025-06-10 01:39:55', 'POKER BOTELLA', 3, 10, 13135465, 3500, 65000, '/productos/1749519595554-Cerveza Poker botella 330 ml.png', 10, 'julian');
+(67, '2025-06-10 01:39:55', 'POKER BOTELLA', 3, 30, 13135465, 3500, 65000, '/productos/1749519595554-Cerveza Poker botella 330 ml.png', 10, 'julian'),
+(74, '2025-06-12 21:34:56', 'Corona botella', 3, 30, 13135465, 5000, 102000, '/productos/1749764096366-84257633-corona-extra.webp', 10, 'julian'),
+(75, '2025-06-13 00:12:40', 'BUDWEISER LATA', 3, 24, 13135465, 3500, 58320, '/productos/1749773560589-BUD.webp', 10, 'julian');
 
 --
 -- Disparadores `producto`
@@ -255,8 +252,8 @@ CREATE TRIGGER `nuevo_egreso` AFTER INSERT ON `producto` FOR EACH ROW BEGIN
     WHERE id = NEW.id;
     
     -- Insertar en egresos
-    INSERT INTO egresos (nombre, tipo, costo) 
-    VALUES (nombre_producto, 1, costo_producto);
+    INSERT INTO egresos (nombre, tipo, costo,empleado) 
+    VALUES (nombre_producto, 1, costo_producto,new.empleado);
 END
 $$
 DELIMITER ;
@@ -271,25 +268,38 @@ CREATE TABLE `producto_add` (
   `id` int(10) NOT NULL,
   `id_prod` int(11) NOT NULL,
   `cantidad` int(4) NOT NULL,
+  `Proveedor` int(11) NOT NULL,
   `hora` timestamp NOT NULL DEFAULT current_timestamp(),
   `costo` int(20) NOT NULL,
   `empleado` varchar(60) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Volcado de datos para la tabla `producto_add`
+--
+
+INSERT INTO `producto_add` (`id`, `id_prod`, `cantidad`, `Proveedor`, `hora`, `costo`, `empleado`) VALUES
+(4, 67, 30, 13135465, '2025-06-12 21:58:38', 70000, 'julian');
+
+--
 -- Disparadores `producto_add`
 --
 DELIMITER $$
-CREATE TRIGGER `add_cant` AFTER INSERT ON `producto_add` FOR EACH ROW begin
-DECLARE cant_p int;
-SELECT cantidad into cant_p
-FROM producto
-where id = new.id;
-if cant_p is not null THEN
-UPDATE producto
-SET cantidad =cant_p + new.cantidad
-WHERE id= new.id;
-end if;
+CREATE TRIGGER `add_cant` AFTER INSERT ON `producto_add` FOR EACH ROW BEGIN
+    DECLARE cant_p INT;
+    
+    -- Obtener cantidad actual del producto usando NEW.id_prod
+    SELECT cantidad INTO cant_p 
+    FROM producto 
+    WHERE id = NEW.id_prod;  -- Corregido aquí
+    
+    -- Si el producto existe, actualizar la cantidad
+    IF cant_p IS NOT NULL THEN
+        UPDATE producto 
+        SET cantidad = cant_p + NEW.cantidad  
+        WHERE id = NEW.id_prod;  -- Corregido aquí
+    END IF;
+    
 END
 $$
 DELIMITER ;
@@ -297,15 +307,20 @@ DELIMITER $$
 CREATE TRIGGER `egreso` AFTER INSERT ON `producto_add` FOR EACH ROW BEGIN
     DECLARE nombre_producto VARCHAR(100);
     DECLARE costo_producto INT(20);
-
-    -- Obtener el nombre del producto desde la tabla producto
-    SELECT nombre INTO nombre_producto
-    FROM producto
-    WHERE id = NEW.id;
-
-    -- Insertar en egresos con el nombre obtenido
-    INSERT INTO egresos (nombre, tipo, costo,empleado)
-    VALUES (nombre_producto, 1, NEW.costo,empleado);
+    DECLARE producto_existe INT DEFAULT 0;
+    
+    -- Verificar que el producto existe y obtener el nombre
+    SELECT COUNT(*), COALESCE(nombre, 'Producto no encontrado') 
+    INTO producto_existe, nombre_producto
+    FROM producto 
+    WHERE id = NEW.id_prod;
+    
+    -- Solo insertar si el producto existe
+    IF producto_existe > 0 THEN
+        INSERT INTO egresos (nombre, tipo, costo, empleado)
+        VALUES (nombre_producto, 1, NEW.costo, NEW.empleado);  -- NEW.empleado
+    END IF;
+    
 END
 $$
 DELIMITER ;
@@ -498,7 +513,8 @@ CREATE TABLE `ventas_res` (
 
 INSERT INTO `ventas_res` (`id`, `id_orden`, `empleado`, `hora`, `mesa`, `id_prod`, `producto`, `tipo`, `precio_u`, `cantidad`, `total_p`, `pago`) VALUES
 (38, 65, 'julian', '2025-06-09 21:16:49', 1, 67, 'POKER BOTELL', 3, 3500, 10, 35000, 1),
-(39, 66, 'julian', '2025-06-09 22:13:16', 1, 67, 'POKER BOTELL', 3, 3500, 10, 35000, 1);
+(39, 66, 'julian', '2025-06-09 22:13:16', 1, 67, 'POKER BOTELL', 3, 3500, 10, 35000, 1),
+(40, 67, 'julian', '2025-06-10 15:32:20', 1, 67, 'POKER BOTELL', 3, 3500, 10, 35000, 1);
 
 --
 -- Índices para tablas volcadas
@@ -624,13 +640,13 @@ ALTER TABLE `cargo`
 -- AUTO_INCREMENT de la tabla `detalles_p`
 --
 ALTER TABLE `detalles_p`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
 -- AUTO_INCREMENT de la tabla `egresos`
 --
 ALTER TABLE `egresos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `mesa`
@@ -642,19 +658,19 @@ ALTER TABLE `mesa`
 -- AUTO_INCREMENT de la tabla `pagos`
 --
 ALTER TABLE `pagos`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
 
 --
 -- AUTO_INCREMENT de la tabla `producto_add`
 --
 ALTER TABLE `producto_add`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `reservas`
@@ -690,7 +706,7 @@ ALTER TABLE `tipo_re`
 -- AUTO_INCREMENT de la tabla `ventas_res`
 --
 ALTER TABLE `ventas_res`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- Restricciones para tablas volcadas
@@ -749,7 +765,8 @@ ALTER TABLE `reservas`
 --
 ALTER TABLE `ventas_res`
   ADD CONSTRAINT `fk_ventas_empleado` FOREIGN KEY (`empleado`) REFERENCES `empleado` (`nombre`),
-  ADD CONSTRAINT `pago` FOREIGN KEY (`pago`) REFERENCES `tipo_pago` (`id`);
+  ADD CONSTRAINT `pago` FOREIGN KEY (`pago`) REFERENCES `tipo_pago` (`id`),
+  ADD CONSTRAINT `ventas_res_ibfk_1` FOREIGN KEY (`tipo`) REFERENCES `tipo_pr` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
