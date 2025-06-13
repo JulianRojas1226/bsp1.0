@@ -1,7 +1,11 @@
+
+
+
 document.addEventListener("DOMContentLoaded", async () => {
   await inicializarCalendario();
   await cargargraficodiario();
   await cargarcategoria()
+  await cargaranuales()
   inicializarSidebar();
   aplicarTemaGuardado();
 });
@@ -9,7 +13,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 // ─────────────── FUNCIONES DE GRÁFICOS ─────────────── //
 let graficosCargados = {
   diario: null,
-  categoria: null
+  categoria: null,
+  anual:null
 };
 function formatCurrency(value) {
             return new Intl.NumberFormat('es-CO', {
@@ -269,7 +274,7 @@ async function cargargraficodiario() {
     
     // Remover listener anterior si existe para evitar duplicados
     window.addEventListener('resize', () => {
-      if (graficosCargados.categoria) {
+      if (graficosCargados.diario) {
         graficosCargados.diario.resize();
       }
     })
@@ -360,13 +365,16 @@ async function cargarcategoria() {
           fontWeight: 'bold',
           color: colores.text
         },
-        animationType: 'scale',
-        animationEasing: 'elasticOut',
-        animationDelay: idx => Math.random() * 200
+       animationDuration: 1500,
+      animationEasing: 'cubicOut'
       }
     });
 
-    graficosCargados.categoria.resize();
+    window.addEventListener('resize', () => {
+      if (graficosCargados.categoria) {
+        graficosCargados.categoria.resize();
+      }
+    })
 
   } catch (error) {
     console.error("Error al cargar el gráfico categoria:", error);
@@ -381,6 +389,7 @@ async function cargarcategoria() {
 document.getElementById("modoCategoriaBtn").addEventListener("click", () => {
   modoCategoria = modoCategoria === 'cantidad' ? 'ingreso' : 'cantidad';
   cargarcategoria();
+  animationDuration: 1500
 });
 
 // Resize seguro
@@ -388,7 +397,124 @@ window.addEventListener('resize', () => {
   if (graficosCargados.categoria) graficosCargados.categoria.resize();
 });
 
+async function cargaranuales() {
+  try {
+    const response = await fetch("/grafico_anual")
+    const data = await response.json()
+    const colores = obtenerColores()
+    const contenedor = document.getElementById("comparativoAnualChart")
 
+    if (graficosCargados.anual) {
+      graficosCargados.anual.dispose()
+    }
+
+    graficosCargados.anual = echarts.init(contenedor, obtenerTema())
+
+    graficosCargados.anual.setOption({
+      tooltip: {
+        trigger: 'axis',
+        backgroundColor: colores.isDark ? 'rgba(55, 58, 64, 0.95)' : 'rgba(238, 238, 238, 0.95)',
+        borderColor: colores.accent,
+        borderWidth: 1,
+        textStyle: { color: colores.text },
+        formatter: function(params) {
+          let tooltip = `<strong>${params[0].axisValue}</strong><br/>`;
+          params.forEach(param => {
+            const value = param.seriesName === 'Ventas ($)'
+              ? `$${Number(param.value).toLocaleString('es-ES')}`
+              : `${param.value} unidades`;
+            tooltip += `${param.marker} ${param.seriesName}: ${value}</br>`;
+          });
+          return tooltip;
+        }
+      },
+      legend: {
+        data: ['Ventas ($)', 'Cantidad'],
+        textStyle: { color: colores.text }
+      },
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+      },
+      xAxis: {
+        type: 'category',
+        data: data.mes,
+        axisLine: { lineStyle: { color: colores.neutral } },
+        axisLabel: { color: colores.text },
+        splitLine: {
+          lineStyle: {
+            color: colores.isDark ? 'rgba(238, 238, 238, 0.1)' : 'rgba(55, 58, 64, 0.1)'
+          }
+        }
+      },
+      yAxis: [
+        {
+          type: 'value',
+          name: 'Ventas ($)',
+          axisLabel: { color: colores.text },
+          axisLine: { lineStyle: { color: colores.neutral } },
+          splitLine: { show: false }
+        },
+        {
+          type: 'value',
+          name: 'Cantidad',
+          axisLabel: { color: colores.text },
+          axisLine: { lineStyle: { color: colores.neutral } },
+          splitLine: { show: false }
+        }
+      ],
+      series: [
+        {
+          name: 'Ventas ($)',
+          type: 'line',
+          yAxisIndex: 0,
+          data: data.total .map(v => parseInt(v)),
+          symbol: 'circle',
+          symbolSize: 6,
+          lineStyle: { color: colores.text },
+          areaStyle: { opacity: 0.3, color: colores.neutral },
+          itemStyle: { color: colores.text }
+        },
+        {
+          name: 'Cantidad',
+          type: 'bar',
+          yAxisIndex: 1,
+          data: data.cantidad.map(v => parseInt(v)),
+          itemStyle: {
+            color: colores.primary,
+            borderRadius: [4, 4, 0, 0]
+          },
+          emphasis: {
+            itemStyle: {
+              color: colores.accent
+            }
+          }
+        }
+      ],
+      animationDuration: 1500,
+      animationEasing: 'cubicOut'
+    });
+
+    // Escucha de resize sin duplicar
+    window.removeEventListener('resize', resizeHandler); // Limpia anterior
+    window.addEventListener('resize', resizeHandler);
+
+    function resizeHandler() {
+      if (graficosCargados.anual) {
+        graficosCargados.anual.resize();
+      }
+    }
+
+  } catch (error) {
+    console.error("Error al cargar el gráfico anual:", error);
+    const contenedor = document.getElementById("comparativoAnualChart");
+    if (contenedor) {
+      contenedor.innerHTML = '<div style="text-align: center; padding: 20px; color: #dc3545;">Error al cargar los datos del gráfico</div>';
+    }
+  }
+}
 
 // ─────────────── FUNCIONES AUXILIARES ─────────────── //
 // Función para limpiar todos los gráficos (útil para limpiar memoria)

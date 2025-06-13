@@ -6,47 +6,40 @@ html(lang="en")
     title Document
     link(rel="stylesheet" href="/css/style.css")
 
-  body(id="login")
-    main
-      .TODO
-        .CAJA_TRASERA
-          .caja_trasera_is
-            h1 ¡Bienvenido!
-            p Inicia sesión para acceder a todas las funcionalidades de nuestra plataforma. 
-              | Ingresa tus credenciales de forma segura y comienza a disfrutar de una experiencia eficiente y personalizada.
-            button#btn_iniciarsesion inicio sesion
+  body 
+    .login-container
+      .info-section
+          .info-content
+              .logo-container
+                  i.fas.fa-shield-alt
+              h1 ¡Bienvenido de vuelta!
+              p Accede a tu cuenta y disfruta de todas las funcionalidades que tenemos preparadas para ti. Tu seguridad es nuestra prioridad.
+      // Sección del formulario
+      .form-section
+        .form-content
+            .form-header
+                h2 Iniciar Sesión
+                p Ingresa tus credenciales para continuar
 
-          .caja_trasera_reg
-            h2 ¿Ya tienes cuenta?
-            h1 ¡Únete a nosotros!
-            p Crea una cuenta en pocos pasos y accede a todas las funcionalidades que tenemos para ofrecerte. 
-              | Completa tus datos para empezar a disfrutar de una experiencia personalizada y optimizada a tus necesidades.
-            button#btn_registrarse REGISTRO
+            form#loginForm(action="/login/autenticacion" method="post")
+                .form-group
+                    .input-wrapper
+                        input.form-input#usuario(name="usuario" type="text" placeholder="Nombre de usuario" required autocomplete="username")
+                        i.input-icon.fas.fa-user
 
-        .contenedor_is_r
-          form.inicio_sesion(action="/login/autenticacion" method="post")
-            h2 INICIAR SESION
-            input(type="text" id="usuario" name="usuario" placeholder="usuario" required)
-            input(type="password" id="codigo" name="codigo" placeholder="codigo" required)
-            a(href="/solicitud") Olvide la contraseña
-            button(type="submit") INICIAR
+                .form-group
+                    .input-wrapper
+                        input.form-input#codigo(name="codigo" type="password" placeholder="Código de acceso" required autocomplete="current-password")
+                        i.input-icon.fas.fa-key
 
-          form.REGISTRO(action="/registro" method="post")
-            h2 REGISTRARSE
-            input(type="text" id="nombre_r" name="nombre_r" placeholder="nombre")
-            input(type="text" id="correo" name="correo" placeholder="correo")
-            select(name="cargo" id=" cargo")
-              option(value="") escoja su cargo
-              if cargos && cargos.length 
-                each cargo in cargos
-                  option(value=cargo.id) #{cargo.cargo}
-              else
-                option(value="") no hay cargos
-            div(id="codigoDiv" style="display: none;")
-              label(for="codigo") Código de admin:
-              input(type="password" name="codigo" id="codigo")
-            input(type="password" id="password" name="password"  placeholder="password")
-            
-            button(type="submit") REGISTRARSE
+                .form-actions
+                    .remember-me
+                        .custom-checkbox#rememberCheck
+                        span Recordarme
+                    a.forgot-link(href="/solicitud") ¿Olvidaste tu contraseña?
+
+                button.submit-button#submitBtn(type="submit")
+                    span#btnText Iniciar Sesión
+
 
     script(src="/js/PLAY.JS")

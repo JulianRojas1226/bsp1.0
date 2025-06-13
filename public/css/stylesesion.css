@@ -251,55 +251,18 @@ body.dark .switch::before{
   left: 88px;
   width: calc(100% - 88px);
 }
-.row.graficos{
-padding: 15px;
-}
-.carrusel {
-  width: 100%;
-  overflow: hidden;
-  position: relative;
-  padding: 10px 0;
-  height: 30rem;
-  align-items: center;
+.container-fluid{
+    margin-left: 0 !important;
+    margin-right: 0 !important;
 }
 
-.carrusel-items {
-  display: flex;
-  gap: 20px;
-  animation: moverCarrusel 20s linear infinite;
-  width: max-content; /* ✅ Se adapta automáticamente al contenido */
-}
-
-.carta-prod {
-  flex: 0 0 auto;
-  width: 200px;
-  height: 300px;
-  border-radius: 12px;
-  
-  transition: transform 0.4s ease;
-  background-color: --;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.12)
-}
-.carta-prod img{
- width: 100%;
- height: 20rem;
-}
-
-.carta-prod:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 10px var(--button-background);
-}
-
-@keyframes moverCarrusel {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
 #calendar {
   background: white;
   padding: 1rem;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
   transition: background 0.3s ease;
+  height: 400px;
 }
 
 body.dark #calendar {
@@ -353,7 +316,18 @@ body.dark #calendar {
     transform: translateY(-2px);
     box-shadow: 0 8px 30px rgba(0,0,0,0.12);
 }
+.card.topproductos{
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
 
+.table>:not(caption)>*>*{
+    color: var(--text-color) !important;
+    background-color: var(--background-color) !important;
+}
+.card.topproductos table tr th{
+    color: var(--accent-color);
+}
 
 /* Para pantallas muy pequeñas */
 @media (max-width: 576px) {

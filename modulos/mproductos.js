@@ -42,10 +42,10 @@ const mprod={
             throw {status:500,message:"error al cargar datos"}
         }
     },
-    cantadd: async({producto,cantidad,costo,proveedor})=>{
+    cantadd: async({producto,cantidad,costo,proveedor,usuario})=>{
         try {
-            await db.query("insert into producto_add(id,cantidad,proveedor,costo) values (?,?,?,?)",
-                [producto,cantidad,proveedor,costo]
+            await db.query("insert into producto_add(id_prod,cantidad,proveedor,costo,empleado) values (?,?,?,?,?)",
+                [producto,cantidad,proveedor,costo,usuario]
             )
             
         } catch (err) {

@@ -2,12 +2,38 @@ html(lang="en")
   head
     meta(charset="UTF-8")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
-    title Document
+    title 
+    link(rel="stylesheet", href="/css/recuperacion.css")
     
   body
-    h2 Recuperar Contraseña
-    p Ingresa tu correo para recibir un enlace de recuperación
-    
-    form(action="/solicitud" method="POST")
-      input(type="email" name="email" placeholder="Correo electrónico" required)
-      button(type="submit") Enviar Enlace
+  doctype html
+html
+    body
+        .floating-shapes
+            .shape
+            .shape
+            .shape
+
+        .container
+            .icon-container
+                .lock-icon
+            
+            h2 Recuperar Contraseña
+            p.subtitle Ingresa tu correo electrónico y te enviaremos un enlace seguro para restablecer tu contraseña
+            
+            form(action="/solicitud" method="POST")
+                .form-group
+                    label(for="email") Correo Electrónico
+                    .input-container
+                        input#email(name="email" type="email" placeholder="ejemplo@correo.com" required)
+                        span.email-icon 📧
+
+                button.submit-btn(type="submit") Enviar Enlace de Recuperación
+            
+            .back-link
+                a(href="/login") ← Volver al inicio de sesión
+            
+            .security-info
+                p
+                    strong 🔐 Información de seguridad:
+                    | El enlace de recuperación expirará en 15 minutos por tu seguridad. Si no recibes el correo, revisa tu carpeta de spam.

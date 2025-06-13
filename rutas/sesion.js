@@ -11,6 +11,7 @@ const routes = Router()
 routes.get("/calendario", csescion.get_calendar)
 routes.get("/graficoventas_diarias", csescion.get_venta_diaria)
 routes.get("/grafico_categoria",csescion.get_ventas_categorias)
+routes.get("/grafico_anual", csescion.get_ventas_anuales)
 // barra de navegacion
 routes.get("logout",cierre.cierre)
 routes.get("/sesion",csescion.getsesion)

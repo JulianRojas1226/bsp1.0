@@ -62,7 +62,28 @@ html(lang="en")
             .container-fluid 
                 .row 
                     .col-lg-8
-                        p Costos
+                        .chart-container.card
+                            .card-header.d-flex.justify-content-between.align-items-center.flex-wrap
+                                h6.mb-0.d-flex.align-items-center
+                                    i.bi.bi-pie-chart.text-success.me-2
+                                    | Costos
+                                .d-flex.gap-2.mt-2.mt-md-0
+                                    button.btn.btn-sm.btn-outline-primary#modoCategoriaBtn Agregar
+                            .card-body.p-2
+                                .table-responsive
+                                    table.table.table-hover.table-sm.mb-0
+                                        thead.table-light
+                                            tr
+                                                th.text-nowrap Producto
+                                                th.text-nowrap.text-center Vendido
+                                                th.text-nowrap.text-end Ingresos
+                                                th.text-nowrap.text-end Ganancia
+                                                th.text-nowrap.text-center Margen
+                                                th.text-nowrap.text-center Stock
+                                        tbody#productosTable
+                                            tr
+                                                td.text-center hola
+                                        
                     .col-lg-4
                         p Usuarios
                 .row 

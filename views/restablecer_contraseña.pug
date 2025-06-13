@@ -1,18 +1,46 @@
-doctype html
+
 html
   head
     title Restablecer Contraseña
+    link(rel="stylesheet", href="/css/nuevocodigo.css")
   body
-    h2 Restablecer Contraseña
-    p Ingresa tu nueva contraseña
-    
-    form(method="POST", action="/reset-password")
-      //- Campo oculto para el token
-      input(type="hidden", name="token", value=token)
+    .floating-shapes
+            .shape
+            .shape
+            .shape
 
-      label(for="nuevaContraseña") Nueva contraseña:
-      input(type="password", name="nuevaContraseña", required=true)
-
-      br
-
-      button(type="submit") Cambiar contraseña
+    .container
+          .icon-container
+              .key-icon
+          
+          h2 Restablecer Contraseña
+          p.subtitle Crea una nueva contraseña segura para tu cuenta
+          
+          form(method="POST" action="/reset-password")
+              input(type="hidden" name="token" value="token_placeholder")
+              
+              .form-group
+                  label(for="nuevaContraseña") Nueva Contraseña
+                  .input-container
+                      input#nuevaContrasena(name="nuevaContraseña" type="password" required)
+                      span.password-toggle 👁️
+                  .password-strength
+                      .strength-bar
+              
+              .password-requirements
+                  h4 Requisitos de contraseña:
+                  .requirement#length-req
+                      span.requirement-icon ✗
+                      span Mínimo 8 caracteres
+                  .requirement#uppercase-req
+                      span.requirement-icon ✗
+                      span Al menos una letra mayúscula
+                  .requirement#lowercase-req
+                      span.requirement-icon ✗
+                      span Al menos una letra minúscula
+                  .requirement#number-req
+                      span.requirement-icon ✗
+                      span Al menos un número
+              
+              button.submit-btn#submit-btn(type="submit" disabled) Cambiar 
+    script(src="/js/codigo.js")

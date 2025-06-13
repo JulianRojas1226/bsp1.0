@@ -56,8 +56,9 @@ const cprod ={
   },
   addcantidad: async (req,res)=>{
     try {
+      const {usuario}=req.session
       const {producto,cantidad,costo,proveedor}=req.body
-      await mprod.cantadd({producto,cantidad,costo,proveedor})
+      await mprod.cantadd({producto,cantidad,costo,proveedor,usuario})
       res.redirect("/prod"); 
     } catch (err) {
       console.error("❌ Error al guardar los datos:", err);

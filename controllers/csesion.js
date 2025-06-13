@@ -22,8 +22,9 @@ const csescion = {
             }
           const lowstocks = await msesion.lowstock()
           
-          const productos = await msesion.most_prod()
-          res.render("sesion",{productos,cargo,usuario,ventashoy,ventasmeses,promedio, productosVendidos,lowstocks});  
+          const topproductos = await msesion.analisisProductos()
+          console.log("productos vendidos ",topproductos)
+          res.render("sesion",{topproductos,cargo,usuario,ventashoy,ventasmeses,promedio, productosVendidos,lowstocks});  
         } catch (err) {
           error.e500(req, res, err);
         }
@@ -75,11 +76,12 @@ const csescion = {
       },
       get_ventas_anuales: async (req,res) => {
         try {
-          const data = await msesion.ventasAnuales()
+          const data = await msesion.comparativoAnual()
           const mes = data.map(d => `${d.mes}`)
           const cantidad = data.map(d =>`${d.cantidad_ventas}`)
           const total = data.map(d =>`${d.total_ventas}`)
           const promedio = data.map(d => `${d.ticket_promedio}`)
+          console.log("datos controlador anual ", data)
           res.json({mes,cantidad,total,promedio})
         } catch (error) {
           console.error("no se trajeron los datos", error)

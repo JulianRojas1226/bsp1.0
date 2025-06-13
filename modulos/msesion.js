@@ -1,5 +1,13 @@
 import db from "../config/db.js";
 const msesion ={
+    mostres: async()=>{
+        try {
+            const [results] = await db.query("select id_re,fecha_hora,NID,nombre,correo,celular,tipo_re,cantidad_p,mesa_asig,obser from reservas")
+            return results
+        } catch (err) {
+            throw {status:500,message:"error al cargar datos de reserva"} 
+        }
+    },
      most_prod: async () => {
         try {
             const [result] = await db.query(`select v.id_prod, v.producto, sum(v.cantidad) as total_vendido, p.dir 
@@ -75,30 +83,29 @@ const msesion ={
     analisisProductos: async () => {
         try {
             const [productos] = await db.query(`
-                SELECT 
+               SELECT 
                     p.id,
                     p.nombre,
                     p.precio,
-                    p.costo,
+                    p.Costo as costo,
                     p.cantidad as stock,
                     p.minimo_cant as stock_minimo,
-                    p.categoria,
-                    COALESCE(SUM(dv.cantidad), 0) as total_vendido,
-                    COALESCE(SUM(dv.cantidad * dv.precio_unitario), 0) as ingresos,
-                    COALESCE(SUM(dv.cantidad * (dv.precio_unitario - p.costo)), 0) as ganancia,
+                    COALESCE(SUM(vr.cantidad), 0) as total_vendido,
+                    COALESCE(SUM(vr.cantidad * vr.precio_u), 0) as ingresos,
+                    COALESCE(SUM((vr.cantidad * vr.precio_u)) - p.Costo, 0) as ganancia,
                     CASE 
                         WHEN p.cantidad <= p.minimo_cant THEN 'BAJO'
                         WHEN p.cantidad <= p.minimo_cant * 2 THEN 'MEDIO'
                         ELSE 'ALTO'
                     END as estado_stock,
-                    ROUND((p.precio - p.costo) / p.precio * 100, 2) as margen_porcentaje
+                    ROUND(((SUM(vr.cantidad * vr.precio_u) - p.Costo) / p.Costo) * 100, 2) as margen_porcentaje
                 FROM producto p
-                LEFT JOIN detalle_ventas dv ON p.id = dv.producto_id
-                LEFT JOIN ventas_res v ON dv.venta_id = v.id 
-                    AND DATE(v.fecha) >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
-                GROUP BY p.id
-                ORDER BY total_vendido DESC
+                LEFT JOIN ventas_res vr ON p.id = vr.id_prod 
+                    AND DATE(vr.hora) >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+                GROUP BY p.id, p.nombre, p.precio, p.Costo, p.cantidad, p.minimo_cant, p.tipo, p.proveedor, p.empleado
+                ORDER BY total_vendido DESC;
             `);
+            console.log("productos vendidos", productos)
             return productos;
         } catch (error) {
             console.error("Error al obtener análisis de productos:", error);
@@ -150,15 +157,16 @@ const msesion ={
         try {
             const [datos] = await db.query(`
                 SELECT 
-                    DATE_FORMAT(fecha, '%Y-%m') as mes,
+                    DATE_FORMAT(hora, '%Y-%m') as mes,
                     COUNT(*) as cantidad_ventas,
                     SUM(total_p) as total_ventas,
                     AVG(total_p) as ticket_promedio
                 FROM ventas_res 
-                WHERE DATE(fecha) >= DATE_SUB(CURDATE(), INTERVAL 12 MONTH)
-                GROUP BY DATE_FORMAT(fecha, '%Y-%m')
+                WHERE DATE(hora) >= DATE_SUB(CURDATE(), INTERVAL 12 MONTH)
+                GROUP BY DATE_FORMAT(hora, '%Y-%m')
                 ORDER BY mes
             `);
+            console.log("dastos anuales", datos)
             return datos;
         } catch (error) {
             console.error("Error al obtener comparativo anual:", error);
