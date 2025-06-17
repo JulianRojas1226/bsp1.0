@@ -107,31 +107,31 @@ html(lang="es")
                                                 .row
                                                     .col-sm-6
                                                         .input-wrapper
-                                                            input(type="text", name="nombre" id="nombreprod" placeholder="Nombre")
+                                                            input(type="text", name="nombre" id="nombreprod" placeholder="Nombre" required)
                                                             .underline
                                                             span#mensaje(style="color:red;")
                                                     .col-sm-6
                                                         .input-wrapper            
-                                                            input(type="number", name="precio", id="precio" placeholder="Precio")
+                                                            input(type="number", name="precio", id="precio" placeholder="Precio" required)
                                                             .underline
                                                 .row
                                                     .col-sm-6
                                                         .input-wrapper                                                
-                                                            input(type="number", name="cantidad",id="cantidad" placeholder="Cantidad")
+                                                            input(type="number", name="cantidad",id="cantidad" placeholder="Cantidad" required)
                                                             .underline
                                                     .col-sm-6
                                                         .input-wrapper                                                
-                                                            input(type="number" name="costo" id="costo" placeholder="Costo")
+                                                            input(type="number" name="costo" id="costo" placeholder="Costo" required)
                                                             .underline
                                                 .row 
                                                     .col-sm-12
                                                         .input-wrapper                                            
-                                                            input(type="number", name="cantidad_min", id="cantidad_min" placeholder="Cantidad MInima")
+                                                            input(type="number", name="cantidad_min", id="cantidad_min" placeholder="Cantidad MInima" required)
                                                             .underline
                                                 .row
                                                     .col-sm-6
                                                         .custom-select-wrapper
-                                                            select.custom-select(name="tipo", id="tipo") 
+                                                            select.custom-select(name="tipo", id="tipo" required) 
                                                                 if tipos && tipos.length
                                                                     each tipo in tipos 
                                                                         option(value=tipo.id) #{tipo.nombre}
@@ -139,7 +139,7 @@ html(lang="es")
                                                                     option(value="") No hay opciones disponibles
                                                     .col-sm-6
                                                         .custom-select-wrapper
-                                                            select.custom-select(name="proveedor", id="proveedor") 
+                                                            select.custom-select(name="proveedor", id="proveedor" required) 
                                                                 if proveedores  && proveedores.length
                                                                     each proveedor in proveedores
                                                                         option(value=proveedor.NID) #{proveedor.nombre}
@@ -158,22 +158,22 @@ html(lang="es")
                                                 .row 
                                                     .col-sm-6
                                                         .custom-select-wrapper
-                                                            select.custom-select(name="producto" id="producto") 
+                                                            select.custom-select(name="producto" id="producto" required) 
                                                                 if productos && productos.length 
                                                                     each producto in productos
                                                                         option(value=producto.id) #{producto.nombre}
                                                     .col-sm-6
                                                         .input-wrapper 
-                                                            input(type="number" id="cantidad" name="cantidad" required min="1" placeholder="cantidad")
+                                                            input(type="number" id="cantidad" name="cantidad" required min="1" placeholder="cantidad" )
                                                             .underline
                                                 .row
                                                     .col-sm-6 
                                                         .input-wrapper 
-                                                            input(type="number", name="costo" placeholder="Costo")
+                                                            input(type="number", name="costo" placeholder="Costo" required)
                                                             .underline
                                                     .col-sm-6
                                                         .custom-select-wrapper
-                                                            select.custom-select(name="proveedor", id="proveedor") 
+                                                            select.custom-select(name="proveedor", id="proveedor" required) 
                                                                 if proveedores  && proveedores.length
                                                                     each proveedor in proveedores
                                                                         option(value=proveedor.NID) #{proveedor.nombre}
@@ -186,20 +186,20 @@ html(lang="es")
                                                 .row
                                                     .col-sm-6
                                                         .input-wrapper 
-                                                            input(type="number", id="NID" name="nid" placeholder="NID")
+                                                            input(type="number", id="NID" name="nid" placeholder="NID" required)
                                                             .underline
                                                     .col-sm-6    
                                                         .input-wrapper                                               
-                                                            input(type="text", id="nombre" name="nombre" placeholder="Nombre")
+                                                            input(type="text", id="nombre" name="nombre" placeholder="Nombre" required)
                                                             .underline
                                                 .row
                                                     .col-sm-6
                                                         .input-wrapper
-                                                            input(type="number", id="celular" name="celular" placeholder="Celular")
+                                                            input(type="number", id="celular" name="celular" placeholder="Celular" required)
                                                             .underline
                                                     .col-sm-6 
                                                         .input-wrapper
-                                                            input(type="text", name="correo" id="correo" placeholder="Correo")
+                                                            input(type="text", name="correo" id="correo" placeholder="Correo" required)
                                                             .underline
                                                 button.btn-prod(type="submit") agregar
                 div.offcanvas.offcanvas-end.notificaciones(tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel")
@@ -245,7 +245,7 @@ html(lang="es")
                                                     p No hay información de proveedores disponible.
                                             .d-flex.row
                                                 .col-lg-5
-                                                   form#eliminarproducto(action=`/eliminar/${producto.id}` method="post" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este producto?');")
+                                                   form.form-eliminar(action=`/eliminar/${producto.id}` method="post")
                                                         button.delete(type="submit") Eliminar
                                                 .col-lg-4
                                                     p.d-inline-flex.gap-1
@@ -296,7 +296,7 @@ html(lang="es")
                         else
                             p No hay productos disponibles.
                     #alert-container 
-
+        script( src="https://cdn.jsdelivr.net/npm/sweetalert2@11")
         script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous") 
         script(src="/js/main.js")
 

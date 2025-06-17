@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-06-2025 a las 05:05:26
+-- Tiempo de generación: 17-06-2025 a las 08:42:02
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -138,7 +138,14 @@ INSERT INTO `egresos` (`id`, `hora`, `nombre`, `tipo`, `costo`, `empleado`) VALU
 (12, '2025-06-10 02:00:07', 'POKER BOTELLA', 1, 70000, 'julian'),
 (13, '2025-06-12 21:34:56', 'Corona botella', 1, 102000, 'julian'),
 (15, '2025-06-12 21:58:38', 'POKER BOTELLA', 1, 70000, 'julian'),
-(16, '2025-06-13 00:12:40', 'BUDWEISER LATA', 1, 58320, 'julian');
+(16, '2025-06-13 00:12:40', 'BUDWEISER LATA', 1, 58320, 'julian'),
+(17, '2025-06-17 02:09:23', 'luz', 2, 110000, 'julian'),
+(18, '2025-06-17 05:11:59', 'Smirnoff Tamarindo *750', 1, 500000, 'julian'),
+(19, '2025-06-17 05:31:26', 'Smirnoff Tamarindo *750', 1, 500000, 'julian'),
+(20, '2025-06-17 05:33:40', 'Smirnoff Tamarindo *750', 1, 500000, 'julian'),
+(21, '2025-06-17 05:35:08', 'Smirnoff Tamarindo *750', 1, 500000, 'julian'),
+(22, '2025-06-17 05:39:40', 'Smirnoff Tamarindo *750', 1, 500000, 'julian'),
+(23, '2025-06-17 05:48:02', 'Smirnoff Tamarindo *750', 1, 500000, 'julian');
 
 -- --------------------------------------------------------
 
@@ -150,17 +157,19 @@ CREATE TABLE `empleado` (
   `nombre` varchar(60) NOT NULL,
   `codigo` varchar(300) NOT NULL,
   `correo` varchar(60) NOT NULL,
-  `cargo` int(3) DEFAULT NULL
+  `cargo` int(3) DEFAULT NULL,
+  `estado` varchar(10) DEFAULT 'activo'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `empleado`
 --
 
-INSERT INTO `empleado` (`nombre`, `codigo`, `correo`, `cargo`) VALUES
-('Administrador', '$2b$10$avTosT2BMjSqZaadO6efYeSIMxNP7xUgMRoh6aMMKJ7Zymw44fBDq', 'julisrojas26@gmail.com', 1),
-('esteban', '$2b$10$6iI8FIQVkpLmZuvxCc3nl.aEpA12m/gnuhI7RwNrQfpyAmm90ftF2', 'julianrojasc1226@gmail.com', 1),
-('julian', '$2b$10$nydUkpmTg6krzvv1GkrmSuWAClw7g.iyMD9pr.vKu4WdeVnucGXhy', 'julsdad@gmail.com', 1);
+INSERT INTO `empleado` (`nombre`, `codigo`, `correo`, `cargo`, `estado`) VALUES
+('Administrador', '$2b$10$avTosT2BMjSqZaadO6efYeSIMxNP7xUgMRoh6aMMKJ7Zymw44fBDq', 'julisrojas26@gmail.com', 1, 'activo'),
+('Bassprod', '$2b$10$ZBl.oRQUJbb8ZacG5dBEfeOLyVWQPRVR6bS5UySTvXDWnOFbM1Lhe', 'bassprod61@gmail.com', 2, 'activo'),
+('esteban', '$2b$10$6iI8FIQVkpLmZuvxCc3nl.aEpA12m/gnuhI7RwNrQfpyAmm90ftF2', 'julianrojasc1226@gmail.com', 1, 'activo'),
+('julian', '$2b$10$nydUkpmTg6krzvv1GkrmSuWAClw7g.iyMD9pr.vKu4WdeVnucGXhy', 'julsdad@gmail.com', 1, 'activo');
 
 -- --------------------------------------------------------
 
@@ -207,7 +216,8 @@ CREATE TABLE `pagos` (
 INSERT INTO `pagos` (`id`, `mesa`, `fecha_inicio`, `fecha_fin`, `metodo_pago`, `total`) VALUES
 (23, 1, '2025-06-09 21:16:49', '2025-06-10 02:16:53', 1, 35000),
 (25, 1, '2025-06-09 22:13:16', '2025-06-10 03:15:51', 1, 35000),
-(26, 1, '2025-06-10 15:32:20', '2025-06-10 20:32:30', 1, 35000);
+(26, 1, '2025-06-10 15:32:20', '2025-06-10 20:32:30', 1, 35000),
+(27, 1, '2025-06-17 01:13:19', '2025-06-17 06:29:16', 1, 7000);
 
 -- --------------------------------------------------------
 
@@ -234,7 +244,7 @@ CREATE TABLE `producto` (
 --
 
 INSERT INTO `producto` (`id`, `hora`, `nombre`, `tipo`, `cantidad`, `proveedor`, `precio`, `Costo`, `dir`, `minimo_cant`, `empleado`) VALUES
-(67, '2025-06-10 01:39:55', 'POKER BOTELLA', 3, 30, 13135465, 3500, 65000, '/productos/1749519595554-Cerveza Poker botella 330 ml.png', 10, 'julian'),
+(67, '2025-06-10 01:39:55', 'POKER BOTELLA', 3, 28, 13135465, 3500, 65000, '/productos/1749519595554-Cerveza Poker botella 330 ml.png', 10, 'julian'),
 (74, '2025-06-12 21:34:56', 'Corona botella', 3, 30, 13135465, 5000, 102000, '/productos/1749764096366-84257633-corona-extra.webp', 10, 'julian'),
 (75, '2025-06-13 00:12:40', 'BUDWEISER LATA', 3, 24, 13135465, 3500, 58320, '/productos/1749773560589-BUD.webp', 10, 'julian');
 
@@ -514,7 +524,8 @@ CREATE TABLE `ventas_res` (
 INSERT INTO `ventas_res` (`id`, `id_orden`, `empleado`, `hora`, `mesa`, `id_prod`, `producto`, `tipo`, `precio_u`, `cantidad`, `total_p`, `pago`) VALUES
 (38, 65, 'julian', '2025-06-09 21:16:49', 1, 67, 'POKER BOTELL', 3, 3500, 10, 35000, 1),
 (39, 66, 'julian', '2025-06-09 22:13:16', 1, 67, 'POKER BOTELL', 3, 3500, 10, 35000, 1),
-(40, 67, 'julian', '2025-06-10 15:32:20', 1, 67, 'POKER BOTELL', 3, 3500, 10, 35000, 1);
+(40, 67, 'julian', '2025-06-10 15:32:20', 1, 67, 'POKER BOTELL', 3, 3500, 10, 35000, 1),
+(41, 68, 'julian', '2025-06-17 01:13:19', 1, 67, 'POKER BOTELL', 3, 3500, 2, 7000, 1);
 
 --
 -- Índices para tablas volcadas
@@ -640,13 +651,13 @@ ALTER TABLE `cargo`
 -- AUTO_INCREMENT de la tabla `detalles_p`
 --
 ALTER TABLE `detalles_p`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- AUTO_INCREMENT de la tabla `egresos`
 --
 ALTER TABLE `egresos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT de la tabla `mesa`
@@ -658,19 +669,19 @@ ALTER TABLE `mesa`
 -- AUTO_INCREMENT de la tabla `pagos`
 --
 ALTER TABLE `pagos`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
 
 --
 -- AUTO_INCREMENT de la tabla `producto_add`
 --
 ALTER TABLE `producto_add`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
 -- AUTO_INCREMENT de la tabla `reservas`
@@ -706,7 +717,7 @@ ALTER TABLE `tipo_re`
 -- AUTO_INCREMENT de la tabla `ventas_res`
 --
 ALTER TABLE `ventas_res`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- Restricciones para tablas volcadas
