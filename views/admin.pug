@@ -65,20 +65,7 @@ html(lang="en")
                 
                 .row 
                     .col-lg-8
-                        .filtros
-                            .filtro-grupo
-                                label(for="fecha") Rango de fechas
-                                input(type="text" id="fecha" placeholder="seleccione el rango de fechas") 
-                            .filtro-grupo 
-                                label(for="categoria") Categoria egresos: 
-                                select(id="categoria")
-                                    option(value="") seleccione una categoria 
-                                    if categorias && categorias.length 
-                                        each categoria in categorias 
-                                            option(value=categoria.id) #{categoria.nombre}
-                            .filtro-grupo 
-                                label(for="Buscar") Buscar:
-                                input(type="text" name="nombre" id="busqueda" placeholder="busca por nombre")
+                        
                         .chart-container.card
                             .card-header.d-flex.justify-content-between.align-items-center.flex-wrap
                                 h6.mb-0.d-flex.align-items-center
@@ -87,7 +74,7 @@ html(lang="en")
                                 .d-flex.gap-2.mt-2.mt-md-0
                                     button.btn.btn-primary.demo-button(type="button" data-bs-toggle="modal" data-bs-target="#dataModal")
                                         i.fas.fa-plus-circle.me-2
-                                        | Agregar Nuevo Item
+                                        | Agregar Egreso
                                     // Modal Simple
                                     .modal.fade#dataModal(tabindex="-1" aria-labelledby="dataModalLabel" aria-hidden="true")
                                         .modal-dialog.modal-dialog-centered
@@ -134,7 +121,27 @@ html(lang="en")
                                                         button.btn.btn-primary-custom(type="submit")
                                                             i.fas.fa-check.me-2
                                                             | Guardar
-
+                            .row.filtros
+                                .col-lg-3
+                                    .filtro-grupo
+                                        label(for="fecha") Rango de fechas
+                                        input(type="text" id="fecha" placeholder="seleccione el rango de fechas")
+                                .col-lg-3        
+                                    .filtro-grupo 
+                                        label(for="categoria") Categoria egresos: 
+                                        select(id="categoria")
+                                            option(value="") seleccione una categoria 
+                                            if categorias && categorias.length 
+                                                each categoria in categorias 
+                                                    option(value=categoria.id) #{categoria.nombre}
+                                .col-lg-3  
+                                    .filtro-grupo 
+                                        label(for="Buscar") Buscar:
+                                        input(type="text" name="nombre" id="busqueda" placeholder="busca por nombre")
+                                .col-lg-3  
+                                    .filtro-grupo 
+                                        button#limpiarFiltros.btn.btn-secundary(type="button")
+                                            i.fas.fa-broom 
                             .card-body.p-2
                                 .table-responsive
                                     table.table.table-hover.table-sm.mb-0
@@ -159,7 +166,7 @@ html(lang="en")
                                 .d-flex.gap-2.mt-2.mt-md-0
                                     button.btn.btn-primary.demo-button(type="button" data-bs-toggle="modal" data-bs-target="#loginModal")
                                         i.fas.fa-user-plus.me-2
-                                        | Abrir Modal de Registro
+                                        | Registro empleado
                             .card-body.p-2
                                 .table-responsive
                                     table.table.table-hover.table-sm.mb-0
@@ -229,7 +236,22 @@ html(lang="en")
 
                 .row 
                     .col-lg-8
-                        p Ventas
+                       .chart-container.card
+                            .card-header.d-flex.justify-content-between.align-items-center.flex-wrap
+                                h6.mb-0.d-flex.align-items-center
+                                    i.bi.bi-pie-chart.text-success.me-2
+                                    | Ventas
+                                .d-flex.gap-2.mt-2.mt-md-0
+                            .card-body.p-2
+                                .table-responsive
+                                    table.table.table-hover.table-sm.mb-0
+                                        thead.table-light
+                                            tr
+                                                th.text-nowrap Nombre
+                                                th.text-nowrap Cargo
+                                                th.text-nowrap Estado
+                                                th.text-nowrap Cambios
+
                     .col-lg-4
                         p 
                 

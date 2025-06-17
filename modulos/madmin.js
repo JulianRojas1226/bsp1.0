@@ -87,8 +87,9 @@ const madmin={
     }
 },
  traer_ventas: async({fecha_inicio,fecha_fin,empleado,pago})=>{
+    let query = "SELECT * FROM pagos WHERE 1=1";
+    if(fecha_inicio && fecha_fin)
     try {
-        const result = await db.query(``)
     } catch (error) {
         console.error ("no se pudieron traer los datos ",error)
     }

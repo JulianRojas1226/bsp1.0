@@ -100,5 +100,26 @@ function actualizarTablaEgresos(egresos) {
         tbody.appendChild(fila);
     });
 }
+document.getElementById("limpiarFiltros").addEventListener("click",limpiarFiltros)
+function limpiarFiltros() {
+    // Limpiar el campo de búsqueda
+    document.getElementById('busqueda').value = '';
+    
+    // Resetear la categoría al primer valor (usualmente "Todas" o vacío)
+    const selectCategoria = document.getElementById('categoria');
+    selectCategoria.selectedIndex = 0;
+    
+    // Resetear las fechas a los valores por defecto (últimos 30 días)
+    const fechaFin = new Date();
+    const fechaInicio = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    
+    fp.setDate([fechaInicio, fechaFin]);
+    
+    // Aplicar los filtros limpiados
+    aplicarFiltrosEgresos();
+    
+    // Opcional: mostrar mensaje de confirmación
+    console.log('Filtros limpiados y aplicados');
+}
 
 document.addEventListener('DOMContentLoaded', aplicarFiltrosEgresos);

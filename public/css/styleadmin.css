@@ -517,3 +517,146 @@ body.dark .switch::before{
                 font-size: 28px;
             }
         }
+.filtros-container {
+    background: var(--background-color);
+    border: 1px solid var(--neutral-color);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(55, 58, 64, 0.1);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    align-items: end;
+}
+
+/* Grupos de filtros individuales */
+.filtro-grupo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Etiquetas de los filtros */
+.filtro-grupo label {
+    font-weight: 600;
+    color: var(--text-color);
+    font-size: 14px;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Inputs de texto */
+.filtro-grupo input[type="text"] {
+    padding: 12px 16px;
+    border: 2px solid var(--neutral-color);
+    border-radius: 8px;
+    background: white;
+    color: var(--text-color);
+    font-size: 14px;
+    transition: all 0.3s ease;
+    outline: none;
+    box-shadow: 0 2px 4px rgba(55, 58, 64, 0.1);
+}
+
+.filtro-grupo input[type="text"]:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(220, 95, 0, 0.1);
+    transform: translateY(-1px);
+}
+
+.filtro-grupo input[type="text"]::placeholder {
+    color: var(--neutral-color);
+    font-style: italic;
+}
+
+/* Select */
+.filtro-grupo select {
+    padding: 12px 16px;
+    border: 2px solid var(--neutral-color);
+    border-radius: 8px;
+    background: white;
+    color: var(--text-color);
+    font-size: 14px;
+    transition: all 0.3s ease;
+    outline: none;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(55, 58, 64, 0.1);
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><path fill="%23686D76" d="M6 8L2 4h8z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 40px;
+}
+
+.filtro-grupo select:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(220, 95, 0, 0.1);
+    transform: translateY(-1px);
+}
+
+/* Botón limpiar filtros */
+#limpiarFiltros {
+    padding: 12px 30px;
+    background: var(--button-background);
+    color: var(--button-text);
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(55, 58, 64, 0.2);
+    width: 100%;
+}
+
+#limpiarFiltros:hover {
+    background: var(--neutral-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(55, 58, 64, 0.3);
+}
+
+#limpiarFiltros:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(55, 58, 64, 0.2);
+}
+
+#limpiarFiltros i {
+    font-size: 16px;
+}
+.demo-button{
+    padding: 12px 30px;
+    background: var(--button-background)!important;
+    color: var(--button-text)!important;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(55, 58, 64, 0.2);
+    width: 100%;
+}
+.demo-button:hover {
+    background: var(--neutral-color) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(55, 58, 64, 0.3);
+}
+
+.demo-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(55, 58, 64, 0.2);
+}
