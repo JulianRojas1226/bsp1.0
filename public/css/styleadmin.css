@@ -631,6 +631,40 @@ body.dark .switch::before{
 #limpiarFiltros i {
     font-size: 16px;
 }
+#limpiarFiltrosv {
+    padding: 12px 30px;
+    background: var(--button-background);
+    color: var(--button-text);
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(55, 58, 64, 0.2);
+    width: 100%;
+}
+
+#limpiarFiltrosv:hover {
+    background: var(--neutral-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(55, 58, 64, 0.3);
+}
+
+#limpiarFiltrosv:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(55, 58, 64, 0.2);
+}
+
+#limpiarFiltrosv i {
+    font-size: 16px;
+}
 .demo-button{
     padding: 12px 30px;
     background: var(--button-background)!important;

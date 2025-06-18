@@ -86,10 +86,24 @@ const madmin={
         throw error;
     }
 },
- traer_ventas: async({fecha_inicio,fecha_fin,empleado,pago})=>{
-    let query = "SELECT * FROM pagos WHERE 1=1";
-    if(fecha_inicio && fecha_fin)
+ traer_ventas: async({fecha_inicio_v,fecha_fin_v,metodo,empleado})=>{
+    let query = "SELECT * FROM pagos WHERE";
+    const params = []
+    if(fecha_inicio_v && fecha_fin_v){
+        query += " fecha_inicio >= ?  AND fecha_fin <= ?"
+        params.push(fecha_inicio_v,fecha_fin_v)
+    }
+    if(metodo){
+        query += " and metodo_pago = ?"
+        params.push(metodo)
+    }
+    if(empleado){
+        query += " and empleado like ?"
+        params.push(empleado)
+    }
     try {
+         const [result] = await db.query(query, params);
+        return result;
     } catch (error) {
         console.error ("no se pudieron traer los datos ",error)
     }

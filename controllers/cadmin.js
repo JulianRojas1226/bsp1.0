@@ -61,7 +61,20 @@ const cadmin = {
             console.error("Error filtrando egresos:", err);
             res.status(500).json({ success: false, error: "Error interno del servidor" });
         }
+    },
+    filtrar_ventas: async (req,res) => {
+        try {
+            const {fecha_inicio_v,fecha_fin_v,metodo,empleado}= req.body
+            const datos = await madmin.traer_ventas({fecha_inicio_v,fecha_fin_v,metodo,empleado})
+            res.json({
+                success: true,
+                datos
+            })
+        } catch (error) {
+             console.error("Error filtrando egresos:", err);
+            res.status(500).json({ success: false, error: "Error interno del servidor" });
         }
+    }
 
 }
 

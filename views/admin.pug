@@ -241,17 +241,46 @@ html(lang="en")
                                 h6.mb-0.d-flex.align-items-center
                                     i.bi.bi-pie-chart.text-success.me-2
                                     | Ventas
-                                .d-flex.gap-2.mt-2.mt-md-0
+                                .row.filtros 
+                                    .col-lg-3
+                                        .filtro-grupo
+                                            label(for="fechas") Rango de busqueda 
+                                            input#fechas_ventas(type="text", placeholder="seleccione el rango de fechas")
+                                    .col-lg-3 
+                                        .filtro-grupo
+                                            label(for="empleado") Escoger empleado 
+                                            select#empleado_input
+                                                option(value="") seleccionar empleado 
+                                                if empleados && empleados.length 
+                                                    each empleado in empleados
+                                                        option(value=empleado.nombre) #{empleado.nombre}
+                                    .col-lg-3 
+                                        .filtro-grupo
+                                            label(for="metodo") metodo de pago 
+                                            select#metodo_pago
+                                                option(value="") seleccione un metodo de pago 
+                                                if metodos && metodos.length 
+                                                    each metodo in metodos 
+                                                        option(value=metodo.id) #{metodo.nombre} 
+                                    .col-lg-3 
+                                        .filtro-grupo
+                                            button#limpiarFiltrosv.btn.btn-secundary(type="button")
+                                                i.fas.fa-broom 
+
+
                             .card-body.p-2
                                 .table-responsive
                                     table.table.table-hover.table-sm.mb-0
                                         thead.table-light
                                             tr
-                                                th.text-nowrap Nombre
-                                                th.text-nowrap Cargo
-                                                th.text-nowrap Estado
-                                                th.text-nowrap Cambios
-
+                                                th.text-center Fecha inicio
+                                                th.text-center Fecha fin
+                                                th.text-center metodo pago
+                                                th.text-center total 
+                                                th.text-center Empleado
+                                        tbody#Ventas_table
+                                            tr
+                                                td(colspan="6").text-center.text-muted Cargando...
                     .col-lg-4
                         p 
                 

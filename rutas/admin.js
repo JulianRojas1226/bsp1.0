@@ -6,5 +6,6 @@ routes.get("/admin",cadmin.getadmin)
 routes.post("/admin/add_egreso",cadmin.add_egreso)
 routes.post("/admin/add_empleado", cadmin.add_empleado)
 routes.post("/admin/filtrar_egresos", cadmin.filtrar_egresos)
+routes.post("/admin/filtrar_ventas", cadmin.filtrar_ventas)
 
 export default routes

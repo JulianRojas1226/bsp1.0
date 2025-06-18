@@ -146,7 +146,7 @@ const mventas = {
             const total_pagado = result_total[0]?.total_pagado
             
             await coneccion.query(`
-                insert into pagos(mesa,fecha_inicio,metodo_pago,total) values (?,?,?,?)`,[mesa,hora_inicial,pago,total_pagado]
+                insert into pagos(mesa,fecha_inicio,metodo_pago,total,empleado) values (?,?,?,?,?)`,[mesa,hora_inicial,pago,total_pagado,usuario]
             )
              
             for (const orden of ordenes) {
