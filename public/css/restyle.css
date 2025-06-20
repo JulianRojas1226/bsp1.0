@@ -338,6 +338,10 @@ body.dark .cartares{
     background-color: var(--background-color);
     color: var(--text-color);
 }
+.sidebar.close ~ .home {
+  left: 88px;
+  width: calc(100% - 88px);
+}
 .home{
     position: relative;
     left: 250px;
@@ -352,7 +356,7 @@ body.dark .cartares{
     color: var(--text-color);
     padding: 8px 40px;
 }
-main .btn-res{
+ .btn-res{
     padding: 10px;
     margin: 10px;
     background-color: var(--button-background);
@@ -362,7 +366,7 @@ main .btn-res{
     cursor: pointer;
     font-size: 15px;
 }
-body.dark main .delete{
+body.dark  .delete{
     background: var(--background-second);
     color: var(--button-text);
     padding: 10px 20px;
@@ -376,10 +380,10 @@ body.dark main .delete{
     gap: 2px;
     transition: all 0.3s ease-in-out;
 }
-body.dark main .delete:hover{
+body.dark  .delete:hover{
     background-color: var(--button-background);
 }
-main .delete{
+.delete{
     background: var(--background-color);
     color: var(--text-color);
     padding: 10px 20px;
@@ -393,19 +397,16 @@ main .delete{
     gap: 2px;
     transition: all 0.3s ease-in-out;
 }
-main .delete:hover{
+ .delete:hover{
     background-color: var(--button-background);
 }
-main .sidebar.close ~ .home {
-  left: 88px;
-  width: calc(100% - 88px);
-}
-main .input-wrapper {
+
+ .input-wrapper {
   position: relative;
   margin-top: 20px;
 }
 
-main .input-wrapper input {
+.input-wrapper input {
   background: transparent;
   color: var(--text-color);
   width: 100%;
@@ -418,14 +419,14 @@ main .input-wrapper input {
   z-index: 1;
 
 }
-body.dark main .card-act {
+body.dark  .card-act {
     background-color: transparent !important;
 }
-main .input-wrapper input::placeholder {
+ .input-wrapper input::placeholder {
   color: var(--text-color);
 }
 
- main .underline {
+  .underline {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -437,14 +438,14 @@ main .input-wrapper input::placeholder {
 }
 
 /* Activar animación al enfocar */
-main .input-wrapper input:focus + .underline {
+ .input-wrapper input:focus + .underline {
   width: 100%;
 }
 
-main .custom-select-wrapper {
+ .custom-select-wrapper {
   font-family: 'Segoe UI', sans-serif;
 }
-main .custom-select {
+ .custom-select {
 margin-top: 10px;
   width: 100%;
   padding: 0.6rem 0rem;
@@ -461,12 +462,12 @@ margin-top: 10px;
   background-size: 10px;
   transition: border-color 0.3s ease;
 }
-main select.custom-select:focus {
+ select.custom-select:focus {
   border-color: var(--cuarter-color);
   
   outline: none;
 }
-main .custom-select option{
+ .custom-select option{
     background-color: var(--secundari-color);
     color: var(--text-color);
 }

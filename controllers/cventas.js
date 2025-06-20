@@ -25,6 +25,7 @@ const cventas = {
             const pagos = await mventas.mostventas()
             const ventasu = await mventas.mostventau()
             const lowstocks = await mventas.lowstock()
+            console.log("datos producto ", lowstocks)
             res.render("ventas", {mesas,productos,ordenes,totales,tipo_pagos,pagos,ventasu,lowstocks,usuario,cargo})
         } catch (err) {
             error.e500(req, res, err);  

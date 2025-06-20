@@ -28,60 +28,60 @@ modeSwitch.addEventListener("click", () => {
     });
 
 document.addEventListener("DOMContentLoaded", () => {
+  console.log("🚀 JS cargado con límite de tiempo");
+
   const modalEl = document.getElementById("stockMinimoModal");
   if (!modalEl) return;
 
-  // Obtener los IDs actuales de productos con bajo stock (desde inputs del modal)
   const currentLowStockIds = Array.from(
     document.querySelectorAll('input[name="producto_aceptado"]')
-  ).map(el => el.value);
+  ).map(el => el.value.toString());
 
-  // Leer del localStorage los productos aceptados previamente
-  const acceptedIds = JSON.parse(localStorage.getItem("lowstockAceptados") || "[]");
+  const stored = JSON.parse(localStorage.getItem("lowstockAceptadosV2") || "null");
 
-  // Verificar si hay algún producto nuevo en bajo stock
+  let expired = true;
+  let acceptedIds = [];
+
+  if (stored && stored.timestamp && stored.ids) {
+    const now = Date.now();
+    const hoursPassed = (now - stored.timestamp) / (1000 * 60 * 60);
+    if (hoursPassed < 5) {
+      expired = false;
+      acceptedIds = stored.ids;
+    }
+  }
+
   const nuevos = currentLowStockIds.some(id => !acceptedIds.includes(id));
 
-  if (!nuevos) return;
+  console.log("IDs actuales:", currentLowStockIds);
+  console.log("IDs aceptados válidos:", acceptedIds);
+  console.log("¿Expiró?", expired);
+  console.log("¿Hay nuevos?", nuevos);
 
-  // Mostrar el modal
+  if (!nuevos || expired === false) return;
+
   const modal = new bootstrap.Modal(modalEl);
   modal.show();
 
   const confirmarBtn = document.getElementById("confirmar-productos");
-
   if (confirmarBtn) {
     confirmarBtn.addEventListener("click", () => {
-      const aceptados = Array.from(document.querySelectorAll('input[name="producto_aceptado"]:checked'))
-        .map(el => el.value.toString());
+      const aceptados = Array.from(
+        document.querySelectorAll('input[name="producto_aceptado"]:checked')
+      ).map(el => el.value.toString());
 
-      // Ocultar opciones que no fueron aceptadas (solo las de lowstock)
       document.querySelectorAll('select[name="producto"]').forEach(select => {
         Array.from(select.options).forEach(option => {
           const isLowStock = option.dataset.lowstock === "true";
-          if (isLowStock) {
-            option.hidden = !aceptados.includes(option.value);
-          } else {
-            option.hidden = false;
-          }
+          option.hidden = isLowStock && !aceptados.includes(option.value);
         });
       });
 
-      // Guardar los productos aceptados
-      localStorage.setItem("lowstockAceptados", JSON.stringify(aceptados));
+      localStorage.setItem(
+        "lowstockAceptadosV2",
+        JSON.stringify({ ids: aceptados, timestamp: Date.now() })
+      );
       modal.hide();
     });
   }
-})
-document.addEventListener("DOMContentLoaded",()=>{
-  document.querySelectorAll(`select[name="producto"]`).forEach(select=>{
-    const inputCantidad = select.closest('form').querySelector('input[name="cantidad"]')
-    const actualuizarMax = ()=>{
-      const selectedOption = select.options[select.selectedIndex]
-      const max =selectedOption.getAttribute('data-max')
-      inputCantidad.max = max
-    }
-    select.addEventListener('change', actualuizarMax)
-    actualuizarMax()
-  })
-})
+});

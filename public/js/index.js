@@ -34,3 +34,71 @@ document.addEventListener("DOMContentLoaded", async () => {
         ]   
     });
 });
+ document.getElementById('reservationForm').addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          // Get form data
+          const formData = new FormData(this);
+          const data = Object.fromEntries(formData);
+          
+          // Basic validation
+          if (!data.fecha_hora || !data.hora || !data.NID || !data.nombre || !data.correo || !data.celular || !data.tipos || !data.cantidad_p) {
+              alert('Por favor, completa todos los campos obligatorios.');
+              return;
+          }
+          
+          // Here you would typically send the data to your backend
+          console.log('Reservation data:', data);
+          
+          // Show success message
+          alert('¡Reserva enviada exitosamente! Te contactaremos pronto para confirmar los detalles.');
+          
+          // Close modal
+          const modal = bootstrap.Modal.getInstance(document.getElementById('reservaModal'));
+          modal.hide();
+          
+          // Reset form
+          this.reset();
+      });
+
+      // Handle contact form submission
+      document.getElementById('contactForm').addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          // Get form data
+          const formData = new FormData(this);
+          const data = Object.fromEntries(formData);
+          
+          // Here you would typically send the data to your backend
+          console.log('Contact data:', data);
+          
+          // Show success message
+          alert('¡Mensaje enviado exitosamente! Te contactaremos pronto.');
+          
+          // Reset form
+          this.reset();
+      });
+
+      // Smooth scrolling for navigation links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+          anchor.addEventListener('click', function (e) {
+              e.preventDefault();
+              const target = document.querySelector(this.getAttribute('href'));
+              if (target) {
+                  target.scrollIntoView({
+                      behavior: 'smooth',
+                      block: 'start'
+                  });
+              }
+          });
+      });
+
+      // Navbar background change on scroll
+      window.addEventListener('scroll', function() {
+          const navbar = document.querySelector('.navbar');
+          if (window.scrollY > 50) {
+              navbar.style.backgroundColor = 'rgba(55, 58, 64, 0.98)';
+          } else {
+              navbar.style.backgroundColor = 'rgba(55, 58, 64, 0.95)';
+          }
+      })

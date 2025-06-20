@@ -1,293 +1,318 @@
+doctype html
 html(lang="es")
   head
     meta(charset="UTF-8")
-    meta(name="viewport" content="width=device-width, initial-scale=1.0")
-    title Bassprod
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Bassprod - Sistema de Gestión Integral
+    link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css", rel="stylesheet")
+    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css")
+    link(href="https://unpkg.com/aos@2.3.1/dist/aos.css", rel="stylesheet")
+    link(href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap", rel="stylesheet")
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css")
     link(rel="stylesheet", href="/css/styleindex.css")
-    // Iconos
-    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css", integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==", crossorigin="anonymous", referrerpolicy="no-referrer")
-    // Animaciones
-    link(rel="stylesheet", href="https://unpkg.com/aos@2.3.1/dist/aos.css")
-    //- bootstrap
-    link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous")
-    link(rel="stylesheet", href="/css/flatpickr.min.css")
-
   body
-    header
-        video(id="mvideo" autoplay loop muted)
-                source(src="/img/1112501_Cocktail_Gen-z_3840x2160.mp4" type="video/mp4")
-        nav.navbar.navbar-expand-lg.container-fluid.jus
-            a.navbar-brand(href="#")
-                img(src="/img/BASSPROD3.png", alt="")
-            button.navbar-toggler(type="button", data-bs-toggle="collapse", data-bs-target="#navbarSupportedContent", aria-controls="navbarSupportedContent", aria-expanded="false", aria-label="Toggle navigation")
-                span.navbar-toggler-icon.menu
-            .collapse.navbar-collapse#navbarSupportedContent
-                ul.navbar-nav.d-flex.justify-content-around.w-100
-                    li.nav-item
-                        a.nav-link.active(aria-current="page", href="#") Home
-                    li.nav-item
-                        a.nav-link.active(aria-current="page", href="#") ¿Quienes somos?
-                    li.nav-item
-                        a.nav-link.active(aria-current="page", href="#") Beneficios
-                    li.nav-item
-                        a.nav-link.active(aria-current="page", href="#") ¿En que sitios trabajamos
-                    li.nav-item
-                        a.nav-link.active(aria-current="page", href="#") Equipo
-                    li.nav-item
-                        a.nav-link(href="/login")
-                            i.fa-regular.fa-user
-                    
-            
-        section#inicio
-            div.bienvenidos
-                h1.titulo ¡La noche perfecta comienza aquí!
-                h2 Ambiente único, música increíble y los mejores tragos.
-                    br
-                    |¡Reserva ahora y asegura tu lugar en la fiesta!
-                //- Botón para abrir el modal
-                button.btn-reserva(data-bs-toggle="modal" data-bs-target="#exampleModal") Reserva aqui 
+    // Navigation
+    nav.navbar.navbar-expand-lg.navbar-dark.fixed-top
+      .container-fluid
+        a.navbar-brand(href="#inicio")
+          i.fas.fa-utensils.me-2
+          | Bassprod
+        button.navbar-toggler(type="button", data-bs-toggle="collapse", data-bs-target="#navbarSupportedContent")
+          span.navbar-toggler-icon
+        .collapse.navbar-collapse#navbarSupportedContent
+          ul.navbar-nav.d-flex.justify-content-around.w-100
+            li.nav-item
+              a.nav-link(href="#inicio") Home
+            li.nav-item
+              a.nav-link(href="#somos") ¿Quiénes somos?
+            li.nav-item
+              a.nav-link(href="#beneficios") Beneficios
+            li.nav-item
+              a.nav-link(href="#trabajamos") ¿En qué sitios trabajamos?
+            li.nav-item
+              a.nav-link(href="#equipo") Equipo
+            li.nav-item
+              a.nav-link(href="#contacto") Contacto
+            li.nav-item
+              a.nav-link(href="/login")
+                i.fa-regular.fa-user
 
-                //- modal
-                div.modal.fade.reserva(id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true")
-                    div.modal-dialog.modal-dialog-centered.modal-dialog-scrollable
-                        div.modal-content.contenedor-reserva
-                            div.modal-header
-                                h1.modal-title.fs-5(id="exampleModalLabel") Reserva
-                                button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close")
-                            div.modal-body
-                                form(action="/addres" method="post")
-                                    div.row
-                                        div.input-wrapper.col-sm
-                                            input(type="text", name="fecha_hora" id="calendario" placeholder="fecha" )
-                                            .underline
-                                        div.input-wrapper.col-sm
-                                            input(type="time", name="hora" placeholder="hora")
-                                            .underline
-                                    div.row 
-                                        div.input-wrapper.col-sm-6
-                                            input(type="number", name="NID" placeholder="Identificación")
-                                            .underline
-                                        div.input-wrapper.col-sm-5
-                                            input(type="text", name="nombre" placeholder="Nombre")
-                                            .underline
-                                    div.row 
-                                        div.col-sm-6.input-wrapper
-                                            input(type="email", name="correo" placeholder="Correo")
-                                            .underline
-                                        div.col-sm-6.input-wrapper
-                                            input(type="number", name="celular" placeholder="Celular")
-                                            .underline
-                                    div.row 
-                                        .col-sm-6.custom-select-wrapper
-                                            label Elige una opción:
-                                            select.custom-select(name="tipos" placeholder="tipo de reserva")
-                                                if tipos && tipos.length 
-                                                    each tipo in tipos 
-                                                        option(value=tipo.tipo) #{tipo.nombre}
-                                                else 
-                                                    option(value="") no se encontraron tipos
-                                        div.col-sm-6.input-wrapper
-                                            input(type="number", name="cantidad_p" placeholder="Cantidad de personas")
+    // Hero Section with Video Background
+    section#inicio.hero.col-12
+      video#mvideo(autoplay, loop, muted)
+        source(src="/img/1112501_Cocktail_Gen-z_3840x2160.mp4", type="video/mp4")
+      .container
+        .row.justify-content-center
+          .col-lg-10.hero-content(data-aos="fade-up", data-aos-duration="1000")
+            h1.titulo ¡La noche perfecta comienza aquí!
+            h2
+              | Ambiente único, música increíble y los mejores tragos.
+              br
+              | ¡Reserva ahora y asegura tu lugar en la fiesta!
+            button.btn-reserva(data-bs-toggle="modal", data-bs-target="#reservaModal")
+              i.fas.fa-calendar-plus.me-2
+              | Reserva aquí
 
-                                    .row
-                                        .col-sm.custom-select-wrapper
-                                            label(for="opciones") Elige una opción:
-                                            select.custom-select(name="mesa_asig" placeholder="Mesa asignada")
-                                                if mesas && mesas.length 
-                                                    each mesa in mesas 
-                                                        option(value=mesa.ID)  #{mesa.ID}
-                                                else 
-                                                    option(value="") no se encontro mesa
-                                    .row
-                                        .input-wrapper
-                                            input(type="text", name="obser" placeholder = "Observacion")   
-                                            .underline                         
-                                    button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Close
-                                    button.btn-reserva(type="submit") Save changes
+    // Reservation Modal
+    .modal.fade#reservaModal(tabindex="-1", aria-labelledby="reservaModalLabel", aria-hidden="true")
+      .modal-dialog.modal-dialog-centered.modal-dialog-scrollable.modal-lg
+        .modal-content
+          .modal-header
+            h1.modal-title.fs-5#reservaModalLabel
+              i.fas.fa-calendar-check.me-2
+              | Reserva tu Mesa
+            button.btn-close.btn-close-white(type="button", data-bs-dismiss="modal", aria-label="Close")
+          .modal-body
+            form#reservationForm
+              .row
+                .col-md-6.input-wrapper
+                  input#calendario(type="text", name="fecha_hora", placeholder="Selecciona la fecha", required)
+                .col-md-6.input-wrapper
+                  input(type="time", name="hora", placeholder="Hora", required)
+              
+              .row
+                .col-md-6.input-wrapper
+                  input(type="number", name="NID", placeholder="Número de Identificación", required)
+                .col-md-6.input-wrapper
+                  input(type="text", name="nombre", placeholder="Nombre Completo", required)
+              
+              .row
+                .col-md-6.input-wrapper
+                  input(type="email", name="correo", placeholder="Correo Electrónico", required)
+                .col-md-6.input-wrapper
+                  input(type="tel", name="celular", placeholder="Número de Celular", required)
+              
+              .row
+                .col-md-6.custom-select-wrapper
+                  label(for="tipos") Tipo de Reserva:
+                  select.custom-select(name="tipos", required)
+                    option(value="") Selecciona el tipo
+                    option(value="mesa-regular") Mesa Regular
+                    option(value="mesa-vip") Mesa VIP
+                    option(value="barra") Barra
+                    option(value="terraza") Terraza
+                .col-md-6.input-wrapper
+                  input(type="number", name="cantidad_p", placeholder="Cantidad de Personas", min="1", max="20", required)
+              
+              .row
+                .col-12.custom-select-wrapper
+                  label(for="mesa_asig") Mesa Preferida:
+                  select.custom-select(name="mesa_asig")
+                    option(value="") Mesa disponible automática
+                    option(value="1") Mesa 1 - Ventana
+                    option(value="2") Mesa 2 - Centro
+                    option(value="3") Mesa 3 - VIP
+                    option(value="4") Mesa 4 - Terraza
+              
+              .row
+                .col-12.input-wrapper
+                  textarea(name="obser", placeholder="Observaciones especiales (alergias, celebraciones, etc.)", rows="3")
+              
+              .row
+                .col-md-6
+                  button.btn.btn-secondary.w-100(type="button", data-bs-dismiss="modal")
+                    i.fas.fa-times.me-2
+                    | Cancelar
+                .col-md-6
+                  button.btn-reserva.w-100(type="submit")
+                    i.fas.fa-check.me-2
+                    | Confirmar Reserva
+    // About Section
+    section#somos.py-5
+      .container-fluid
+        .row
+          .info-container
+            article.col-lg-8.cont-info-1(data-aos="fade-right", data-aos-duration="1000")
+              h2 ¿Quiénes somos?
+              a ¿En qué nos enfocamos?
+              p
+                i.fa-regular.fa-circle-user.me-2
+                | Nos especializamos en el desarrollo de soluciones integrales para la gestión de inventarios, facturación y reservas enfocadas en establecimientos gastronómicos.
+              p
+                i.fa-regular.fa-circle-user.me-2
+                | Control preciso de materias primas, insumos y productos terminados.
+              p
+                i.fa-regular.fa-circle-user.me-2
+                | Generación de comprobantes fiscales electrónicos, adaptados a las normativas locales.
+              p
+                i.fa-regular.fa-circle-user.me-2
+                | Automatización del proceso de reservas para mesas o pedidos especiales, integrándose con plataformas en línea.
+              p
+                i.fa-regular.fa-circle-user.me-2
+                | Herramientas avanzadas de análisis con gráficos, estadísticas y reportes personalizados.
+            article.col-lg-3.cont-foto(data-aos="flip-left", data-aos-easing="ease-out-cubic", data-aos-duration="2500")
+              img.img-fluid(src="/img/cerveza-filtrada-con-espuma.jpg")
+          .container-fluid
+            .row.d-flex.justify-content-between(data-aos="fade-up", data-aos-duration="2000")
+              article.col-lg-3.cont-info-2
+                h3 01
+                h4 Gestión Integral
+                p Soluciones completas para el control de inventarios, facturación y reservas en establecimientos gastronómicos.
+              article.col-lg-3.cont-info-2
+                h3 02
+                h4 Tecnología Avanzada
+                p Herramientas modernas de análisis con gráficos, estadísticas y reportes personalizados para tu negocio.
+              article.col-lg-3.cont-info-2
+                h3 03
+                h4 Cumplimiento Fiscal
+                p Generación automática de comprobantes fiscales electrónicos adaptados a las normativas locales vigentes.
 
-    main
-       
-        section#somos
-            .info-container
-                article.col-lg-7.cont-info-1
-                    h2 ¿Quiénes somos?
-                    a ¿En qué nos enfocamos?
-                    p Nos especializamos en el desarrollo de soluciones integrales para la gestión de inventarios, facturación y reservas enfocadas en establecimientos gastronómicos.
-                    p
-                    i.fa-regular.fa-circle-user
-                    | Control preciso de materias primas, insumos y productos terminados.
-                    p
-                    i.fa-regular.fa-circle-user
-                    | Generación de comprobantes fiscales electrónicos, adaptados a las normativas locales.
-                    p
-                    i.fa-regular.fa-circle-user
-                    | Automatización del proceso de reservas para mesas o pedidos especiales, integrándose con plataformas en línea.
-                    p
-                    i.fa-regular.fa-circle-user
-                    | Herramientas avanzadas de análisis con gráficos, estadísticas y reportes personalizados.
-                article.col-lg-5.cont-foto(data-aos="flip-left", data-aos-easing="ease-out-cubic", data-aos-duration="2500")
-                    img(src="/img/imagen_somos.png", alt="foto-1")
-            .container-fluid
-                .row.d-flex.justify-content-center(data-aos="fade-up", data-aos-duration="2000")
-                    article.col-lg-3.cont-info-2
-                        h3 01
-                        h4 Lorem Ipsum
-                        p Ulamco laboris nisi ut aliquip ex ea commodo consequat. Et consectetur ducimus vero placeat.
-                    article.col-lg-3.cont-info-2
-                        h3 02
-                        h4 Repellat Nihil
-                        p Dolorem est fugiat occaecati voluptate velit esse. Dicta veritatis dolor quod et vel dire leno para dest.
-                    article.col-lg-3.cont-info-2
-                        h3 03
-                        h4 Ad ad velit qui
-                        p Molestiae officiis omnis illo asperiores. Aut doloribus vitae sunt debitis quo vel nam quis.         
-        section#beneficios.beneficios-header
-            h2 Beneficios
-            p Nos enfocamos al manejo de inventario, facturación y reservas de establecimientos dedicados a la elaboración de comidas, bebidas y que son preparadas para consumo humano.
-            .tarjetas-grid
-                article.cards(data-aos="fade-down-right", data-aos-duration="2000")
-                    h3 Manejo de inventario
-                    a
-                        i.fa-solid.fa-check
-                        | Control eficiente de los insumos y productos disponibles.
-                        br
-                    a
-                        i.fa-solid.fa-check
-                        |  Reducción de desperdicios gracias a un monitoreo constante.
-                        br
-                    a
-                        i.fa-solid.fa-check
-                        |  Optimización de costos al mantener niveles adecuados de stock.
+    // Benefits Section
+    section#beneficios.beneficios-header
+      .container-fluid
+        .section-title
+          h2 Beneficios
+          p Nos enfocamos al manejo de inventario, facturación y reservas de establecimientos dedicados a la elaboración de comidas, bebidas y que son preparadas para consumo humano.
+        .tarjetas-grid.row.d-flex.justify-content-around
+          article.cards.col-lg-2(data-aos="fade-down-right", data-aos-duration="2000")
+            h3 Manejo de inventario
+            a
+              i.fa-solid.fa-check
+              | Control eficiente de los insumos y productos disponibles.
+            a
+              i.fa-solid.fa-check
+              | Reducción de desperdicios gracias a un monitoreo constante.
+            a
+              i.fa-solid.fa-check
+              | Optimización de costos al mantener niveles adecuados de stock.
 
-                article.cards(data-aos="fade-down-left", data-aos-duration="2000")
-                    h3 Facturación
-                    a
-                        i.fa-solid.fa-check
-                        |  Generación rápida y precisa de facturas.
-                        br
-                    a
-                        i.fa-solid.fa-check
-                        |  Mejora en la gestión financiera y contable del establecimiento.
-                        br
-                    a
-                        i.fa-solid.fa-check
-                        |  Cumplimiento con normativas fiscales y tributarias.
+          article.cards.col-lg-2(data-aos="fade-down-left", data-aos-duration="2000")
+            h3 Facturación
+            a
+              i.fa-solid.fa-check
+              | Generación rápida y precisa de facturas.
+            a
+              i.fa-solid.fa-check
+              | Mejora en la gestión financiera y contable del establecimiento.
+            a
+              i.fa-solid.fa-check
+              | Cumplimiento con normativas fiscales y tributarias.
 
-                article.cards(data-aos="fade-up-right", data-aos-duration="2000")
-                    h3 Reservas
-                    a
-                        i.fa-solid.fa-check
-                        |  Organización y seguimiento de las reservas de clientes.
-                        br
-                    a
-                        i.fa-solid.fa-check
-                        |  Reducción de tiempos de espera y mejor experiencia del cliente.
-                        br
-                    a
-                        i.fa-solid.fa-check
-                        |  Optimización del uso de los recursos y espacios del establecimiento.
+          article.cards.col-lg-2(data-aos="fade-up-right", data-aos-duration="2000")
+            h3 Reservas
+            a
+              i.fa-solid.fa-check
+              | Organización y seguimiento de las reservas de clientes.
+            a
+              i.fa-solid.fa-check
+              | Reducción de tiempos de espera y mejor experiencia del cliente.
+            a
+              i.fa-solid.fa-check
+              | Optimización del uso de los recursos y espacios del establecimiento.
 
-                article.cards(data-aos="fade-up-left", data-aos-duration="2000")
-                    h3 Aplicación a establecimientos de comida y bebida
-                    a
-                        i.fa-solid.fa-check
-                        |  Soluciones diseñadas específicamente para el sector gastronómico.
-                        br
-                    a
-                        i.fa-solid.fa-check
-                        |  Mejora en la calidad del servicio al cliente.
-                        br
-                    a
-                        i.fa-solid.fa-check
-                        |  Adaptación a las necesidades particulares de este tipo de negocio.
+          article.cards.col-lg-2(data-aos="fade-up-left", data-aos-duration="2000")
+            h3 Aplicación a establecimientos de comida y bebida
+            a
+              i.fa-solid.fa-check
+              | Soluciones diseñadas específicamente para el sector gastronómico.
+            a
+              i.fa-solid.fa-check
+              | Mejora en la calidad del servicio al cliente.
+            a
+              i.fa-solid.fa-check
+              | Adaptación a las necesidades particulares de este tipo de negocio.
 
-        section#trabajamos
-            h2 ¿En que sitios trabajamos?
-            p Nos enfocamos en el manejo de inventario, facturación y reservas de establecimientos dedicados a la elaboración de comidas, bebidas y que son preparadas para consumo humano.
-            .container
-                .card
-                    h3 Bares
-                    li
-                        i.fa-solid.fa-minus
-                        |  Espacios donde se sirven bebidas alcohólicas y no alcohólicas.
-                    li
-                        i.fa-solid.fa-minus
-                        |  Pueden ofrecer aperitivos o bocadillos.
-                    li
-                        i.fa-solid.fa-minus
-                        |  Ambiente relajado y social.
-                    a.button.button-gray(href="#") Preguntar ahora
+    // Services Section
+    section#trabajamos
+      .container-fluid
+        .section-title
+          h2 ¿En qué sitios trabajamos?
+          p Nos enfocamos en el manejo de inventario, facturación y reservas de establecimientos dedicados a la elaboración de comidas, bebidas y que son preparadas para consumo humano.
+        .container
+          .card
+            h3 Bares
+            ul
+              li
+                i.fa-solid.fa-minus
+                | Espacios donde se sirven bebidas alcohólicas y no alcohólicas.
+              li
+                i.fa-solid.fa-minus
+                | Pueden ofrecer aperitivos o bocadillos.
+              li
+                i.fa-solid.fa-minus
+                | Ambiente relajado y social.
+            a.button(href="#contacto") Preguntar ahora
 
-                .card.highlight
-                    h3 Restaurantes
-                    li
-                        i.fa-solid.fa-minus
-                        |  Establecimientos donde se sirven comidas completas.
-                    li
-                        i.fa-solid.fa-minus
-                        |  Ofrecen un menú con entradas, platos principales y postres.
-                    li
-                        i.fa-solid.fa-minus
-                        |  Enfocados en la comida y la experiencia gastronómica.
-                    a.button.button-orange(href="#") Preguntar ahora
+          .card.highlight
+            h3 Restaurantes
+            ul
+              li
+                i.fa-solid.fa-minus
+                | Establecimientos donde se sirven comidas completas.
+              li
+                i.fa-solid.fa-minus
+                | Ofrecen un menú con entradas, platos principales y postres.
+              li
+                i.fa-solid.fa-minus
+                | Enfocados en la comida y la experiencia gastronómica.
+            a.button.button-orange(href="#contacto") Preguntar ahora
 
-                .card
-                    h3 Cafeterías
-                    li
-                        i.fa-solid.fa-minus
-                        |  Especializados en la venta de café y bebidas calientes.
-                    li
-                        i.fa-solid.fa-minus
-                        |  También venden productos de panadería y pastelería.
-                    li
-                        i.fa-solid.fa-minus
-                        |  Ambiente tranquilo, ideal para trabajar o socializar.
-                    a.button.button-gray(href="#") Preguntar ahora
+          .card
+            h3 Cafeterías
+            ul
+              li
+                i.fa-solid.fa-minus
+                | Especializados en la venta de café y bebidas calientes.
+              li
+                i.fa-solid.fa-minus
+                | También venden productos de panadería y pastelería.
+              li
+                i.fa-solid.fa-minus
+                | Ambiente tranquilo, ideal para trabajar o socializar.
+            a.button(href="#contacto") Preguntar ahora
 
-        section#equipo
-            h2 Conoce a Nuestro Equipo
-            p Nuestro equipo de trabajo está conformado por profesionales comprometidos con la mejora continua
-            .equipo-container
-                .miembro(data-aos="fade-right", data-aos-duration="1500")
-                    img(src="/img/team/Team-1.png", alt="Julian Estevan Rojas Cusva")
-                    h3 Julian Estevan Rojas Cusva
-                    a Programador Back-End
-                .miembro(data-aos="fade-left", data-aos-duration="1500")
-                    img(src="/img/team/Team-2.png", alt="Juan Sebastian Tovar Paez")
-                    h3 Juan Sebastian Tovar Paez
-                    a Programador Frontend
-        section.contacto(data-aos="zoom-in", data-aos-duration="1500")
-            h2 Contáctanos
-            p
-                | Comparte con nosotros tus datos de contacto y te enviaremos 
-                br
-                | toda la informacion de los medios de pagos.
-            
-            form(action="#", method="POST")
-                input(type="text", name="nombre", placeholder="Nombre", required)
-                input(type="text", name="numero", placeholder="Telefono", required)
-                input(type="email", name="correo", placeholder="Correo Electrónico", required)
-                textarea(name="mensaje", rows="5", placeholder="Mensaje Personalizado", required)
-                button(type="submit") Enviar
+    // Team Section
+    section#equipo
+      .container-fluid
+        .section-title
+          h2 Conoce a Nuestro Equipo
+          p Nuestro equipo de trabajo está conformado por profesionales comprometidos con la mejora continua
+        .equipo-container.d-flex.justify-content-center.row
+          .miembro.col-lg-6.col-sm-6(data-aos="fade-right", data-aos-duration="1500")
+            img(src="/img/team/Team-1.png", alt="Julian Estevan Rojas Cusva")
+            h3 Julian Estevan Rojas Cusba
+            a Programador Back-End
+          .miembro.col-lg-6.col-sm-6(data-aos="fade-left", data-aos-duration="1500")
+            img(src="/img/team/Team-2.png", alt="Juan Sebastian Tovar Paez")
+            h3 Juan Sebastian Tovar Paez
+            a Programador Frontend
 
+    // Contact Section
+    section#contacto.contacto(data-aos="zoom-in", data-aos-duration="1500")
+      .container
+        h2 Contáctanos
+        p
+          | Comparte con nosotros tus datos de contacto y te enviaremos
+          br
+          | toda la información de los medios de pagos.
+        form#contactForm
+          input(type="text", name="nombre", placeholder="Nombre", required)
+          input(type="tel", name="numero", placeholder="Teléfono", required)
+          input(type="email", name="correo", placeholder="Correo Electrónico", required)
+          textarea(name="mensaje", rows="5", placeholder="Mensaje Personalizado", required)
+          button(type="submit") Enviar
 
+    // Footer
     footer
-      h2 Información Contacto
-      p &copy; 2025 - Todos los derechos reservados.
-      p
-        i.fa-solid.fa-envelope
-        | Bassprod@gmail.com
-      p
-        i.fa-solid.fa-phone
-        | +57 3209367482
-      p
-        i.fa-solid.fa-location-dot
-        | Dirección: Una Casa
+      .container-fluid
+        h2 Información de Contacto
+        p &copy; 2025 - Todos los derechos reservados.
+        p
+          i.fa-solid.fa-envelope
+          | Bassprod@gmail.com
+        p
+          i.fa-solid.fa-phone
+          | +57 3209367482
+        p
+          i.fa-solid.fa-location-dot
+          | Dirección: Una Casa
 
-    //- animaciones
-    script(src="/js/flatpickr.min.js")
-    script(src="/js/index.js", type="module")
-    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous")
+    // Scripts
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js")
     script(src="https://unpkg.com/aos@2.3.1/dist/aos.js")
+    script(src="https://cdn.jsdelivr.net/npm/flatpickr")
+    script(src="/js/index.js") 
     script.
-     AOS.init();
+      // Initialize AOS
+      AOS.init();
+      

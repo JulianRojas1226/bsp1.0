@@ -94,96 +94,93 @@ html(lang="en")
                         .toggle-switch
                             span.switch
         .home
-            
-            main 
-                
-                section(name="mostres")
-                    .container
-                        .row.justify-content-arround.w-100
-                            if reservas && reservas.length 
-                                each reserva in reservas
-                                    .col-lg-3.col-md-6.col-sm-12
-                                        div.card.cartares(style="width: 18rem;")
-                                            img.card-img-top(src="/img/reserva.jpg" alt="...")
-                                            .card-body
-                                                h5.card-title  #{new Date(reserva.fecha_hora).toLocaleDateString("es-ES",{ year:"numeric",month:"long", day:"numeric"})}
-                                                p.card-text #{reserva.nombre}
-                                                .row.d-flex
-                                                    .col-sm-6
-                                                        form#eliminarreserva(action=`/borrar/${reserva.id_re}`, method="post") 
-                                                            button.btn-res(type="submit" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este producto?');") Eliminar
-                                                    .col-sm-6
-                                                        p.d-inline-flex.gap-1
-                                                                                                      
-                                                            button.btn-res(
-                                                                type="button",
-                                                                data-bs-toggle="collapse",
-                                                                data-bs-target="#collapseExample",
-                                                                aria-expanded="false",
-                                                                aria-controls="collapseExample"
-                                                            ) Actualizar 
-                                                div.collapse#collapseExample
-                                                    .card.card-body.card-act
-                                                        form(action=`/actualizar/${reserva.id_re}`, method="post")
-                                                            .row 
-                                                                .col-sm-6
-                                                                    .input-wrapper
-                                                                        input(type="text", name="fecha_hora_act" id="calendario" placeholder="Fecha")
-                                                                        .underline 
+            section(name="mostres")
+                .container-fluid
+                    .row.justify-content-arround.w-100
+                        if reservas && reservas.length 
+                            each reserva in reservas
+                                .col-lg-3.col-md-6.col-sm-12
+                                    div.card.cartares(style="width: 18rem;")
+                                        img.card-img-top(src="/img/reserva.jpg" alt="...")
+                                        .card-body
+                                            h5.card-title  #{new Date(reserva.fecha_hora).toLocaleDateString("es-ES",{ year:"numeric",month:"long", day:"numeric"})}
+                                            p.card-text #{reserva.nombre}
+                                            .row.d-flex
+                                                .col-sm-6
+                                                    form#eliminarreserva(action=`/borrar/${reserva.id_re}`, method="post") 
+                                                        button.btn-res(type="submit" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este producto?');") Eliminar
+                                                .col-sm-6
+                                                    p.d-inline-flex.gap-1
+                                                                                                    
+                                                        button.btn-res(
+                                                            type="button",
+                                                            data-bs-toggle="collapse",
+                                                            data-bs-target="#collapseExample",
+                                                            aria-expanded="false",
+                                                            aria-controls="collapseExample"
+                                                        ) Actualizar 
+                                            div.collapse#collapseExample
+                                                .card.card-body.card-act
+                                                    form(action=`/actualizar/${reserva.id_re}`, method="post")
+                                                        .row 
+                                                            .col-sm-6
+                                                                .input-wrapper
+                                                                    input(type="text", name="fecha_hora_act" id="calendario" placeholder="Fecha")
+                                                                    .underline 
 
-                                                                .col-sm-6 
-                                                                    .input-wrapper
-                                                                        input(type="time", name="hora_aCT" placeholder="Hora")
-                                                                        .underline
-                                                            .row 
-                                                                .col-sm-6
-                                                                    .input-wrapper   
-                                                                        input(type="number", name="NID_act" placeholder="Identificacion")
-                                                                        .underline
-                                                                .col-sm-6 
-                                                                    .input-wrapper
-                                                                        input(type="text", name="nombre_act" placeholder="Nombre")
-                                                                        .underline
-                                                            .row 
-                                                                .col-sm-6 
-                                                                    .input-wrapper
-                                                                        input(type="email", name="correo_act" placeholder="Correo")
-                                                                .col-sm-6 
-                                                                    .input-wrapper 
-                                                                        input(type="number", name="celular_act" placeholder="Celular")
-                                                            .row    
-                                                                .col-sm-6 
-                                                                    .custom-select-wrapper
-                                                                        select.custom-select(name="tipo_re")
-                                                                            if tipos && tipos.length 
-                                                                                each tipo in tipos 
-                                                                                    option(value=tipo.tipo) #{tipo.nombre}
-                                                                            else 
-                                                                                option(value="") no se encontraron tipos
-                                                                .col-sm-6 
-                                                                    .input-wrapper                                                             
-                                                                        input(type="number", name="cantidad_p_act" placeholder)
-                                                                        .underline
-                                                            .row
-                                                                .col-sm-6
-                                                                    .custom-select-wrapper                                                             
-                                                                        select.custom-select(name="mesa_asig_act")
-                                                                            if mesas && mesas.length 
-                                                                                each mesa in mesas 
-                                                                                    option(value=mesa.ID)  #{mesa.ID}
-                                                                            else 
-                                                                                option(value="") no se encontro mesa
-                                                                .col-sm-6 
-                                                                    .input-wrapper
-                                                                        input(type="text", name="obser_act" placeholder="Observacion")
-                                                                        .underline
-                                                            button.btn-res(type="submit") agregar 
-                                                        
-                                                        if fechareservada ===  hoy
-                                                            button(type="submit") ordenar 
-                                                            button(type="submit") Eliminar        
-                            else                    
-                                p no hay reservas        
+                                                            .col-sm-6 
+                                                                .input-wrapper
+                                                                    input(type="time", name="hora_aCT" placeholder="Hora")
+                                                                    .underline
+                                                        .row 
+                                                            .col-sm-6
+                                                                .input-wrapper   
+                                                                    input(type="number", name="NID_act" placeholder="Identificacion")
+                                                                    .underline
+                                                            .col-sm-6 
+                                                                .input-wrapper
+                                                                    input(type="text", name="nombre_act" placeholder="Nombre")
+                                                                    .underline
+                                                        .row 
+                                                            .col-sm-6 
+                                                                .input-wrapper
+                                                                    input(type="email", name="correo_act" placeholder="Correo")
+                                                            .col-sm-6 
+                                                                .input-wrapper 
+                                                                    input(type="number", name="celular_act" placeholder="Celular")
+                                                        .row    
+                                                            .col-sm-6 
+                                                                .custom-select-wrapper
+                                                                    select.custom-select(name="tipo_re")
+                                                                        if tipos && tipos.length 
+                                                                            each tipo in tipos 
+                                                                                option(value=tipo.tipo) #{tipo.nombre}
+                                                                        else 
+                                                                            option(value="") no se encontraron tipos
+                                                            .col-sm-6 
+                                                                .input-wrapper                                                             
+                                                                    input(type="number", name="cantidad_p_act" placeholder)
+                                                                    .underline
+                                                        .row
+                                                            .col-sm-6
+                                                                .custom-select-wrapper                                                             
+                                                                    select.custom-select(name="mesa_asig_act")
+                                                                        if mesas && mesas.length 
+                                                                            each mesa in mesas 
+                                                                                option(value=mesa.ID)  #{mesa.ID}
+                                                                        else 
+                                                                            option(value="") no se encontro mesa
+                                                            .col-sm-6 
+                                                                .input-wrapper
+                                                                    input(type="text", name="obser_act" placeholder="Observacion")
+                                                                    .underline
+                                                        button.btn-res(type="submit") agregar 
+                                                    
+                                                    if fechareservada ===  hoy
+                                                        button(type="submit") ordenar 
+                                                        button(type="submit") Eliminar        
+                        else                    
+                            p no hay reservas        
         script(src="/js/flatpickr.min.js")
         script(src="/js/res.js", type="module")
         

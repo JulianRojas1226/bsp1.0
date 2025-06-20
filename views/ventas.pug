@@ -177,8 +177,6 @@ html(lang="en")
                                 button.btn.btn-primary(
                                 type="button"
                                 ) Understood
-
-                
                 if lowstocks && lowstocks.length
                     .modal.fade#stockMinimoModal(tabindex="-1" aria-labelledby="stockMinimoLabel" aria-hidden="true")
                         .modal-dialog
@@ -195,9 +193,12 @@ html(lang="en")
                                             | #{p.nombre} (Stock: #{p.cantidad}, Mínimo: #{p.minimo_cant})
                                 .modal-footer
                                     button.btn.btn-primary(type="button", id="confirmar-productos") Confirmar
+
         script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous") 
         script(src="/js/ventas.js")
-
+        script.
+            console.log("LOWSTOCKS:", !{JSON.stringify(lowstocks)});
+            localStorage.getItem("lowstockAceptados")
 
 
                     

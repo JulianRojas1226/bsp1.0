@@ -224,7 +224,8 @@ const mventas = {
     },
     lowstock: async()=>{
         try {
-           const [resultsmin_prod]= await db.query("select * from producto where cantidad < minimo_cant")
+           const [resultsmin_prod]= await db.query("select id,nombre,cantidad,minimo_cant from producto where cantidad <= minimo_cant")
+           console.log("datos modelo ",resultsmin_prod)
            return resultsmin_prod
         } catch (err) {
             console.error("❌ Error al guardar los datos en la base de datos:", err);
