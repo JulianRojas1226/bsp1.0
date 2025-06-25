@@ -3,29 +3,25 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-console.log("🔍 Verificando variables de entorno:");
-console.log("MYSQL_URL:", process.env.MYSQL_URL);
+let connection = null;
 
-// Verificar que la URL existe
-if (!process.env.MYSQL_URL) {
-    console.error("❌ MYSQL_URL no está definida");
-    process.exit(1);
+async function createConnection() {
+    try {
+        connection = await mysql.createConnection({
+            uri: process.env.MYSQL_URL,
+            connectTimeout: 60000,
+            acquireTimeout: 60000,
+            timeout: 60000
+        });
+        console.log("✅ Conexión a BD exitosa");
+        return connection;
+    } catch (error) {
+        console.error("❌ Error al conectar a BD:", error.message);
+        return null;
+    }
 }
 
-let connection;
-
-try {
-    // Crear la conexión
-    connection = await mysql.createConnection(process.env.MYSQL_URL);
-    console.log("✅ Conexión creada exitosamente");
-    
-    // Probar la conexión
-    const [rows] = await connection.query('SELECT 1 as ');
-    console.log("✅ Conexión a la base de datos exitosa:", rows);
-    
-} catch (err) {
-    console.error("❌ Error al conectar:", err.message);
-    console.error("❌ Código de error:", err.code);
-}
+// Crear conexión al importar el módulo
+connection = await createConnection();
 
 export default connection;
