@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import mlogin  from "../modulos/modulos.js";
 import error from "../middwlare/err.js";
 
