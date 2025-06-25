@@ -68,7 +68,7 @@ const madmin={
     const params = [];
     
     if (fecha_inicio && fecha_fin) {
-        query += " AND hora BETWEEN ? AND ?";
+        query += " AND DATE(hora) BETWEEN ? AND ?";
         params.push(fecha_inicio, fecha_fin);
     }
     if (categoria) {
