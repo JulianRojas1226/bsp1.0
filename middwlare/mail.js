@@ -43,7 +43,7 @@ export async function enviarCorreo(destinatario, asunto, mensajeHtml) {
 }
 
 async function enviar_recuperacion({ destinatario, token }) {
-  const enlace = `http://0.0.0.0:3000/reset-password?token=${token}`;
+  const enlace = `https://bsp1-0.onrender.com/reset-password?token=${token}`;
   const html = `<p>Para restablecer tu contraseña, haz clic en:</p>
                 <a href="${enlace}">Restablecer contraseña</a>`;
 
