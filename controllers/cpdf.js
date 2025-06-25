@@ -73,7 +73,7 @@ const cpdf={
       await page.setExtraHTTPHeaders({ cookie: req.headers.cookie });
     }
 
-    await page.goto('http://localhost:3000/pdf', { waitUntil: 'networkidle0' });
+    await page.goto('http://0.0.0.0:3000/pdf', { waitUntil: 'networkidle0' });
 
     // Esperar que los gráficos se conviertan a imagen (si lo haces)
     await new Promise(resolve => setTimeout(resolve, 2000));
