@@ -87,4 +87,4 @@ app.use(routesadmin)
 app.use(routespdf)
 app.use(error.e404);
 
-app.listen(port,()=> {console.log(`la aplicacion esta funcionando en http://localhost:${port}`)})
+app.listen(port,()=> {console.log(`la aplicacion esta funcionando en http://0.0.0.0${port}`)})
