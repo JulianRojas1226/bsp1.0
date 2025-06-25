@@ -36,6 +36,8 @@ const fp = flatpickr("#fecha", {
     mode: "range",
     dateFormat: "Y-m-d",
     locale: "es",
+    showMonths: 2,
+    maxDate:'today',
     defaultDate: [
         new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
         new Date()
@@ -129,6 +131,8 @@ const fpv = flatpickr("#fechas_ventas",{
     mode: "range",
     dateFormat: "Y-m-d",
     locale: "es",
+    showMonths: 2,
+    maxDate: 'today',
     defaultDate: [
         new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
         new Date()
@@ -212,3 +216,144 @@ function limpiarFiltrosv() {
     mostrarNotificacion('Filtros limpiados correctamente', 'success');
 }
 document.addEventListener('DOMContentLoaded',aplicarFiltrosVentas)
+let empleados_existentes = []
+
+async function cargar_empleado() {
+    try {
+        const response = await fetch('/admin/empleado_duplicado')
+        const data = await response.json()
+        console.log("js ", data)
+        // Corregido: usar return en el map para transformar los datos
+        empleados_existentes = data.map(p => ({
+            nombre: p.nombre.toLowerCase(),
+            correo: p.correo.toLowerCase()
+        }))
+    } catch (error) {
+        console.error("No se trajeron los datos", error);
+    }
+}
+
+function verificarDuplicado(nombre, correo) {
+    return empleados_existentes.some(empleado => 
+        empleado.nombre === nombre.toLowerCase() || 
+        empleado.correo === correo.toLowerCase()
+    )
+}
+
+function obtenerTipoDuplicado(nombre, correo) {
+    const nombreDuplicado = empleados_existentes.some(empleado => 
+        empleado.nombre === nombre.toLowerCase()
+    )
+    const correoDuplicado = empleados_existentes.some(empleado => 
+        empleado.correo === correo.toLowerCase()
+    )
+    
+    if (nombreDuplicado && correoDuplicado) {
+        return "nombre y correo"
+    } else if (nombreDuplicado) {
+        return "nombre"
+    } else if (correoDuplicado) {
+        return "correo"
+    }
+    return null
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const empleado_input = document.getElementById("nombre_empleado")
+    const correo_input = document.getElementById("correo_empleado") // Asegúrate de que este ID exista
+    const mensaje = document.getElementById("mensaje");
+    const botonGuardar = document.getElementById("btnGuardar");
+    const form = document.getElementById("formEmpleado");
+    
+    cargar_empleado()
+    setInterval(cargar_empleado, 30000)
+    
+    function validarCampos() {
+        const nombre = empleado_input.value.trim()
+        const correo = correo_input.value.trim()
+        
+        // Limpiar mensaje si ambos campos están vacíos
+        if (nombre === "" && correo === "") {
+            mensaje.textContent = ""
+            botonGuardar.disabled = false
+            return
+        }
+        
+        // Validar solo si ambos campos tienen contenido
+        if (nombre !== "" && correo !== "") {
+            if (verificarDuplicado(nombre, correo)) {
+                const tipoDuplicado = obtenerTipoDuplicado(nombre, correo)
+                mensaje.textContent = `⚠️ Ya existe un empleado con este ${tipoDuplicado}`
+                botonGuardar.disabled = true;
+            } else {
+                mensaje.textContent = ""
+                botonGuardar.disabled = false
+            }
+        } else {
+            // Si solo uno de los campos tiene contenido, limpiar mensaje
+            mensaje.textContent = ""
+            botonGuardar.disabled = false
+        }
+    }
+    
+    // Agregar event listeners a ambos campos
+    empleado_input.addEventListener('input', validarCampos)
+    correo_input.addEventListener('input', validarCampos)
+    
+    form.addEventListener('submit', (e) => {
+        const nombre = empleado_input.value.trim()
+        const correo = correo_input.value.trim()
+        
+        if (verificarDuplicado(nombre, correo)) {
+            e.preventDefault()
+            const tipoDuplicado = obtenerTipoDuplicado(nombre, correo)
+            alert(`No puedes guardar un empleado con ${tipoDuplicado} duplicado.`)
+        }
+    })
+})
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll("form.form-eliminar").forEach(form => {
+        form.addEventListener("submit", function(event) {
+            event.preventDefault(); // prevenir envío inmediato
+
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "Esta acción no se puede deshacer",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Cambiar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit(); // enviar si se confirma
+                }
+            });
+        });
+    });
+});
+
+  const dateRangeInput = document.getElementById('fechas_ventas_pdf');
+
+        // Configurar Flatpickr para rango de fechas en un solo campo
+        const fp_pdf = flatpickr(dateRangeInput, {
+            mode: 'range',
+            locale: 'es',
+            dateFormat: 'd/m/Y',
+            placeholder: 'Seleccionar rango de fechas',
+            rangeSeparator: ' hasta ',
+            showMonths: 2,
+            maxDate: 'today',
+            onChange: function(selectedDates, dateStr, instance) {
+                // Actualizar campos ocultos cuando cambie el rango
+                if (selectedDates.length === 2) {
+                    const fechaInicio = selectedDates[0];
+                    const fechaFin = selectedDates[1];
+                    
+                    // Llenar campos ocultos con formato YYYY-MM-DD para el backend
+                    document.getElementById('fechaInicioHidden').value = fechaInicio.toISOString().split('T')[0];
+                    document.getElementById('fechaFinHidden').value = fechaFin.toISOString().split('T')[0]
+                }
+            }
+        });

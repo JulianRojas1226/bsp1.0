@@ -34,6 +34,14 @@ const madmin={
         console.error("no se pudieron cargar datos")
     }
  },
+ traer_tipo_p: async()=>{
+    try {
+        const [result] = await db.query("select id,nombre from tipo_pr")
+        return result
+    } catch (error) {
+        console.error("no se pudieron traer datos")        
+    }
+ },
  creacion: async (usuario) => {
         try {
           const hash = await bcrypt.hash(String(usuario.codigo), 10);
@@ -106,6 +114,29 @@ const madmin={
         return result;
     } catch (error) {
         console.error ("no se pudieron traer los datos ",error)
+    }
+ },
+ duplicados: async()=>{
+    try {
+        const [result] = await db.query("select nombre,correo from empleado")
+        return result
+    } catch (error) {
+        console.error("se ha dado un error al traer los datos ", error)
+    }
+ },
+ desabilitar_empleado: async ({nombre}) => {
+    try {
+        const result = await db.query(`
+            UPDATE empleado 
+            SET estado = CASE 
+                WHEN estado = 'activo' THEN 'inactivo' 
+                WHEN estado = 'inactivo' THEN 'activo'
+                ELSE 'activo'
+            END 
+            WHERE nombre = ?
+        `, [nombre])
+    } catch (error) {
+        console.error("no se pudo hacer el cambio de estado ", error)
     }
  }
 }

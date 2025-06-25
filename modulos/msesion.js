@@ -84,26 +84,48 @@ const msesion ={
         try {
             const [productos] = await db.query(`
                SELECT 
-                    p.id,
-                    p.nombre,
-                    p.precio,
-                    p.Costo as costo,
-                    p.cantidad as stock,
-                    p.minimo_cant as stock_minimo,
-                    COALESCE(SUM(vr.cantidad), 0) as total_vendido,
-                    COALESCE(SUM(vr.cantidad * vr.precio_u), 0) as ingresos,
-                    COALESCE(SUM((vr.cantidad * vr.precio_u)) - p.Costo, 0) as ganancia,
-                    CASE 
-                        WHEN p.cantidad <= p.minimo_cant THEN 'BAJO'
-                        WHEN p.cantidad <= p.minimo_cant * 2 THEN 'MEDIO'
-                        ELSE 'ALTO'
-                    END as estado_stock,
-                    ROUND(((SUM(vr.cantidad * vr.precio_u) - p.Costo) / p.Costo) * 100, 2) as margen_porcentaje
-                FROM producto p
-                LEFT JOIN ventas_res vr ON p.id = vr.id_prod 
-                    AND DATE(vr.hora) >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
-                GROUP BY p.id, p.nombre, p.precio, p.Costo, p.cantidad, p.minimo_cant, p.tipo, p.proveedor, p.empleado
-                ORDER BY total_vendido DESC;
+                p.id,
+                p.nombre,
+                p.precio,
+                -- Tomar el costo directamente del egreso
+                e.costo_total as costo,
+                p.cantidad as stock,
+                p.minimo_cant as stock_minimo,
+                COALESCE(SUM(vr.cantidad), 0) as total_vendido,
+                COALESCE(SUM(vr.cantidad * vr.precio_u), 0) as ingresos,
+                -- Calcular ganancia usando el costo del egreso
+                COALESCE(SUM((vr.cantidad * vr.precio_u)) - e.costo_total, 0) as ganancia,
+                CASE 
+                    WHEN p.cantidad <= p.minimo_cant THEN 'BAJO'
+                    WHEN p.cantidad <= p.minimo_cant * 2 THEN 'MEDIO'
+                    ELSE 'ALTO'
+                END as estado_stock,
+                -- Calcular margen usando el costo del egreso
+                ROUND(((SUM(vr.cantidad * vr.precio_u) - e.costo_total) / e.costo_total) * 100, 2) as margen_porcentaje
+            FROM producto p
+            LEFT JOIN ventas_res vr ON p.id = vr.id_prod 
+                AND DATE(vr.hora) >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+            -- INNER JOIN con egresos para tomar solo productos que tienen egresos
+            INNER JOIN (
+                SELECT 
+                    nombre,
+                    SUM(costo) as costo_total
+                FROM egresos 
+                WHERE DATE(hora) >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+                GROUP BY nombre
+            ) e ON p.nombre = e.nombre
+            GROUP BY 
+                p.id, 
+                p.nombre, 
+                p.precio, 
+                p.Costo, 
+                p.cantidad, 
+                p.minimo_cant, 
+                p.tipo, 
+                p.proveedor, 
+                p.empleado,
+                e.costo_total
+            ORDER BY total_vendido DESC;
             `);
             console.log("productos vendidos", productos)
             return productos;
@@ -172,6 +194,7 @@ const msesion ={
             console.error("Error al obtener comparativo anual:", error);
             throw error;
         }
-    }
+    },
+    
 }
 export default msesion 

@@ -1,7 +1,25 @@
 html
   head
+    link(rel="stylesheet", href="/css/mensaje_temporal.css")
     meta(http-equiv="refresh", content=`${tiempo / 1000};url=${redireccion}`)
     title Redireccionando...
   body
-    h1 #{mensaje}
-    p Serás redirigido en #{tiempo / 1000} segundos.
+    .floating-shapes
+      .shape
+      .shape
+      .shape
+
+    .container
+        .icon
+
+        h1 Redireccionando
+
+        p.message #{mensaje}
+
+        .countdown-container
+            .countdown#countdown 5
+            .countdown-label segundos
+
+        .progress-bar
+            .progress-fill
+    script(src="/js/temporal.js") 

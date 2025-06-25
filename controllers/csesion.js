@@ -59,6 +59,7 @@ const csescion = {
       },
       get_ventas_categorias: async (req, res) => {
         try {
+          
           const data = await msesion.ventasPorCategoria()
           const categorias = data.map(d => `${d.categoria}`)
           const cantidades = data.map(d => `${d.cantidad_vendida}`)

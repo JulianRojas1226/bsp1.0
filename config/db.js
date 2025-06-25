@@ -1,14 +1,16 @@
 import  mysql  from "mysql2/promise";
-
-const pool =  mysql.createPool({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "bassprod",
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0,
-})
+import dotenv from "dotenv";
+dotenv.config()
+const pool = mysql.createPool({
+  host: process.env.MYSQLHOST,
+  user: process.env.MYSQLUSER,
+  password: process.env.MYSQLPASSWORD,
+  database: process.env.MYSQLDATABASE,
+  port: process.env.MYSQLPORT,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+});
 pool.getConnection()
     .then(connection => {
         console.log("✅ Conexión exitosa a la base de datos");

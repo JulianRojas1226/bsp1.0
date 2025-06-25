@@ -17,10 +17,10 @@ html
           p.subtitle Crea una nueva contraseña segura para tu cuenta
           
           form(method="POST" action="/reset-password")
-              input(type="hidden" name="token" value="token_placeholder")
+              input(type="hidden" name="token" value=token)
               
               .form-group
-                  label(for="nuevaContraseña") Nueva Contraseña
+                  label(for="nuevaContrasena") Nueva Contraseña
                   .input-container
                       input#nuevaContrasena(name="nuevaContraseña" type="password" required)
                       span.password-toggle 👁️

@@ -11,7 +11,7 @@ function togglePassword() {
         passwordInput.type = 'password';
         toggleIcon.textContent = '👁️';
     }
-}z|
+}
 
         function checkPasswordStrength(password) {
             let strength = 0;

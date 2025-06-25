@@ -15,6 +15,7 @@ import routesventas from "./rutas/ventas.js";
 import routescerrar from "./rutas/cerrar-sesion.js"
 import routescod from "./rutas/codigo.js"
 import routesadmin from "./rutas/admin.js";
+import routespdf from "./rutas/pdf.js"
 
 const __dirname = process.cwd()
 const app = express()
@@ -83,6 +84,7 @@ app.use(routesproductos)
 app.use(routesventas)
 app.use(routescerrar)
 app.use(routesadmin)
+app.use(routespdf)
 app.use(error.e404);
 
 app.listen(port,()=> {console.log(`la aplicacion esta funcionando en http://localhost:${port}`)})

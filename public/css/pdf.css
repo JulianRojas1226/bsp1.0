@@ -1,0 +1,56 @@
+html, body {
+  height: auto;
+  min-height: 1123px; /* A4 height at 96dpi */
+}
+
+.footer {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 2px solid #e9ecef;
+  text-align: center;
+  color: #6c757d;
+  font-size: 11px;
+}
+
+.page-break {
+  page-break-before: always;
+}
+
+.chart-container {
+  page-break-inside: avoid;
+}
+#ventasDiarias{
+  width: 100%;
+}
+#categoria{
+  width: 100%;
+}
+#comparativoAnualChart{
+  width: 100%;
+}
+img{
+  width: 100%;
+}
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .payment-block {
+    break-inside: avoid-page;
+  }
+
+  .chart-container {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+h2{
+  margin-bottom: 10px;
+}
+.graficos{
+  margin-top: 10px;
+}

@@ -25,9 +25,16 @@ const clogin={
         
 
         let user = results[0]
+        if (user.estado !== 'activo') {
+            return res.render("mensaje_temporal", {
+                mensaje: "Tu cuenta está inactiva. Contacta al administrador",
+                redireccion: "/",
+                tiempo: 5000 // 5 segundos para que puedan leer el mensaje
+            })
+        }
         let imatch = await bcrypt.compare(codigo,user.codigo)
         if (!imatch) {
-            res.render("mensaje_temporal", {
+            res.render("mensaje_temporal", { 
             mensaje: "Contraseña incorrecta",
             redireccion: "/",
             tiempo: 3000 // milisegundos = 3 segundos

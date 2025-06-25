@@ -61,7 +61,7 @@ html(lang="en")
                                 .toggle-switch
                                     span.switch
         .home 
-            .container-fluid
+            .container-fluid.admin-cont
                 
                 .row 
                     .col-lg-8
@@ -85,7 +85,7 @@ html(lang="en")
                                                         | Ingresar Datos
                                                     button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close")
 
-                                                form#dataForm(action="/admin/add_egreso", method="post")
+                                                form(action="/admin/add_egreso",  method="post")
                                                     .modal-body
                                                         // Nombre
                                                         .form-group
@@ -93,7 +93,8 @@ html(lang="en")
                                                             .input-group
                                                                 span.input-group-text
                                                                     i.fas.fa-tag
-                                                                input.form-control#nombre(type="text" name="nombre" placeholder="Ingresa el nombre" required)
+                                                                input.form-control(type="text" name="nombre" placeholder="Ingresa el nombre" required)
+                                                                
                                                         // Tipo
                                                         .form-group
                                                             label.form-label(for="tipo") Tipo
@@ -118,7 +119,7 @@ html(lang="en")
                                                         button.btn.btn-secondary-custom(type="button" data-bs-dismiss="modal")
                                                             i.fas.fa-times.me-2
                                                             | Cancelar
-                                                        button.btn.btn-primary-custom(type="submit")
+                                                        button.btn.btn-primary-custom#btnguardar(type="submit")
                                                             i.fas.fa-check.me-2
                                                             | Guardar
                             .row.filtros
@@ -185,7 +186,9 @@ html(lang="en")
                                                         td.text-center  #{empleado.cargo}
                                                         td.text-center #{empleado.estado}
                                                         td.text-center 
-                        
+                                                            form.form-eliminar(action=`/admin/deshabilitar`, method="post")
+                                                                input(type="hidden", name="nombre", value=empleado.nombre)
+                                                                button.delete(type="submit") Eliminar 
 
                             // Modal de Registro
                             .modal.fade#loginModal(tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true")
@@ -200,17 +203,17 @@ html(lang="en")
                                                         h2.login-title Regístrate
                                                         p.login-subtitle Completa el formulario para crear tu cuenta y comenzar tu experiencia.
 
-                                                        form#loginForm(action="/admin/add_empleado", method="post")
+                                                        form.loginForm(action="/admin/add_empleado", id="formEmpleado" method="post")
                                                             .form-floating.mb-3
-                                                                input#floatingName.form-control(type="text" name ="nombre" placeholder="Nombre completo" required)
+                                                                input.floatingName.form-control(type="text" name ="nombre" id="nombre_empleado" placeholder="Nombre completo" required)
                                                                 label(for="floatingName") Nombre
                                                             
                                                             .form-floating.mb-3
-                                                                input#floatingpassword.form-control(type="password" name="codigo" placeholder="Código" required)
+                                                                input#floatingpassword.form-control(type="password"  name="codigo" placeholder="Código" required)
                                                                 label(for="floatingCode") Código
                                                             
                                                             .form-floating.mb-3
-                                                                input#floatingEmail.form-control(type="email" name="correo" placeholder="name@example.com" required)
+                                                                input.floatingEmail.form-control(type="email" name="correo" id="correo_empleado"  placeholder="name@example.com" required)
                                                                 label(for="floatingEmail") Correo
                                                             
                                                             .form-floating.mb-3
@@ -220,17 +223,14 @@ html(lang="en")
                                                                             each cargo in cargos 
                                                                                 option(value=cargo.id) #{cargo.cargo} 
                                                                 label(for="floatingSelect") Tipo de Usuario
-
+                                                            span#mensaje(style="color:red;")
                                                             button.btn.btn-primary-custom.w-100.mb-4(type="submit")
                                                                 i.fas.fa-user-check.me-2
-                                                                | Registrarse
+                                                                | Registrar
                                                 .col-lg-6.promo-panel
                                                     .promo-content
                                                         h3.promo-title ¿Ya tienes una cuenta?
                                                         p.promo-subtitle Inicia sesión y continúa con tu increíble experiencia creativa.
-                                                        button.btn.btn-outline-light-custom(type="button" onclick="showLogin()")
-                                                            i.fas.fa-sign-in-alt.me-2
-                                                            | INICIAR SESIÓN
 
 
 
@@ -282,9 +282,54 @@ html(lang="en")
                                             tr
                                                 td(colspan="6").text-center.text-muted Cargando...
                     .col-lg-4
-                        p 
-                
-
+                         .chart-container.card
+                            .card-header.d-flex.justify-content-start.align-items-center.flex-wrap
+                                h6.mb-0.d-flex.align-items-center
+                                | generar reporte
+                            .card-body.p-2
+                                form(action="/admin/filtros" method="post")
+                                    input(type="hidden" id="fechaInicioHidden" name="fecha_inicio" required)
+                                    input(type="hidden" id="fechaFinHidden" name="fecha_fin" required) 
+                                    .row.filtros
+                                        .col-lg-6
+                                            .filtro-grupo
+                                                label(for="fechas") Rango de busqueda 
+                                                input#fechas_ventas_pdf(type="text", placeholder="seleccione el rango de fechas")
+                                        .col-lg-6        
+                                            .filtro-grupo
+                                                    label(for="empleado") Escoger empleado 
+                                                    select#empleado_input_pdf(name="empleado")
+                                                        option(value="") seleccionar empleado 
+                                                        if empleados && empleados.length 
+                                                            each empleado in empleados
+                                                                option(value=empleado.nombre) #{empleado.nombre}
+                                        .col-lg-6
+                                            .filtro-grupo
+                                                    label(for="metodo") metodo de pago 
+                                                    select#metodo_pago_pdf(name="metodo_p")
+                                                        option(value="") seleccione un metodo de pago 
+                                                        if metodos && metodos.length 
+                                                            each metodo in metodos 
+                                                                option(value=metodo.id) #{metodo.nombre}
+                                        .col-lg-6
+                                            .filtro-grupo 
+                                                label(for="categoria") Categoria egresos: 
+                                                select(id="categoria" name="categoria_e")
+                                                    option(value="") seleccione una categoria 
+                                                    if categorias && categorias.length 
+                                                        each categoria in categorias 
+                                                            option(value=categoria.id) #{categoria.nombre}
+                                        .col-lg-12
+                                            .filtro-grupo 
+                                                label(for="Productos") Categoria productos:
+                                                select(id="Productos" name="tipo_pr")
+                                                    option(value="") seleccione una categoria 
+                                                    if productos && productos.length 
+                                                        each producto in productos 
+                                                            option(value=producto.id) #{producto.nombre}
+                                    button(type="submit") agregar
+            
+    script( src="https://cdn.jsdelivr.net/npm/sweetalert2@11")
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous") 
     script(src="https://cdn.jsdelivr.net/npm/flatpickr")
     script(src="/js/admin.js" type="module")

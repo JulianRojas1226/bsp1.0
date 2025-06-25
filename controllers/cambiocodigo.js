@@ -38,11 +38,17 @@ const ccodigo={
             error.e500(req, res, err);
         }
     },
-        get_cambio_codigo: async (req, res) => {
+    get_cambio_codigo: async (req, res) => {
         try {
             const { token } = req.query;
             const datos = validartoken(token);
-            if (!datos) return res.status(403).send("Token inválido o expirado");
+            if (!datos) {
+                res.render("mensaje_temporal", {
+                mensaje: "se expiro el token, vuelve a solicitar la contraseña",
+                redireccion: "/",
+                tiempo: 5000 // 5 segundos para que puedan leer el mensaje
+            })
+            }
 
             // Pasar token a la vista para que se use en el formulario
             res.render("restablecer_contraseña", { token });

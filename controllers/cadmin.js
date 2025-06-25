@@ -1,6 +1,11 @@
+import puppeteer from "puppeteer";
 import madmin from "../modulos/madmin.js";
+import fs from "fs"
+
+
 
 const cadmin = {
+    
     getadmin: async(req,res)=>{
         try{
             const{usuario,cargo} =req.session
@@ -15,7 +20,8 @@ const cadmin = {
             const metodos = await madmin.traer_metodo_pago()
             const empleados = await madmin.traer_empleado()
             const cargos = await madmin.traer_cargo()
-            res.render("admin",{usuario,cargo,categorias,metodos,empleados,cargos})
+            const productos = await madmin.traer_tipo_p()
+            res.render("admin",{usuario,cargo,categorias,metodos,empleados,cargos,productos})
         }catch(err){
             console.log("ocurrio un error", err)
         }
@@ -74,8 +80,49 @@ const cadmin = {
              console.error("Error filtrando egresos:", err);
             res.status(500).json({ success: false, error: "Error interno del servidor" });
         }
-    }
+    },
+    duplicados: async (req,res) => {
+        try {
+            const empleado = await madmin.duplicados()
+            res.json(empleado)
+        } catch (error) {
+            console.error("no se pudieron traer los datos ",error)
+        }
+    },
+    deshabilitar: async (req,res) => {
+        try {
+             const {nombre} = req.body
+             console.log("Nombre recibido:", nombre)
+             const result = await madmin.desabilitar_empleado({nombre})
+             console.log("Resultado de eliminación:", result);
+            res.redirect("/admin")
+        } catch (error) {
+            console.error("no se pudieron deshabilitar el empleado ",error)
+        }
+    },
+
+    filtros: async (req,res) => {
+        try {
+            const {fecha_inicio,fecha_fin,empleado,metodo_p,categoria_e,tipo_pr}= req.body
+            req.session.filtros = {
+                fecha_inicio,
+                fecha_fin,
+                empleado,
+                metodo_p,
+                categoria_e,
+                tipo_pr
+            };
+
+              
+            res.redirect("/pdf/generar")
+        } catch (error) {
+            console.error("no se pudieron subir los datos",error)
+        }
+    },
+    
+
+
+ 
 
 }
-
 export default cadmin
