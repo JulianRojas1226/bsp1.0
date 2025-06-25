@@ -1,25 +1,24 @@
-import mysql from "mysql2/promise";
-import dotenv from "dotenv";
+// import-db.js
+import mysql from 'mysql2/promise';
+import fs from 'fs';
 
-dotenv.config();
-
-let connection = null;
-
-async function createConnection() {
-    try {
-        connection = await mysql.createConnection({
-            uri: process.env.MYSQL_URL,
-            connectTimeout: 60000
-        });
-        console.log("✅ Conexión a BD exitosa");
-        return connection;
-    } catch (error) {
-        console.error("❌ Error al conectar a BD:", error.message);
-        return null;
+async function importSQL() {
+  const connection = await mysql.createConnection(process.env.DATABASE_URL);
+  
+  // Leer archivo SQL
+  const sqlFile = fs.readFileSync('./database.sql', 'utf8');
+  
+  // Ejecutar cada statement
+  const statements = sqlFile.split(';').filter(stmt => stmt.trim());
+  
+  for (const statement of statements) {
+    if (statement.trim()) {
+      await connection.execute(statement);
     }
+  }
+  
+  console.log('Base de datos importada exitosamente');
+  await connection.end();
 }
 
-// Crear conexión al importar el módulo
-connection = await createConnection();
-
-export default connection;
+importSQL().catch(console.error);
