@@ -1,43 +1,12 @@
 import db from "../config/db.js"
 const mindex={
     mosttipo: async()=>{
-      try {
-        console.log('🔍 Verificando conexión DB...');
-        
-        if (!db) {
-            console.log('❌ DB es null o undefined');
-            return res.status(500).json({ error: 'DB no disponible' });
-        }
-        
-        console.log('🔍 Ejecutando query...');
-        
-        // Cambia tu query por una más simple para probar
-        
-        const [results]= await db.query("select tipo,nombre from tipo_re")
+        try {
+            const [results]= await db.query("select tipo,nombre from tipo_re")
             return results
-        console.log('✅ Query exitosa:', rows);
-        
-        res.json({ 
-            message: 'Datos cargados exitosamente',
-            data: rows 
-        });
-        
-    } catch (error) {
-        console.error('❌ Error detallado:', {
-            message: error.message,
-            code: error.code,
-            errno: error.errno,
-            sqlState: error.sqlState,
-            stack: error.stack
-        });
-        
-        res.status(500).json({ 
-            status: 500, 
-            message: 'error al cargar datos',
-            error: error.message,
-            code: error.code
-        });
-    }
+        } catch (err) {
+            throw {status:500,message:"error al cargar datos"}
+        }
     },
     mostmesa: async()=>{
         try {
