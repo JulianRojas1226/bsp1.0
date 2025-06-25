@@ -9,9 +9,7 @@ async function createConnection() {
     try {
         connection = await mysql.createConnection({
             uri: process.env.MYSQL_URL,
-            connectTimeout: 60000,
-            acquireTimeout: 60000,
-            timeout: 60000
+            connectTimeout: 60000
         });
         console.log("✅ Conexión a BD exitosa");
         return connection;
