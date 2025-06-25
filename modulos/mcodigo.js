@@ -1,4 +1,4 @@
-import bcrypt, { hash } from "bcrypt"
+import bcrypt, { hash } from "bcryptjs"
 import db from "../config/db.js"
 
 const mcontraseña ={
