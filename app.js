@@ -16,7 +16,7 @@ import routescerrar from "./rutas/cerrar-sesion.js"
 import routescod from "./rutas/codigo.js"
 import routesadmin from "./rutas/admin.js";
 import routespdf from "./rutas/pdf.js"
-
+import dotenv from 'dotenv';
 const __dirname = process.cwd()
 const app = express()
 const port = 3000
@@ -87,4 +87,20 @@ app.use(routesadmin)
 app.use(routespdf)
 app.use(error.e404);
 
-app.listen(port,()=> {console.log(`la aplicacion esta funcionando en http://0.0.0.0:${port}`)})
+dotenv.config();
+
+console.log('🔍 Variables de entorno:');
+console.log('NODE_ENV:', process.env.NODE_ENV);
+console.log('PORT:', process.env.PORT);
+console.log('MYSQL_URL:', process.env.MYSQL_URL ? 'Configurada ✅' : 'No configurada ❌');
+
+
+const PORT = process.env.PORT || 3000;
+
+// Configuración condicional basada en el entorno
+if (process.env.NODE_ENV === 'production') {
+    console.log('🚀 Modo producción activado');
+    // Configuraciones específicas para producción
+} else {
+    console.log('🔧 Modo desarrollo');
+}
