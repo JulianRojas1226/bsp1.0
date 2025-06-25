@@ -1,5 +1,5 @@
 import db from "../config/db.js"
-import bcrypt, { hash } from "bcrypt"
+import bcrypt, { hash } from "bcryptjs"
 
 const madmin={
  traer_categoria_e:async () => {
