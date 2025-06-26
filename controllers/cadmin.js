@@ -1,6 +1,6 @@
-import puppeteer from "puppeteer";
+
 import madmin from "../modulos/madmin.js";
-import fs from "fs"
+
 
 
 
