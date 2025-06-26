@@ -122,7 +122,7 @@ const mventas = {
         }
     },
     pagar: async({mesa,pago,usuario})=>{
-        const coneccion = await db.getConnection()
+        const coneccion =  db
         try {
             console.log("📡 Datos recibidos en el modelo:", { mesa,pago});
             await coneccion.beginTransaction()

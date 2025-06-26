@@ -87,10 +87,9 @@ html(lang="es")
                   label(for="tipos") Tipo de Reserva:
                   select.custom-select(name="tipos", required)
                     option(value="") Selecciona el tipo
-                    option(value="mesa-regular") Mesa Regular
-                    option(value="mesa-vip") Mesa VIP
-                    option(value="barra") Barra
-                    option(value="terraza") Terraza
+                    if tipos  && tipos.length
+                      each tipo in tipos 
+                        option(value=tipo.tipo) #{tipo.nombre}
                 .col-md-6.input-wrapper
                   input(type="number", name="cantidad_p", placeholder="Cantidad de Personas", min="1", max="20", required)
               
@@ -99,10 +98,9 @@ html(lang="es")
                   label(for="mesa_asig") Mesa Preferida:
                   select.custom-select(name="mesa_asig")
                     option(value="") Mesa disponible automática
-                    option(value="1") Mesa 1 - Ventana
-                    option(value="2") Mesa 2 - Centro
-                    option(value="3") Mesa 3 - VIP
-                    option(value="4") Mesa 4 - Terraza
+                    if mesas && mesas.length 
+                      each mesa in mesas 
+                        option(value=mesa.id) mesa #{mesa.id}
               
               .row
                 .col-12.input-wrapper
