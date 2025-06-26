@@ -3,11 +3,11 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-let connection = null;
+let db = null;
 
 async function createConnection() {
     try {
-        connection = await mysql.createConnection({
+        db = await mysql.createConnection({
             uri: process.env.MYSQL_URL,
             connectTimeout: 60000
         });
@@ -20,6 +20,6 @@ async function createConnection() {
 }
 
 // Crear conexión al importar el módulo
-connection = await createConnection();
+db = await createConnection();
 
-export default connection;
+export default db;
