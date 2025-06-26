@@ -4,7 +4,6 @@ import path from "path";
 import { dirname } from "path";
 import { fileURLToPath } from 'url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
-import { v2 as cloudinary } from 'cloudinary';
 const mprod={
     tipo: async()=>{
         try {

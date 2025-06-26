@@ -1,6 +1,6 @@
 
 import { Router } from "express";
-import { upload, handleUploadError, deleteImage } from '../middwlare/cloudinaryConfig.js';
+import { upload, handleUploadError, deleteImage } from '../middwlare/multer.js';
 import cprod from "../controllers/cprod.js";
 import cres from "../controllers/cres.js";
 import cventas from "../controllers/cventas.js";
