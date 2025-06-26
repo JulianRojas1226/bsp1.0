@@ -1,4 +1,4 @@
-         import error from "../middwlare/err.js";
+import error from "../middwlare/err.js";
 import msesion from "../modulos/msesion.js";
 const csescion = {
     getsesion: async (req, res) => {

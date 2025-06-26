@@ -1,6 +1,6 @@
 
 import { Router } from "express";
-import actualizar from "../middwlare/multer.js";
+import { upload, handleUploadError, deleteImage } from '../middlewares/cloudinaryConfig.js';
 import cprod from "../controllers/cprod.js";
 import cres from "../controllers/cres.js";
 import cventas from "../controllers/cventas.js";
@@ -16,10 +16,10 @@ routes.get("/sesion", csescion.getsesion)
 routes.get("/admin",cadmin.getadmin)
 routes.get("logout", cierre.cierre)
 // funcionalidad prod
-routes.post("/formprod", actualizar.single("imagen"), cprod.adddatos)
+routes.post("/formprod", upload.single("imagen"), cprod.adddatos)
 routes.post("/cantprod", cprod.addcantidad)
 routes.post("/addproveedor", cprod.addproveedor)
-routes.post("/eliminar/:id", cprod.borrarprod)
+routes.post("/eliminar/:id", cprod.eliminarProducto)
 routes.post("/actualizarprod/:id", cprod.actualizar)
 routes.get("/lowstock", cprod.low_stock)
 routes.get("/notificacion",cprod.notificacion)
