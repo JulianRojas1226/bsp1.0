@@ -107,10 +107,12 @@ const cpdf={
     await browser.close();
 
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'attachment; filename="reporte.pdf"');
+    res.setHeader('Content-Disposition', 'inline; filename="reporte.pdf"'); // Cambié 'attachment' por 'inline'
     res.setHeader('Content-Length', pdfBuffer.length);
+    res.setHeader('Cache-Control', 'no-cache'); // ✅ Agregar esto
     
-    res.send(pdfBuffer);
+    // ✅ Asegurar que sea Buffer
+    res.end(pdfBuffer, 'binary');
 
   } catch (error) {
     if (browser) await browser.close();
