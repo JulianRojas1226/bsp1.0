@@ -63,7 +63,7 @@ html(lang="es")
               | Reserva tu Mesa
             button.btn-close.btn-close-white(type="button", data-bs-dismiss="modal", aria-label="Close")
           .modal-body
-            form#reservationForm
+            form#reservationForm(action="/addres")
               .row
                 .col-md-6.input-wrapper
                   input#calendario(type="text", name="fecha_hora", placeholder="Selecciona la fecha", required)

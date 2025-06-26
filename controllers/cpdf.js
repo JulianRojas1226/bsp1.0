@@ -63,46 +63,60 @@ const cpdf={
           }
         },
   generarPdf: async (req, res) => {
-  let browser;
+   let browser;
 
   try {
-    browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] });
+    browser = await puppeteer.launch({ 
+      headless: true, 
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage', // ✅ Importante para contenedores
+        '--disable-gpu'
+      ]
+    });
+    
     const page = await browser.newPage();
 
     if (req.headers.cookie) {
       await page.setExtraHTTPHeaders({ cookie: req.headers.cookie });
     }
 
-    await page.goto('https://bsp1-0.onrender.com/pdf', { waitUntil: 'networkidle0' });
+    await page.goto('https://bsp1-0.onrender.com/pdf', { 
+      waitUntil: 'networkidle0',
+      timeout: 30000 // ✅ Timeout explícito
+    });
 
-    // Esperar que los gráficos se conviertan a imagen (si lo haces)
+    // Esperar que los gráficos se carguen
     await new Promise(resolve => setTimeout(resolve, 2000));
 
     const pdfBuffer = await page.pdf({
       format: 'A4',
-      printBackground: true
+      printBackground: true,
+      margin: { // ✅ Mejores márgenes
+        top: '20px',
+        right: '20px',
+        bottom: '20px',
+        left: '20px'
+      }
     });
 
     await browser.close();
 
-    // 1. Guardar el PDF
-    const rutaPdf = path.join(process.cwd(), 'reporte-final.pdf');
-    fs.writeFileSync(rutaPdf, pdfBuffer);
-
-    // 2. Leerlo y enviarlo al navegador
-    const fileStat = fs.statSync(rutaPdf);
+    // ✅ Enviar directamente el buffer (SIN guardar archivo)
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', 'attachment; filename="reporte.pdf"');
-    res.setHeader('Content-Length', fileStat.size);
+    res.setHeader('Content-Length', pdfBuffer.length);
+    
+    res.send(pdfBuffer); // ✅ Envío directo
 
-    const stream = fs.createReadStream(rutaPdf);
-    stream.pipe(res);
   } catch (error) {
     if (browser) await browser.close();
     console.error('❌ Error generando PDF:', error);
-    res.status(500).send('Error generando PDF');
+    res.status(500).json({ error: 'Error generando PDF' });
   }
 }
+
 
 
     
