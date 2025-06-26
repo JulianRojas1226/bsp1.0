@@ -12,7 +12,7 @@ async function createConnection() {
             connectTimeout: 60000
         });
         console.log("✅ Conexión a BD exitosa");
-        return connection;
+        return db;
     } catch (error) {
         console.error("❌ Error al conectar a BD:", error.message);
         return null;
