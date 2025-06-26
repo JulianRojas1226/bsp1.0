@@ -29,7 +29,7 @@ const mventas = {
         }
     },
     duplicar_orden: async ({id}) => {
-        const conexion = await db.getConnection();
+        const conexion = db
         try {
             await conexion.beginTransaction();
 
