@@ -1,5 +1,7 @@
 import error from "../middwlare/err.js";
 import mprod from "../modulos/mproductos.js"
+import { deleteImage } from "../middwlare/multer.js";
+
 
 const cprod ={
     getprod: async (req,res) => {
@@ -39,21 +41,70 @@ const cprod ={
         res.status(500).send("Error al obtener los tipos"); // Enviamos una respuesta de error
     }
   },
-  adddatos: async (req,res)=>{
-    try {
-      if (!req.file) {
-        return res.status(400).send("no se subio ninguna imagen.")
-      }
-      const {usuario} = req.session
-      const ruta = `/productos/${req.file.filename}`
-      const {nombre,cantidad, costo,tipo,proveedor,precio,cantidad_min}=req.body  
-      await mprod.insertdatos({ruta,nombre,tipo,cantidad,costo,proveedor,precio,cantidad_min,usuario})
-      res.redirect("/prod"); 
-    } catch (err) {
-      console.error("❌ Error al guardar los datos:", err);
-      res.status(500).send("Error al guardar los datos.");
-    }
-  },
+  
+adddatos: async (req, res) => {
+        try {
+            // Verificar si se subió archivo
+            if (!req.file) {
+                return res.status(400).send("❌ No se subió ninguna imagen.");
+            }
+            
+            const { usuario } = req.session;
+            const { nombre, cantidad, costo, tipo, proveedor, precio, cantidad_min } = req.body;
+            
+            // ✅ DATOS DEL ARCHIVO EN CLOUDINARY
+            const datosImagen = {
+                url: req.file.path,           // URL completa de Cloudinary
+                publicId: req.file.public_id, // ID para eliminar después
+                filename: req.file.filename,  // Nombre del archivo
+                size: req.file.bytes,         // Tamaño en bytes
+                format: req.file.format       // Formato (jpg, png, etc.)
+            };
+            
+            // Log para debug
+            console.log('📷 IMAGEN SUBIDA A CLOUDINARY:');
+            console.log('🔗 URL:', datosImagen.url);
+            console.log('🆔 Public ID:', datosImagen.publicId);
+            console.log('📏 Tamaño:', (datosImagen.size / 1024).toFixed(2) + ' KB');
+            console.log('📋 Formato:', datosImagen.format);
+            
+            // Guardar en base de datos
+            // IMPORTANTE: Ahora 'ruta' será la URL completa de Cloudinary
+            const ruta = datosImagen.url;
+            
+            await mprod.insertdatos({
+                ruta,           // URL de Cloudinary
+                nombre,
+                tipo,
+                cantidad,
+                costo,
+                proveedor,
+                precio,
+                cantidad_min,
+                usuario,
+                // Opcional: guardar también el public_id para poder eliminar después
+                cloudinary_id: datosImagen.publicId
+            });
+            
+            console.log('✅ Producto guardado exitosamente');
+            res.redirect("/prod");
+            
+        } catch (error) {
+            console.error("❌ Error al guardar producto:", error);
+            
+            // Si hubo error y se subió imagen, eliminarla de Cloudinary
+            if (req.file && req.file.public_id) {
+                try {
+                    await deleteImage(req.file.public_id);
+                    console.log('🗑️ Imagen eliminada por error en guardado');
+                } catch (deleteError) {
+                    console.error('❌ Error al eliminar imagen:', deleteError);
+                }
+            }
+            
+            res.status(500).send("❌ Error al guardar el producto.");
+        }
+    },
   addcantidad: async (req,res)=>{
     try {
       const {usuario}=req.session
@@ -75,21 +126,38 @@ const cprod ={
       res.status(500).send("Error al guardar los datos.");
     }
   },
-  borrarprod: async (req, res)=>{
-    try {
-      const {id} = req.params
-      console.log("ID recibido:", id)
-      if (!id) {
-        return res.status(400).send("no se proporciono un id")
-      }
-      const resultado = await mprod.borrar({id})
-      console.log("Resultado de eliminación:", resultado);
-      res.redirect("/prod")
-    } catch (err) {
-      console.error("❌ Error en el controlador:", err.message);
-      res.status(500).send("Error al borrar el producto.");
-    }  
-  },
+  eliminarProducto: async (req, res) => {
+        try {
+            const { id } = req.params;
+            
+            // Obtener datos del producto antes de eliminar
+            const producto = await mprod.obtenerPorId(id);
+            
+            if (!producto) {
+                return res.status(404).send("❌ Producto no encontrado");
+            }
+            
+            // Eliminar imagen de Cloudinary si existe
+            if (producto.cloudinary_id) {
+                try {
+                    await deleteImage(producto.cloudinary_id);
+                    console.log('🗑️ Imagen eliminada de Cloudinary');
+                } catch (error) {
+                    console.error('⚠️ Error al eliminar imagen, pero continuando:', error);
+                }
+            }
+            
+            // Eliminar producto de BD
+            await mprod.eliminar(id);
+            
+            console.log('✅ Producto eliminado completamente');
+            res.redirect("/prod");
+            
+        } catch (error) {
+            console.error("❌ Error al eliminar producto:", error);
+            res.status(500).send("❌ Error al eliminar el producto.");
+        }
+    },
   actualizar: async(req,res)=>{
     try {
       const {id} = req.params

@@ -24,10 +24,10 @@ const mprod={
             throw {status:500,message:"error al cargar datos"}
         }
     },
-    insertdatos: async({ruta,nombre,tipo,cantidad,costo,proveedor,precio,cantidad_min,usuario})=>{
+    insertdatos: async({ruta,nombre,tipo,cantidad,costo,proveedor,precio,cantidad_min,usuario,cloudinary_id})=>{
         try {
-            await db.query("Insert into producto (nombre,tipo,cantidad,proveedor,precio,costo,dir,minimo_cant,empleado) values (?,?,?,?,?,?,?,?,?)",
-                [nombre,tipo,cantidad,proveedor,precio,costo,ruta,cantidad_min,usuario]
+            await db.query("Insert into producto (nombre,tipo,cantidad,proveedor,precio,costo,dir,minimo_cant,empleado,cloudinary_id) values (?,?,?,?,?,?,?,?,?,)",
+                [nombre,tipo,cantidad,proveedor,precio,costo,ruta,cantidad_min,usuario,cloudinary_id]
             )
         } catch (err) {
             console.error("❌ Error al guardar los datos en la base de datos:", err);
