@@ -19,8 +19,8 @@
   "homepage": "https://github.com/JulianRojas1226/login1#readme",
   "description": "",
   "dependencies": {
+    "@sparticuz/chromium": "^137.0.1",
     "bcryptjs": "^3.0.2",
-    "chrome-aws-lambda": "^9.1.0",
     "cloudinary": "^1.30.0",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",

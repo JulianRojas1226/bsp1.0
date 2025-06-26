@@ -1,5 +1,5 @@
 import mpdf from "../modulos/mpdf.js";
-import chromium from 'chrome-aws-lambda';
+import chromium from '@sparticuz/chromium';
 import puppeteer from 'puppeteer-core';
 
 const cpdf={
@@ -67,10 +67,16 @@ const cpdf={
 
   try {
     browser = await puppeteer.launch({
-      args: chromium.args,
+      args: [
+        ...chromium.args,
+        '--hide-scrollbars',
+        '--disable-web-security',
+        '--no-sandbox',
+        '--disable-setuid-sandbox'
+      ],
       defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath,
-      headless: chromium.headless,
+      executablePath: await chromium.executablePath(),
+      headless: true,
       ignoreHTTPSErrors: true,
     });
 
@@ -111,7 +117,7 @@ const cpdf={
     console.error('❌ Error generando PDF:', error);
     res.status(500).json({ error: 'Error generando PDF' });
   }
-  }
+}
 
 
     
