@@ -61,7 +61,7 @@ const cventas = {
         res.redirect("/ventas")  
       } catch (err) {
         res.render("mensaje_temporal", {
-            mensaje: "Stock insuficiente para duplicar",
+            mensaje: "Stock insuficiente para duplicar", err,
             redireccion: "/ventas",
             tiempo: 3000 // milisegundos = 3 segundos
         })
