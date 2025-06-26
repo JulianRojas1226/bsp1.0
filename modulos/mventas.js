@@ -29,7 +29,7 @@ const mventas = {
         }
     },
     duplicar_orden: async ({id}) => {
-         const conexion = await db.getConnection();
+        const conexion = await db.getConnection();
         try {
             await conexion.beginTransaction();
 
@@ -68,6 +68,11 @@ const mventas = {
         } catch (error) {
             console.error("Error al duplicar orden:", error);
             throw error; // Se lanza el error para que el controlador lo maneje
+        }finally {
+    // ✅ SIEMPRE liberar la conexión
+            if (conexion) {
+                conexion.release();
+            }
         }
     },
     mostorden: async()=>{

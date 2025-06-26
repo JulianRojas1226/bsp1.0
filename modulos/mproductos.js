@@ -1,9 +1,7 @@
 import fs from "fs"
 import db from "../config/db.js";
 import path from "path";
-import { dirname } from "path";
-import { fileURLToPath } from 'url'
-const __dirname = dirname(fileURLToPath(import.meta.url))
+
 const mprod={
     tipo: async()=>{
         try {

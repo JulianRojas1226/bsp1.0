@@ -44,6 +44,7 @@ const cadmin = {
         try {
             const {nombre,correo,codigo,cargo}=req.body
             await madmin.creacion({nombre,correo,codigo,cargo})
+            res.redirect("/admin")
         } catch (error) {
             res.render("mensaje_temporal",{
                 mensaje: "se ha generado un error al momento de la insercion de datos",
