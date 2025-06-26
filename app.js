@@ -50,6 +50,11 @@ app.use(
           "'unsafe-inline'",
           "'unsafe-eval'",
         ],
+        imgSrc: [
+        "'self'", 
+        "data:", 
+        "https://res.cloudinary.com" // Agregar este dominio
+      ],
       },
     },
   })
