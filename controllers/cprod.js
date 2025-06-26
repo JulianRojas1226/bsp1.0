@@ -126,29 +126,12 @@ adddatos: async (req, res) => {
       res.status(500).send("Error al guardar los datos.");
     }
   },
-  eliminarProducto: async (req, res) => {
+ eliminarProducto: async (req, res) => {
         try {
             const { id } = req.params;
             
-            // Obtener datos del producto antes de eliminar
-            const producto = await mprod.obtenerPorId(id);
-            
-            if (!producto) {
-                return res.status(404).send("❌ Producto no encontrado");
-            }
-            
-            // Eliminar imagen de Cloudinary si existe
-            if (producto.cloudinary_id) {
-                try {
-                    await deleteImage(producto.cloudinary_id);
-                    console.log('🗑️ Imagen eliminada de Cloudinary');
-                } catch (error) {
-                    console.error('⚠️ Error al eliminar imagen, pero continuando:', error);
-                }
-            }
-            
-            // Eliminar producto de BD
-            await mprod.eliminar(id);
+            // El modelo maneja toda la lógica de eliminación
+            await mprod.borrar({ id });
             
             console.log('✅ Producto eliminado completamente');
             res.redirect("/prod");
