@@ -1,5 +1,9 @@
-
+import fs from "fs"
 import db from "../config/db.js";
+import path from "path";
+import { dirname } from "path";
+import { fileURLToPath } from 'url'
+const __dirname = dirname(fileURLToPath(import.meta.url))
 import { v2 as cloudinary } from 'cloudinary';
 const mprod={
     tipo: async()=>{
@@ -115,74 +119,40 @@ const mprod={
             throw { status: 500, message: "Error al buscar productos en la base de datos." };
         }
     },
-    borrar: async ({ id }) => {
-        const conexion = await db.getConnection();
+    borrar: async ({id}) => {
+        const coneccion = await db.getConnection();
         try {
-            await conexion.beginTransaction();
+            await coneccion.beginTransaction();
 
-            // Obtener datos del producto antes de eliminar
-            const [producto] = await conexion.query(
-                "SELECT dir, cloudinary_id FROM producto WHERE id = ?", 
-                [id]
-            );
+            // Obtener ruta de la imagen antes de eliminar el producto
+            const [producto] = await coneccion.query("SELECT dir FROM producto WHERE id = ?", [id]);
 
-            if (!producto.length) {
-                throw new Error("Producto no encontrado.");
-            }
+            if (!producto.length) throw new Error("Producto no encontrado.");
 
-            const { dir: imageUrl, cloudinary_id } = producto[0];
+            const imagePath = path.join(process.cwd(), "public", producto[0].dir);
 
-            // Eliminar el producto de la base de datos PRIMERO
-            const [result] = await conexion.query("DELETE FROM producto WHERE id = ?", [id]);
+            // Eliminar el producto de la base de datos
+            const [result] = await coneccion.query("DELETE FROM producto WHERE id = ?", [id]);
 
-            if (result.affectedRows === 0) {
-                throw new Error("No se pudo eliminar el producto.");
-            }
+            if (result.affectedRows === 0) throw new Error("No se pudo eliminar el producto.");
 
-            // Eliminar imagen de Cloudinary
-            if (cloudinary_id) {
-                try {
-                    const deleteResult = await cloudinary.uploader.destroy(cloudinary_id);
-                    
-                    if (deleteResult.result === 'ok') {
-                        console.log("✅ Imagen eliminada de Cloudinary:", cloudinary_id);
-                    } else if (deleteResult.result === 'not found') {
-                        console.warn("⚠️ Imagen no encontrada en Cloudinary:", cloudinary_id);
-                    } else {
-                        console.warn("⚠️ Resultado inesperado al eliminar imagen:", deleteResult);
-                    }
-                } catch (cloudinaryError) {
-                    console.error("❌ Error al eliminar imagen de Cloudinary:", cloudinaryError);
-                    // No hacer rollback por error de Cloudinary, el producto ya se eliminó
-                }
+            // Verificar y eliminar imagen
+            if (fs.existsSync(imagePath)) {
+                await fs.promises.unlink(imagePath);
+                console.log("✅ Imagen eliminada:", imagePath);
             } else {
-                // Fallback: Si no tienes cloudinary_id, intentar extraerlo de la URL
-                if (imageUrl && imageUrl.includes('cloudinary.com')) {
-                    try {
-                        const publicId = extractPublicIdFromUrl(imageUrl);
-                        if (publicId) {
-                            const deleteResult = await cloudinary.uploader.destroy(publicId);
-                            console.log("✅ Imagen eliminada usando URL:", publicId);
-                        }
-                    } catch (error) {
-                        console.error("❌ Error al extraer public_id de URL:", error);
-                    }
-                } else {
-                    console.warn("⚠️ No se pudo identificar imagen de Cloudinary para eliminar");
-                }
+                console.warn("⚠️ La imagen no existe en la ruta:", imagePath);
             }
 
-            await conexion.commit();
-            console.log("✅ Producto eliminado correctamente:", result);
+        await coneccion.commit();
+        console.log("✅ Producto eliminado correctamente:", result);
 
-            return result;
+        return result;
 
+        
         } catch (err) {
-            await conexion.rollback();
             console.error("❌ Error al eliminar el producto:", err.message);
             throw { status: 500, message: "Error al eliminar el producto de la base de datos." };
-        } finally {
-            conexion.release();
         }
     },
     actualizar: async({id, nombre, cantidad_min, precio, proveedor, tipo })=>{
