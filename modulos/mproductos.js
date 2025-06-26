@@ -26,7 +26,7 @@ const mprod={
     },
     insertdatos: async({ruta,nombre,tipo,cantidad,costo,proveedor,precio,cantidad_min,usuario,cloudinary_id})=>{
         try {
-            await db.query("Insert into producto (nombre,tipo,cantidad,proveedor,precio,costo,dir,minimo_cant,empleado,cloudinary_id) values (?,?,?,?,?,?,?,?,?,)",
+            await db.query("Insert into producto (nombre,tipo,cantidad,proveedor,precio,costo,dir,minimo_cant,empleado,cloudinary_id) values (?,?,?,?,?,?,?,?,?,?)",
                 [nombre,tipo,cantidad,proveedor,precio,costo,ruta,cantidad_min,usuario,cloudinary_id]
             )
         } catch (err) {
