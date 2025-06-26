@@ -107,9 +107,9 @@ const cpdf={
     await browser.close();
 
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'inline; filename="reporte.pdf"'); // Cambié 'attachment' por 'inline'
+    res.setHeader('Content-Disposition', 'attachment; filename="reporte.pdf"'); // ✅ 'attachment' fuerza descarga
     res.setHeader('Content-Length', pdfBuffer.length);
-    res.setHeader('Cache-Control', 'no-cache'); // ✅ Agregar esto
+    res.setHeader('Cache-Control', 'no-cache');
     
     // ✅ Asegurar que sea Buffer
     res.end(pdfBuffer, 'binary');
