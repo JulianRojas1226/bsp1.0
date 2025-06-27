@@ -63,7 +63,7 @@ html(lang="es")
               | Reserva tu Mesa
             button.btn-close.btn-close-white(type="button", data-bs-dismiss="modal", aria-label="Close")
           .modal-body
-            form#reservationForm(action="/addres")
+            form#reservationForm(action="/addres" method="post")
               .row
                 .col-md-6.input-wrapper
                   input#calendario(type="text", name="fecha_hora", placeholder="Selecciona la fecha", required)
@@ -112,9 +112,9 @@ html(lang="es")
                     i.fas.fa-times.me-2
                     | Cancelar
                 .col-md-6
-              button.btn-reserva.w-100(type="submit")
-                i.fas.fa-check.me-2
-                | Confirmar Reserva
+                  button.btn-reserva.w-100(type="submit")
+                    i.fas.fa-check.me-2
+                    | Confirmar Reserva
     // About Section
     section#somos.py-5
       .container-fluid
