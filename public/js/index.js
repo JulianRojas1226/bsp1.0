@@ -35,31 +35,48 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 });
  document.getElementById('reservationForm').addEventListener('submit', function(e) {
-          e.preventDefault();
-          
-          // Get form data
-          const formData = new FormData(this);
-          const data = Object.fromEntries(formData);
-          
-          // Basic validation
-          if (!data.fecha_hora || !data.hora || !data.NID || !data.nombre || !data.correo || !data.celular || !data.tipos || !data.cantidad_p) {
-              alert('Por favor, completa todos los campos obligatorios.');
-              return;
-          }
-          
-          // Here you would typically send the data to your backend
-          console.log('Reservation data:', data);
-          
-          // Show success message
-          alert('¡Reserva enviada exitosamente! Te contactaremos pronto para confirmar los detalles.');
-          
-          // Close modal
-          const modal = bootstrap.Modal.getInstance(document.getElementById('reservaModal'));
-          modal.hide();
-          
-          // Reset form
-          this.reset();
-      });
+    e.preventDefault();
+    
+    // Get form data
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+    
+    // Basic validation
+    if (!data.fecha_hora || !data.hora || !data.NID || !data.nombre || !data.correo || !data.celular || !data.tipos || !data.cantidad_p) {
+        alert('Por favor, completa todos los campos obligatorios.');
+        return;
+    }
+    
+    // Enviar datos al backend
+    fetch('/addres', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error en la respuesta del servidor');
+        }
+        return response.json();
+    })
+    .then(result => {
+        console.log('Reserva exitosa:', result);
+        alert('¡Reserva enviada exitosamente! Te contactaremos pronto para confirmar los detalles.');
+        
+        // Close modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('reservaModal'));
+        modal.hide();
+        
+        // Reset form
+        this.reset();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Hubo un error al enviar la reserva. Por favor, inténtalo de nuevo.');
+    });
+});;
 
       // Handle contact form submission
       document.getElementById('contactForm').addEventListener('submit', function(e) {
